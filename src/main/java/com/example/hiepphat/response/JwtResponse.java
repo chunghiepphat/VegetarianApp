@@ -6,7 +6,8 @@ public class JwtResponse {
 	private String token;
 	private String type = "Bearer";
 	private int id;
-	private String username;
+	private String first_name;
+	private String last_name;
 	private String email;
 	private List<String> roles;
 	private String about_me;
@@ -16,11 +17,12 @@ public class JwtResponse {
 	private String facebook_link;
 	private String instagram_link;
 
-	public JwtResponse(String token,int id, String username, String email, List<String> roles, String about_me, String phone_number, String profile_image,
+	public JwtResponse(String token,int id, String first_name,String last_name, String email, List<String> roles, String about_me, String phone_number, String profile_image,
 					   String country, String facebook_link, String instagram_link) {
 		this.token=token;
 		this.id = id;
-		this.username = username;
+		this.first_name=first_name;
+		this.last_name=last_name;
 		this.email = email;
 		this.roles = roles;
 		this.about_me = about_me;
@@ -111,12 +113,20 @@ public class JwtResponse {
 		this.email = email;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getFirst_name() {
+		return first_name;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
+	}
+
+	public String getLast_name() {
+		return last_name;
+	}
+
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
 	}
 
 	public List<String> getRoles() {

@@ -50,7 +50,8 @@ public class UserController {
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
-                userDetails.getUsername(),
+                userDetails.getFirst_name(),
+                userDetails.getLast_name(),
                 userDetails.getEmail(),
                 roles,
                 userDetails.getAbout_me(),
@@ -72,7 +73,7 @@ public class UserController {
             Role roles=new Role();
             roles.setRole_id(1);
         // Create new user's account
-        User user = new User(signUpRequest.getUsername(),
+        User user = new User(signUpRequest.getFirst_name(),signUpRequest.getLast_name(),
                 signUpRequest.getEmail(),passwordEncoder.encode(signUpRequest.getPassword())
               ,true,roles);
         userService.save(user);

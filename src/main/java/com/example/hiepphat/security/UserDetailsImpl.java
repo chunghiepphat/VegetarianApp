@@ -19,8 +19,8 @@ public class UserDetailsImpl implements UserDetails {
 
 	private int id;
 
-	private String username;
-
+	private String first_name;
+	private String last_name;
 	private String email;
 
 	@JsonIgnore
@@ -33,11 +33,12 @@ public class UserDetailsImpl implements UserDetails {
 	private String instagram_link;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(int id, String username, String email, String password,String about_me,String phone_number,String profile_image,String country,
+	public UserDetailsImpl(int id, String first_name,String last_name, String email, String password,String about_me,String phone_number,String profile_image,String country,
 			String facebook_link,String instagram_link,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
-		this.username = username;
+		this.first_name=first_name;
+		this.last_name=last_name;
 		this.email = email;
 		this.password = password;
 		this.authorities = authorities;
@@ -54,7 +55,8 @@ public class UserDetailsImpl implements UserDetails {
 		authorities.add(new SimpleGrantedAuthority(user.getRole().getRole_name()));
 		return new UserDetailsImpl(
 				user.getUser_id(),
-				user.getUsername(), 
+				user.getFirst_name(),
+				user.getLast_name(),
 				user.getEmail(),
 				user.getPassword(),
 				user.getAbout_me(),
@@ -110,7 +112,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return username;
+		return null;
 	}
 
 	@Override
@@ -141,5 +143,13 @@ public class UserDetailsImpl implements UserDetails {
 			return false;
 		UserDetailsImpl user = (UserDetailsImpl) o;
 		return Objects.equals(id, user.id);
+	}
+
+	public String getFirst_name() {
+		return first_name;
+	}
+
+	public String getLast_name() {
+		return last_name;
 	}
 }

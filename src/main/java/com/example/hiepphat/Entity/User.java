@@ -7,15 +7,15 @@ import java.util.Set;
 @Entity
 @Table(name = "Users",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
         })
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int user_id;
-    private String username;
     private String email;
+    private String first_name;
+    private String last_name;
     private String password;
     private boolean is_active;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,8 +38,9 @@ public class User {
         this.role = role;
     }
 
-    public User(String username, String email, String password, boolean is_active,Role role) {
-        this.username = username;
+    public User(String first_name,String last_name, String email, String password, boolean is_active,Role role) {
+        this.first_name=first_name;
+        this.last_name=last_name;
         this.email = email;
         this.password = password;
         this.is_active = is_active;
@@ -102,12 +103,20 @@ public class User {
         this.user_id = user_id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getEmail() {
