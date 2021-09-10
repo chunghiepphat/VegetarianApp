@@ -112,7 +112,7 @@ public class UserDetailsImpl implements UserDetails {
 
 	@Override
 	public String getUsername() {
-		return null;
+		return first_name+""+last_name;
 	}
 
 	@Override
