@@ -1,0 +1,151 @@
+/* Homepage welcome banner */
+.home-banner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    border: thin none #d0d0d0;
+    border-bottom-style: solid;
+}
+
+.home-banner picture {
+    height: 70vh;
+    min-width: 60%;
+    flex-grow: 1;
+}
+
+.home-banner-details > span {
+    font-size: 26px;
+}
+
+.home-banner-details > h1 > a, .home-banner-details > p > a {
+    text-align: center;
+
+}
+
+.home-banner-details > h1 > a {
+    font-size: 46px;
+}
+
+.home-banner-details > p > a {
+    font-size: 22px;
+    color: #5a5a5a;
+}
+
+
+.home-banner-details {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-basis: 40%;
+    flex-grow: 1;
+    padding: 60px;
+}
+
+/* Homepage site navigation */
+.home-navigation {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    background-color: linen;
+    padding: 60px;
+}
+
+.home-navigation h1 {
+
+}
+
+.home-navigation input[type=text] {
+    margin: 20px;
+    width: 80%;
+    max-width: 600px;
+}
+
+.home-navigation nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    max-width: 600px;
+    margin: 5px;
+}
+
+/* Homepage categorical sections */
+.home-section {
+    width: 100%;
+    max-width: 1080px;
+    margin: auto;
+    padding-top: 40px;
+}
+
+.home-section header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.home-section h1 {
+    font-size: 26px;
+}
+
+/* Article cards */
+.card-deck {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    overflow-x: scroll;
+    padding: 0 0 0 10px;
+}
+
+.card-article {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    margin: 20px 20px 20px 0;
+    width: 200px;
+    height: 300px;
+    box-shadow: 0 4px 8px #d0d0d0;
+}
+
+.card-article picture {
+    width: 100%;
+    height: 60%;
+    background-color: linen;
+}
+
+.card-article > h1, .card-article > p {
+    padding: 2px 5%;
+}
+
+.card-article > h1 > a {
+    font-size: 20px;
+}
+
+.card-article > p > a {
+    font-weight: normal;
+    color: #5a5a5a;
+}
+
+.card-video {
+    margin: 20px 20px 20px 0;
+    width: 640px;
+    height: 360px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px;
+    box-shadow: 0 4px 8px #d0d0d0;
+    overflow: hidden;
+}
+
+.card-video > iframe {
+    width: 100%;
+    height: 100%;
+}

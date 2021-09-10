@@ -1,0 +1,217 @@
+/* Defaults */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font: 16px/150% Segoe UI;
+    color: #3a3a3a;
+    transition: 0.3s
+}
+
+a { /* Site-wide default hyperlink styling */
+    text-decoration: none;
+    font-weight: bold;
+    color: darkslateblue;
+}
+
+a:hover {
+    filter: brightness(150%);
+}
+
+button { /* Site-wide default button styling */
+    padding: 6px 20px;
+    background-color: wheat;
+    border: thin solid #d0d0d0;
+    box-shadow: 0 2px 4px #d0d0d0;
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(110%);
+}
+
+h1, h1 a {
+    font-size: 34px;
+}
+
+h1 > a {
+    font-weight: normal;
+    color: #3a3a3a;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+h3 {
+    font-size: 22px;
+}
+
+input[type=text], input[type=password] { /* Site-wide default text box styling */
+    padding: 10px;
+    height: 40px;
+    font-size: 16px;
+    background-color: inherit;
+    border: thin none #3a3a3a;
+    border-bottom-style: solid;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+    background-color: antiquewhite;
+    outline: none;
+}
+
+li {
+    list-style: none;
+}
+
+picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Generic navigation links */
+nav li {
+    display: inline-block;
+}
+
+nav li:hover {
+    background-color: wheat;
+}
+
+nav li a {
+    display: block;
+    padding: 10px 20px;
+    font-weight: normal;
+    font-size: 18px;
+    color: #3a3a3a;
+}
+
+/* Main content container */
+main {
+    padding-bottom: 40px;
+    background-color: #fafafa;
+}
+
+/* Site header */
+.site-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    border: thin none #d0d0d0;
+    border-bottom-style: solid;
+    z-index: 90;
+}
+
+.site-header input[type=text] {
+    flex-grow: 1;
+    max-width: 600px;
+}
+
+.site-header-logo {
+    max-width: 200px;
+    padding: 0 20px 0 20px;
+}
+
+/* Site footer */
+.site-footer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 20px;
+    background-color: linen;
+}
+
+.site-footer h1 {
+    margin: 10px 0 10px 0;
+    font-size: 26px;
+}
+
+.site-footer-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 0 0 10px 0;
+}
+
+.site-footer-row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding: 20px 0 20px 0;
+}
+
+/* Popup form */
+.page-overlay { /* Dims the screen outside the popup */
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    max-width: 400px;
+    top: 20%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding: 40px 40px;
+    background-color: white;
+    border: thin solid #d0d0d0;
+    border-radius: 10px;
+    z-index: 9;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-container .cancel {
+    background-color: lightcoral;
+}
+
+.form-container button {
+    width: 100%;
+    margin: 10px 0 0 0;
+
+}
+
+.form-container input[type=text], .form-container input[type=password] {
+    width: 100%;
+    margin: 10px 0 10px 0;
+}
+
+.form-container h1 {
+    margin: 10px 0 10px 0;
+    text-align: center;
+    font-size: 26px;
+}
+
+.form-container h2 {
+    margin: 20px 0 20px 0;
+    text-align: center;
+    font-size: 16px;
+}
