@@ -21,6 +21,8 @@ public class Converter {
         dto.setRecipe_categories_id(entity.getRecipeCategories().getRecipe_category_id());
         dto.setResting_time_minutes(entity.getResting_time_minutes());
         dto.setTime_created(entity.getTime());
+        dto.setLast_name(entity.getUser().getLast_name());
+        dto.setFirst_name(entity.getUser().getFirst_name());
         return dto;
     }
 }
