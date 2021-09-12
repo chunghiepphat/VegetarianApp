@@ -1,6 +1,7 @@
 package com.example.hiepphat.Entity;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Table(name = "Recipes")
@@ -23,11 +24,11 @@ public class Recipe {
     private int prep_time_minutes;
     private int baking_time_minutes;
     private int resting_time_minutes;
-
+    @Column(name = "time_created")
+    private Date time;
     public long getRecipe_id() {
         return recipe_id;
     }
-
     public void setRecipe_id(long recipe_id) {
         this.recipe_id = recipe_id;
     }
@@ -118,5 +119,13 @@ public class Recipe {
 
     public void setResting_time_minutes(int resting_time_minutes) {
         this.resting_time_minutes = resting_time_minutes;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
     }
 }

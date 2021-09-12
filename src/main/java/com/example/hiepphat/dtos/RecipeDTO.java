@@ -4,6 +4,7 @@ import com.example.hiepphat.Entity.RecipeCategories;
 import com.example.hiepphat.Entity.User;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 public class RecipeDTO {
     private long recipe_id;
@@ -18,6 +19,7 @@ public class RecipeDTO {
     private int prep_time_minutes;
     private int baking_time_minutes;
     private int resting_time_minutes;
+    private Date time_created;
 
     public long getRecipe_id() {
         return recipe_id;
@@ -113,5 +115,13 @@ public class RecipeDTO {
 
     public void setResting_time_minutes(int resting_time_minutes) {
         this.resting_time_minutes = resting_time_minutes;
+    }
+
+    public Date getTime_created() {
+        return time_created;
+    }
+
+    public void setTime_created(Date time_created) {
+        this.time_created = time_created;
     }
 }

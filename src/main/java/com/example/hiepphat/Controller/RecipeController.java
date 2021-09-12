@@ -21,7 +21,7 @@ public class RecipeController {
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
         result.setPage(page);
-        Pageable pageable= PageRequest.of(page-1, limit);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
         result.setListResult(recipeService.findAll(pageable));
         result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit ));
         return result;
