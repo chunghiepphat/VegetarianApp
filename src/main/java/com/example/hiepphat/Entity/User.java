@@ -27,7 +27,18 @@ public class User {
     private String country;
     private String facebook_link;
     private String instagram_link;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Recipe> recipes;
     public User(){
+    }
+
+    public Set<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
     }
 
     public Role getRole() {

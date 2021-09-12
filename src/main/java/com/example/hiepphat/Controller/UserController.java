@@ -30,7 +30,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -41,7 +41,7 @@ public class UserController {
 @Autowired
     JwtUtils jwtUtils;
 
-    private TokenStore tokenStore;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -99,14 +99,5 @@ public class UserController {
         String user=jwtUtils.getClaimFromJwtToken(token);
         return user;
    }
-    @GetMapping("/logout")
-    public String logout(String token){
-        tokenStore=new InMemoryTokenStore();
-        OAuth2AccessToken oAuth2AccessToken=tokenStore.readAccessToken(token);
-        if(oAuth2AccessToken!=null){
-            tokenStore.removeAccessToken(oAuth2AccessToken);
-        }
-        return "OK";
-    }
 
 }
