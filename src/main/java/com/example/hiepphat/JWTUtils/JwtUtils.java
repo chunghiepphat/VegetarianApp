@@ -1,6 +1,7 @@
 package com.example.hiepphat.JWTUtils;
 
 
+import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -26,16 +27,29 @@ public class JwtUtils {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
 		return Jwts.builder()
-				.setSubject((userPrincipal.getEmail()))
+				.claim("email",userPrincipal.getEmail())
+				.claim("id",userPrincipal.getId()).claim("first_name",userPrincipal.getFirst_name())
+				.claim("last_name",userPrincipal.getLast_name()).claim("roles",userPrincipal.getAuthorities())
+				.claim("about_me",userPrincipal.getAbout_me()).claim("phone_number",userPrincipal.getPhone_number())
+				.claim("profile_image",userPrincipal.getProfile_image()).claim("country",userPrincipal.getCountry())
+				.claim("facebook_link",userPrincipal.getFacebook_link()).claim("instagram_link",userPrincipal.getInstagram_link())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
 	}
 
-	public String getUserNameFromJwtToken(String token) {
-		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
+	public String generateJwtTokenSignup(SignUpRequest signUpRequest) {
+		return Jwts.builder()
+				.claim("email",signUpRequest.getEmail())
+				.claim("first_name",signUpRequest.getFirst_name())
+				.claim("last_name",signUpRequest.getLast_name()).claim("roles",1)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
 	}
+
 	public String getClaimFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("email",String.class);
 	}
