@@ -2,13 +2,16 @@ package com.example.hiepphat.service;
 
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.dtos.TenRecipeDTO;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class Converter {
     public RecipeDTO toDTO(Recipe entity) {
         RecipeDTO dto = new RecipeDTO();
-        dto.setRecipe_id(entity.getRecipe_id());
+        dto.setRecipe_id(entity.getRecipeID());
         dto.setRecipe_thumbnail(entity.getRecipe_thumbnail());
         dto.setRecipe_content(entity.getRecipe_content());
         dto.setRecipe_difficulty(entity.getRecipe_difficulty());
@@ -25,4 +28,13 @@ public class Converter {
         dto.setFirst_name(entity.getUser().getFirst_name());
         return dto;
     }
+    public TenRecipeDTO toDTO10(Recipe entity) {
+        TenRecipeDTO dto = new TenRecipeDTO();
+        dto.setRecipe_thumbnail(entity.getRecipe_thumbnail());
+        dto.setRecipe_title(entity.getRecipe_title());
+        dto.setLast_name(entity.getUser().getLast_name());
+        dto.setFirst_name(entity.getUser().getFirst_name());
+        return dto;
+    }
+
 }

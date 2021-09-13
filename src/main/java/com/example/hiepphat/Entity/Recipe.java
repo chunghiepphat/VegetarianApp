@@ -8,7 +8,8 @@ import java.sql.Date;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long recipe_id;
+    @Column(name = "recipe_id")
+    private long recipeID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -26,11 +27,13 @@ public class Recipe {
     private int resting_time_minutes;
     @Column(name = "time_created")
     private Date time;
-    public long getRecipe_id() {
-        return recipe_id;
+
+    public long getRecipeID() {
+        return recipeID;
     }
-    public void setRecipe_id(long recipe_id) {
-        this.recipe_id = recipe_id;
+
+    public void setRecipeID(long recipeID) {
+        this.recipeID = recipeID;
     }
 
     public User getUser() {
