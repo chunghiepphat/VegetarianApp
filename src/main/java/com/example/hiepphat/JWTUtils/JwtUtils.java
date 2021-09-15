@@ -1,6 +1,7 @@
 package com.example.hiepphat.JWTUtils;
 
 
+import com.example.hiepphat.dtos.UserDTO;
 import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
@@ -44,6 +45,18 @@ public class JwtUtils {
 				.claim("email",signUpRequest.getEmail())
 				.claim("first_name",signUpRequest.getFirst_name())
 				.claim("last_name",signUpRequest.getLast_name()).claim("roles",1)
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+				.signWith(SignatureAlgorithm.HS512, jwtSecret)
+				.compact();
+	}
+	public String generateJwtTokenUpdateUser(UserDTO userDTO) {
+		return Jwts.builder()
+				.claim("first_name",userDTO.getFirst_name())
+				.claim("last_name",userDTO.getLast_name()).claim("about_me",userDTO.getAbout_me())
+				.claim("country",userDTO.getCountry()).claim("facebook_link",userDTO.getFacebook_link())
+				.claim("instagram_link",userDTO.getInstagram_link()).claim("password",userDTO.getPassword()).claim("profile_image",userDTO.getProfile_image())
+				.claim("phone_number",userDTO.getPhone_number()).claim("gender",userDTO.getGender()).claim("birth_day",userDTO.getBirth_day())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)

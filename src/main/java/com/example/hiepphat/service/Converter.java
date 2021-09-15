@@ -20,7 +20,7 @@ public class Converter {
         dto.setPortion_type(entity.getPortion_type());
         dto.setRecipe_title(entity.getRecipe_title());
         dto.setPrep_time_minutes(entity.getPrep_time_minutes());
-        dto.setUser_id(entity.getUser().getUser_id());
+        dto.setUser_id(entity.getUser().getUserID());
         dto.setRecipe_categories_id(entity.getRecipeCategories().getRecipe_category_id());
         dto.setResting_time_minutes(entity.getResting_time_minutes());
         dto.setTime_created(entity.getTime());

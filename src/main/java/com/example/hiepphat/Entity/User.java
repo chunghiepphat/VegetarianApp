@@ -1,6 +1,7 @@
 package com.example.hiepphat.Entity;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +13,8 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int user_id;
+    @Column(name = "user_id")
+    private int userID;
     private String email;
     private String first_name;
     private String last_name;
@@ -30,6 +32,25 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Recipe> recipes;
+    private Date birth_day;
+    private String gender;
+
+    public Date getBirth_day() {
+        return birth_day;
+    }
+
+    public void setBirth_day(Date birth_day) {
+        this.birth_day = birth_day;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
     public User(){
     }
 
@@ -106,12 +127,12 @@ public class User {
         this.instagram_link = instagram_link;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getFirst_name() {

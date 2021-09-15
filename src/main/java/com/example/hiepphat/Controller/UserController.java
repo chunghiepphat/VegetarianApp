@@ -3,14 +3,14 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.Role;
 import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.JWTUtils.JwtUtils;
+import com.example.hiepphat.dtos.UserDTO;
+import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.request.LoginRequest;
 import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.response.JwtResponse;
 import com.example.hiepphat.response.SignupResponse;
-import com.example.hiepphat.security.UserDetailsImpl;
 import com.example.hiepphat.service.UserServiceImpl;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,9 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -36,7 +35,8 @@ public class UserController {
     PasswordEncoder passwordEncoder;
 @Autowired
     JwtUtils jwtUtils;
-
+@Autowired
+UserRepository userRepository;
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -75,6 +75,22 @@ public class UserController {
         return "User.";
     }
 
-
-
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> update(@RequestBody UserDTO model,@PathVariable("id") int id){
+             User oldUser=userService.findByUser_id(id);
+        oldUser.setFirst_name(model.getFirst_name());
+        oldUser.setLast_name(model.getLast_name());
+        oldUser.setAbout_me(model.getAbout_me());
+        oldUser.setCountry(model.getCountry());
+        oldUser.setFacebook_link(model.getFacebook_link());
+        oldUser.setInstagram_link(model.getInstagram_link());
+        oldUser.setPassword(passwordEncoder.encode(model.getPassword()));
+        oldUser.setProfile_image(model.getProfile_image());
+        oldUser.setPhone_number(model.getPhone_number());
+        oldUser.setGender(model.getGender());
+        oldUser.setBirth_day(model.getBirth_day());
+         userService.save(oldUser);
+         String jwt=jwtUtils.generateJwtTokenUpdateUser(model);
+         return ResponseEntity.ok(new JwtResponse(jwt));
+    }
 }
