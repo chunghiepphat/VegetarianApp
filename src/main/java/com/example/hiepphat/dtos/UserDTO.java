@@ -19,7 +19,7 @@ public class UserDTO
     private String country;
     private String facebook_link;
     private String instagram_link;
-    private Date birth_day;
+    private Date birth_date;
     private String gender;
     public String getFirst_name() {
         return first_name;
@@ -94,11 +94,11 @@ public class UserDTO
     }
 
     public Date getBirth_day() {
-        return birth_day;
+        return birth_date;
     }
 
-    public void setBirth_day(Date birth_day) {
-        this.birth_day = birth_day;
+    public void setBirth_day(Date birth_date) {
+        this.birth_date = birth_date;
     }
 
     public String getGender() {

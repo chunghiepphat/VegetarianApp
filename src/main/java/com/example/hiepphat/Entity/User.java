@@ -32,15 +32,15 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Recipe> recipes;
-    private Date birth_day;
+    private Date birth_date;
     private String gender;
 
     public Date getBirth_day() {
-        return birth_day;
+        return birth_date;
     }
 
     public void setBirth_day(Date birth_day) {
-        this.birth_day = birth_day;
+        this.birth_date = birth_day;
     }
 
     public String getGender() {

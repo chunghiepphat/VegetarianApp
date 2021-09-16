@@ -84,7 +84,14 @@ UserRepository userRepository;
         oldUser.setCountry(model.getCountry());
         oldUser.setFacebook_link(model.getFacebook_link());
         oldUser.setInstagram_link(model.getInstagram_link());
-        oldUser.setPassword(passwordEncoder.encode(model.getPassword()));
+        String pass=model.getPassword();
+        if(pass==null){
+           pass=oldUser.getPassword();
+            oldUser.setPassword(pass);
+        }
+        else{
+            oldUser.setPassword(passwordEncoder.encode(pass));
+        }
         oldUser.setProfile_image(model.getProfile_image());
         oldUser.setPhone_number(model.getPhone_number());
         oldUser.setGender(model.getGender());
