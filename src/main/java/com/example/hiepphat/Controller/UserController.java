@@ -80,7 +80,7 @@ UserRepository userRepository;
     public UserDTO update(@RequestBody UserDTO model,@PathVariable("id") int id){
              User oldUser=userService.findByUser_id(id);
              if(oldUser!=null) {
-                 model.setUser_id(oldUser.getUserID());
+                 model.setId(oldUser.getUserID());
                  model.setEmail(oldUser.getEmail());
                  oldUser.setFirst_name(model.getFirst_name());
                  oldUser.setLast_name(model.getLast_name());

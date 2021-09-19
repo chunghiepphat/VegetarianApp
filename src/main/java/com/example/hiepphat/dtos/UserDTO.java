@@ -10,7 +10,7 @@ import java.util.List;
 
 public class UserDTO
 {
-    private int user_id;
+    private int id;
     private String email;
     private String first_name;
     private String last_name;
@@ -23,12 +23,12 @@ public class UserDTO
     private Date birth_date;
     private String gender;
 
-    public int getUser_id() {
-        return user_id;
+    public int getId() {
+        return id;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEmail() {
