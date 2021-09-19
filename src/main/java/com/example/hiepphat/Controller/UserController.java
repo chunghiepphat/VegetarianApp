@@ -76,7 +76,8 @@ UserRepository userRepository;
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@RequestBody UserDTO model,@PathVariable("id") int id){
+    @PreAuthorize("hasAuthority('user')")
+    public UserDTO update(@RequestBody UserDTO model,@PathVariable("id") int id){
              User oldUser=userService.findByUser_id(id);
         oldUser.setFirst_name(model.getFirst_name());
         oldUser.setLast_name(model.getLast_name());
@@ -84,20 +85,11 @@ UserRepository userRepository;
         oldUser.setCountry(model.getCountry());
         oldUser.setFacebook_link(model.getFacebook_link());
         oldUser.setInstagram_link(model.getInstagram_link());
-        String pass=model.getPassword();
-        if(pass==null){
-           pass=oldUser.getPassword();
-            oldUser.setPassword(pass);
-        }
-        else{
-            oldUser.setPassword(passwordEncoder.encode(pass));
-        }
         oldUser.setProfile_image(model.getProfile_image());
         oldUser.setPhone_number(model.getPhone_number());
         oldUser.setGender(model.getGender());
         oldUser.setBirth_day(model.getBirth_day());
          userService.save(oldUser);
-         String jwt=jwtUtils.generateJwtTokenUpdateUser(model);
-         return ResponseEntity.ok(new JwtResponse(jwt));
+         return model;
     }
 }
