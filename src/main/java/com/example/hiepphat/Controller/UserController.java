@@ -79,17 +79,21 @@ UserRepository userRepository;
     @PreAuthorize("hasAuthority('user')")
     public UserDTO update(@RequestBody UserDTO model,@PathVariable("id") int id){
              User oldUser=userService.findByUser_id(id);
-        oldUser.setFirst_name(model.getFirst_name());
-        oldUser.setLast_name(model.getLast_name());
-        oldUser.setAbout_me(model.getAbout_me());
-        oldUser.setCountry(model.getCountry());
-        oldUser.setFacebook_link(model.getFacebook_link());
-        oldUser.setInstagram_link(model.getInstagram_link());
-        oldUser.setProfile_image(model.getProfile_image());
-        oldUser.setPhone_number(model.getPhone_number());
-        oldUser.setGender(model.getGender());
-        oldUser.setBirth_date(model.getBirth_date());
-         userService.save(oldUser);
+             if(oldUser!=null) {
+                 model.setUser_id(oldUser.getUserID());
+                 model.setEmail(oldUser.getEmail());
+                 oldUser.setFirst_name(model.getFirst_name());
+                 oldUser.setLast_name(model.getLast_name());
+                 oldUser.setAbout_me(model.getAbout_me());
+                 oldUser.setCountry(model.getCountry());
+                 oldUser.setFacebook_link(model.getFacebook_link());
+                 oldUser.setInstagram_link(model.getInstagram_link());
+                 oldUser.setProfile_image(model.getProfile_image());
+                 oldUser.setPhone_number(model.getPhone_number());
+                 oldUser.setGender(model.getGender());
+                 oldUser.setBirth_date(model.getBirth_date());
+                 userService.save(oldUser);
+             }
          return model;
     }
 }

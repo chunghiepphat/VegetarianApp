@@ -10,6 +10,8 @@ import java.util.List;
 
 public class UserDTO
 {
+    private int user_id;
+    private String email;
     private String first_name;
     private String last_name;
     private String about_me;
@@ -20,6 +22,23 @@ public class UserDTO
     private String instagram_link;
     private Date birth_date;
     private String gender;
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getFirst_name() {
         return first_name;
     }
