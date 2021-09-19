@@ -35,12 +35,12 @@ public class User {
     private Date birth_date;
     private String gender;
 
-    public Date getBirth_day() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_day(Date birth_day) {
-        this.birth_date = birth_day;
+    public void setBirth_date(Date birth_date) {
+        this.birth_date = birth_date;
     }
 
     public String getGender() {

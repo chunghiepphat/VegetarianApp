@@ -82,11 +82,11 @@ public class UserDTO
         this.instagram_link = instagram_link;
     }
 
-    public Date getBirth_day() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_day(Date birth_date) {
+    public void setBirth_date(Date birth_date) {
         this.birth_date = birth_date;
     }
 

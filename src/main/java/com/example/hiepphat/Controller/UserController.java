@@ -88,7 +88,7 @@ UserRepository userRepository;
         oldUser.setProfile_image(model.getProfile_image());
         oldUser.setPhone_number(model.getPhone_number());
         oldUser.setGender(model.getGender());
-        oldUser.setBirth_day(model.getBirth_day());
+        oldUser.setBirth_date(model.getBirth_date());
          userService.save(oldUser);
          return model;
     }
