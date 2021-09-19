@@ -50,18 +50,7 @@ public class JwtUtils {
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
 				.compact();
 	}
-	public String generateJwtTokenUpdateUser(UserDTO userDTO) {
-		return Jwts.builder()
-				.claim("first_name",userDTO.getFirst_name())
-				.claim("last_name",userDTO.getLast_name()).claim("about_me",userDTO.getAbout_me())
-				.claim("country",userDTO.getCountry()).claim("facebook_link",userDTO.getFacebook_link())
-				.claim("instagram_link",userDTO.getInstagram_link()).claim("password",userDTO.getPassword()).claim("profile_image",userDTO.getProfile_image())
-				.claim("phone_number",userDTO.getPhone_number()).claim("gender",userDTO.getGender()).claim("birth_day",userDTO.getBirth_day())
-				.setIssuedAt(new Date())
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-				.signWith(SignatureAlgorithm.HS512, jwtSecret)
-				.compact();
-	}
+
 
 	public String getClaimFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("email",String.class);
