@@ -25,7 +25,7 @@ public class HiepphatApplication extends SpringBootServletInitializer {
 		return new WebMvcConfigurerAdapter() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("*")
+				registry.addMapping("/**")
 						.allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
 						.allowedHeaders("*");
 			}
