@@ -2,6 +2,7 @@ package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.response.BlogResponse;
 import com.example.hiepphat.response.RecipeResponse;
 import com.example.hiepphat.response.TenRecipesResponse;
 import com.example.hiepphat.service.Converter;
@@ -47,5 +48,20 @@ public class RecipeController {
            throw new Exception("Nout found recipe id:"+ id);
         }
         return result;
+    }
+    @GetMapping("/get10recipebyuser/{id}")
+    public TenRecipesResponse show10RecipesbyUserID(@PathVariable int id) throws Exception {
+        TenRecipesResponse result=new TenRecipesResponse();
+        result.setListResult(recipeService.findTop10ByUserOrderByTimeDesc(id));
+        return result;
+    }
+    @GetMapping("/getallbyuserID/{id}")
+    public RecipeResponse showRecipebyID(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
+        RecipeResponse result2=new RecipeResponse();
+        result2.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        result2.setListResult(recipeService.findAllByUser_UserID(pageable,id));
+        result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
+        return result2;
     }
 }

@@ -1,7 +1,9 @@
 package com.example.hiepphat.service;
 
+import com.example.hiepphat.Entity.Blog;
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.dtos.TenBlogDTO;
 import com.example.hiepphat.dtos.TenRecipeDTO;
 import com.example.hiepphat.repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,36 @@ RecipeRepository recipeRepository;
         Recipe enties=recipeRepository.findByRecipeID(id);
         RecipeDTO recipeDTO= converter.toDTO(enties);
         return recipeDTO;
+    }
+
+    @Override
+    public List<TenRecipeDTO> findTop10ByUserOrderByTimeDesc(int userID) {
+        List<TenRecipeDTO> results=new ArrayList<>();
+        List<Recipe> entities=recipeRepository.findTop10ByUser_UserIDOrderByTimeDesc(userID);
+        for (Recipe item: entities){
+            TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            results.add(recipeDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public List<TenRecipeDTO> findAllByUser_UserID(Pageable pageable, int userID) {
+        List<TenRecipeDTO> results=new ArrayList<>();
+        List<Recipe> entites=recipeRepository.findAllByUser_UserID(pageable,userID);
+        for(Recipe item:entites){
+            TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            results.add(recipeDTO);
+
+        }
+
+        return results;
+    }
+
+
+    @Override
+    public int countByUser_UserID(int userID) {
+        return recipeRepository.countByUser_UserID(userID);
     }
 
 

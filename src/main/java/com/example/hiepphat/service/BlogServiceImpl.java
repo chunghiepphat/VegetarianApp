@@ -8,6 +8,7 @@ import com.example.hiepphat.dtos.TenBlogDTO;
 import com.example.hiepphat.dtos.TenRecipeDTO;
 import com.example.hiepphat.repositories.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -55,4 +56,35 @@ private BlogRepository blogRepository;
         }
         return results;
     }
+
+    @Override
+    public List<TenBlogDTO> findTop10ByUser_UserIDOrderByTimeDesc(int userID) {
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entities=blogRepository.findTop10ByUser_UserIDOrderByTimeDesc(userID);
+        for (Blog item: entities){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            results.add(blogDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public List<TenBlogDTO> findAllByUser_UserID(Pageable pageable, int userID) {
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entites=blogRepository.findAllByUser_UserID(pageable,userID);
+        for(Blog item:entites){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            results.add(blogDTO);
+
+        }
+
+        return results;
+    }
+
+    @Override
+    public int countByUser_UserID(int userID) {
+        return blogRepository.countByUser_UserID(userID);
+    }
+
+
 }

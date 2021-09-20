@@ -42,4 +42,19 @@ public class BlogController {
         result.setListResult(blogService.findTop10Records());
         return result;
     }
+    @GetMapping("/get10blogbyuser/{id}")
+    public TenBlogResponse show10BlogsbyUserID(@PathVariable int id) throws Exception {
+        TenBlogResponse result=new TenBlogResponse();
+        result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
+        return result;
+    }
+    @GetMapping("/getallbyuserID/{id}")
+    public BlogResponse showBlogByID(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id){
+        BlogResponse result2=new BlogResponse();
+        result2.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        result2.setListResult(blogService.findAllByUser_UserID(pageable,id));
+        result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
+        return result2;
+    }
 }
