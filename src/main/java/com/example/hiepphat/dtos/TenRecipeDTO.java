@@ -5,6 +5,15 @@ public class TenRecipeDTO {
     private String recipe_thumbnail;
     private String first_name;
     private String last_name;
+    private long recipe_id;
+
+    public long getRecipe_id() {
+        return recipe_id;
+    }
+
+    public void setRecipe_id(long recipe_id) {
+        this.recipe_id = recipe_id;
+    }
 
     public String getRecipe_title() {
         return recipe_title;

@@ -37,6 +37,7 @@ public class Converter {
         dto.setRecipe_title(entity.getRecipe_title());
         dto.setLast_name(entity.getUser().getLast_name());
         dto.setFirst_name(entity.getUser().getFirst_name());
+        dto.setRecipe_id(entity.getRecipeID());
         return dto;
     }
     public TenBlogDTO toDTO10BLOG(Blog entity){
@@ -46,6 +47,7 @@ public class Converter {
         dto.setBlog_title(entity.getBlog_title());
         dto.setFirst_name(entity.getUser().getFirst_name());
         dto.setLast_name(entity.getUser().getLast_name());
+        dto.setBlog_id(entity.getBlogID());
         return dto;
     }
     public BlogDTO toDTOBLOG(Blog entity) {

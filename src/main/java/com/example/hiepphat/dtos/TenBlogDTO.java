@@ -6,9 +6,17 @@ public class TenBlogDTO {
     private String blog_content;
     private String first_name;
     private String last_name;
-
+    private long blog_id;
     public String getBlog_title() {
         return blog_title;
+    }
+
+    public long getBlog_id() {
+        return blog_id;
+    }
+
+    public void setBlog_id(long blog_id) {
+        this.blog_id = blog_id;
     }
 
     public void setBlog_title(String blog_title) {
