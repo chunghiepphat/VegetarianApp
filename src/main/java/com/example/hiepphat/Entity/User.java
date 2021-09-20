@@ -34,6 +34,18 @@ public class User {
     private Set<Recipe> recipes;
     private Date birth_date;
     private String gender;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Set<Blog> blogs;
+    private String provider;
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
 
     public Date getBirth_date() {
         return birth_date;

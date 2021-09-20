@@ -1,8 +1,11 @@
 package com.example.hiepphat.security;
 
 
+import com.example.hiepphat.Entity.Role;
+import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.JWTUtils.AuthEntryPointJwt;
 import com.example.hiepphat.JWTUtils.AuthTokenFilter;
+import com.example.hiepphat.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +16,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +36,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
-
+	@Autowired
+	UserServiceImpl userService;
 	@Autowired
 	private AuthEntryPointJwt unauthorizedHandler;
 
@@ -56,10 +67,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable()
 			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-			.authorizeRequests().antMatchers("/api/user/**").permitAll()
+			.authorizeRequests().antMatchers("/","oauth",
+						"/error",
+						"/favicon.ico",
+						"/**/*.png",
+						"/**/*.gif",
+						"/**/*.svg",
+						"/**/*.jpg",
+						"/**/*.html",
+						"/**/*.css",
+						"/**/*.js")
+				.permitAll().antMatchers("/api/user/**").permitAll()
 			.antMatchers("/api/recipes/**").permitAll()
+				.antMatchers("/api/blogs/**").permitAll()
 			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}
+
+
+
+
 }

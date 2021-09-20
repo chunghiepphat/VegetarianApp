@@ -1,7 +1,10 @@
 package com.example.hiepphat.service;
 
+import com.example.hiepphat.Entity.Blog;
 import com.example.hiepphat.Entity.Recipe;
+import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.dtos.TenBlogDTO;
 import com.example.hiepphat.dtos.TenRecipeDTO;
 import org.springframework.stereotype.Component;
 
@@ -36,5 +39,26 @@ public class Converter {
         dto.setFirst_name(entity.getUser().getFirst_name());
         return dto;
     }
-
+    public TenBlogDTO toDTO10BLOG(Blog entity){
+        TenBlogDTO dto=new TenBlogDTO();
+        dto.setBlog_thumbnail(entity.getBlog_thumbnail());
+        dto.setBlog_content(entity.getBlog_content());
+        dto.setBlog_title(entity.getBlog_title());
+        dto.setFirst_name(entity.getUser().getFirst_name());
+        dto.setLast_name(entity.getUser().getLast_name());
+        return dto;
+    }
+    public BlogDTO toDTOBLOG(Blog entity) {
+        BlogDTO dto = new BlogDTO();
+        dto.setBlog_id(entity.getBlogID());
+        dto.setBlog_title(entity.getBlog_title());
+        dto.setBlog_subtitle(entity.getBlog_subtitle());
+        dto.setFirst_name(entity.getUser().getFirst_name());
+        dto.setLast_name(entity.getUser().getLast_name());
+        dto.setTime(entity.getTime());
+        dto.setBlog_content(entity.getBlog_content());
+        dto.setBlog_thumbnail(entity.getBlog_thumbnail());
+        dto.setUser_id(entity.getUser().getUserID());
+        return dto;
+    }
 }

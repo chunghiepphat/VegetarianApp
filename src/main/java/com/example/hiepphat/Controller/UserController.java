@@ -10,7 +10,6 @@ import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.response.JwtResponse;
 import com.example.hiepphat.response.SignupResponse;
 import com.example.hiepphat.service.UserServiceImpl;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -64,6 +62,7 @@ UserRepository userRepository;
             User user = new User(signUpRequest.getFirst_name(), signUpRequest.getLast_name(),
                     signUpRequest.getEmail(), passwordEncoder.encode(signUpRequest.getPassword())
                     , true, roles);
+            user.setProvider("local");
             userService.save(user);
             String jwt=jwtUtils.generateJwtTokenSignup(signUpRequest);
             return ResponseEntity.ok(new SignupResponse("Register Successfully",jwt));
@@ -96,4 +95,5 @@ UserRepository userRepository;
              }
          return model;
     }
+
 }

@@ -1,0 +1,58 @@
+package com.example.hiepphat.service;
+
+import com.example.hiepphat.Entity.Blog;
+import com.example.hiepphat.Entity.Recipe;
+import com.example.hiepphat.dtos.BlogDTO;
+import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.dtos.TenBlogDTO;
+import com.example.hiepphat.dtos.TenRecipeDTO;
+import com.example.hiepphat.repositories.BlogRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class BlogServiceImpl implements BlogService{
+@Autowired
+private BlogRepository blogRepository;
+    @Autowired
+    private Converter converter;
+    @Override
+    public List<TenBlogDTO> findAll(Pageable pageable) {
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entites=blogRepository.findAll(pageable).getContent();
+        for(Blog item:entites){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            results.add(blogDTO);
+        }
+        return results;
+    }
+
+    @Override
+    public int totalItem() {
+        return (int)blogRepository.count();
+    }
+
+    @Override
+    public BlogDTO findblogbyID(long id) {
+        Blog enties=blogRepository.findByBlogID(id);
+        BlogDTO blogDTO= converter.toDTOBLOG(enties);
+        return blogDTO;
+    }
+
+    @Override
+    public List<TenBlogDTO> findTop10Records() {
+        Date date=new Date(new java.util.Date().getTime());
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entities=blogRepository.findTop10ByTimeLessThanEqualOrderByTimeDesc(date);
+        for (Blog item: entities){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            results.add(blogDTO);
+        }
+        return results;
+    }
+}
