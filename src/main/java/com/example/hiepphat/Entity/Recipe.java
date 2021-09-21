@@ -2,6 +2,8 @@ package com.example.hiepphat.Entity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Recipes")
@@ -27,6 +29,7 @@ public class Recipe {
     private int resting_time_minutes;
     @Column(name = "time_created")
     private Date time;
+
 
     public long getRecipeID() {
         return recipeID;

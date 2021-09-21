@@ -1,5 +1,6 @@
 package com.example.hiepphat.service;
 
+import com.example.hiepphat.Entity.LikeRecipe;
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.dtos.TenBlogDTO;
@@ -20,4 +21,5 @@ public interface RecipeService {
     List<TenRecipeDTO> findTop10ByUserOrderByTimeDesc(int userID);
     List<TenRecipeDTO> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
+
 }

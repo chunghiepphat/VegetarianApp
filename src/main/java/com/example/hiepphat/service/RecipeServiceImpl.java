@@ -1,10 +1,12 @@
 package com.example.hiepphat.service;
 
 import com.example.hiepphat.Entity.Blog;
+import com.example.hiepphat.Entity.LikeRecipe;
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.dtos.TenBlogDTO;
 import com.example.hiepphat.dtos.TenRecipeDTO;
+import com.example.hiepphat.repositories.LikeRecipeRepository;
 import com.example.hiepphat.repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +25,8 @@ public class RecipeServiceImpl implements RecipeService{
 RecipeRepository recipeRepository;
     @Autowired
     private Converter converter;
-
+    @Autowired
+    LikeRecipeRepository likeRecipeRepository;
     @Override
     public List<TenRecipeDTO> findAll(Pageable pageable) {
         List<TenRecipeDTO> results=new ArrayList<>();
@@ -88,6 +91,8 @@ RecipeRepository recipeRepository;
     public int countByUser_UserID(int userID) {
         return recipeRepository.countByUser_UserID(userID);
     }
+
+
 
 
 }

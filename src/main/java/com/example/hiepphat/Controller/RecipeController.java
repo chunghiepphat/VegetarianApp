@@ -2,11 +2,11 @@ package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.repositories.LikeRecipeRepository;
 import com.example.hiepphat.response.BlogResponse;
 import com.example.hiepphat.response.RecipeResponse;
 import com.example.hiepphat.response.TenRecipesResponse;
-import com.example.hiepphat.service.Converter;
-import com.example.hiepphat.service.RecipeService;
+import com.example.hiepphat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -23,9 +23,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/recipes")
 public class RecipeController {
     @Autowired
-    private RecipeService recipeService;
+    private LikeRecipeRepository likeRecipeRepository;
+    @Autowired
+    private RecipeServiceImpl recipeService;
     @Autowired
     private Converter converter;
+    @Autowired
+    private LikeRecipeService likeRecipeService;
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
@@ -64,4 +68,11 @@ public class RecipeController {
         result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
         return result2;
     }
+    @GetMapping("/get5bestrecipes")
+    public TenRecipesResponse getbestrecipe() {
+        TenRecipesResponse result=new TenRecipesResponse();
+        result.setListResult(likeRecipeService.findbestRecipe());
+        return result;
+    }
+
 }
