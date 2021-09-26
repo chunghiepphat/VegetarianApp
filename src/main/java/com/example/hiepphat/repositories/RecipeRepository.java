@@ -23,7 +23,7 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
      List<Recipe> findTop10ByUser_UserIDOrderByTimeDesc(int userID);
     List<Recipe> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
-
+    List<Recipe> findByRecipeTitleLike(String search);
 
 
 }

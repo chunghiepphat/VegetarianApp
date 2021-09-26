@@ -92,7 +92,21 @@ RecipeRepository recipeRepository;
         return recipeRepository.countByUser_UserID(userID);
     }
 
+    @Override
+    public List<TenRecipeDTO> findAllByRecipeTitleLike(String search) {
+        List<TenRecipeDTO> results=new ArrayList<>();
+        List<Recipe> entities=recipeRepository.findByRecipeTitleLike("%"+search+"%");
+        for (Recipe item: entities){
+            TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            results.add(recipeDTO);
+        }
+        return results;
+    }
 
+    @Override
+    public Recipe save(Recipe recipe) {
+        return recipeRepository.save(recipe);
+    }
 
 
 }

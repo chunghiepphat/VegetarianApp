@@ -21,7 +21,7 @@ public class Converter {
         dto.setPortion_size(entity.getPortion_size());
         dto.setBaking_time_minutes(entity.getBaking_time_minutes());
         dto.setPortion_type(entity.getPortion_type());
-        dto.setRecipe_title(entity.getRecipe_title());
+        dto.setRecipe_title(entity.getRecipeTitle());
         dto.setPrep_time_minutes(entity.getPrep_time_minutes());
         dto.setUser_id(entity.getUser().getUserID());
         dto.setRecipe_categories_id(entity.getRecipeCategories().getRecipe_category_id());
@@ -34,7 +34,7 @@ public class Converter {
     public TenRecipeDTO toDTO10(Recipe entity) {
         TenRecipeDTO dto = new TenRecipeDTO();
         dto.setRecipe_thumbnail(entity.getRecipe_thumbnail());
-        dto.setRecipe_title(entity.getRecipe_title());
+        dto.setRecipe_title(entity.getRecipeTitle());
         dto.setLast_name(entity.getUser().getLast_name());
         dto.setFirst_name(entity.getUser().getFirst_name());
         dto.setRecipe_id(entity.getRecipeID());
@@ -48,6 +48,7 @@ public class Converter {
         dto.setFirst_name(entity.getUser().getFirst_name());
         dto.setLast_name(entity.getUser().getLast_name());
         dto.setBlog_id(entity.getBlogID());
+        dto.setTime(entity.getTime());
         return dto;
     }
     public BlogDTO toDTOBLOG(Blog entity) {

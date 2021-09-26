@@ -1,25 +1,11 @@
-package com.example.hiepphat.Entity;
+package com.example.hiepphat.request;
 
-import javax.persistence.*;
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity
-@Table(name = "Recipes")
-public class Recipe {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recipe_id")
-    private long recipeID;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipe_category_id")
-    private RecipeCategories recipeCategories;
-    @Column(name = "recipe_title")
-    private String recipeTitle;
+public class RecipeRequest {
+    private int user_id;
+    private int recipe_categories_id;
+    private String recipe_title;
     private String recipe_thumbnail;
     private String recipe_content;
     private int recipe_difficulty;
@@ -28,42 +14,30 @@ public class Recipe {
     private int prep_time_minutes;
     private int baking_time_minutes;
     private int resting_time_minutes;
-    @Column(name = "time_created")
-    private Date time;
 
-    public String getRecipeTitle() {
-        return recipeTitle;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setRecipeTitle(String recipeTitle) {
-        this.recipeTitle = recipeTitle;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 
-    public long getRecipeID() {
-        return recipeID;
+    public int getRecipe_categories_id() {
+        return recipe_categories_id;
     }
 
-    public void setRecipeID(long recipeID) {
-        this.recipeID = recipeID;
+    public void setRecipe_categories_id(int recipe_categories_id) {
+        this.recipe_categories_id = recipe_categories_id;
     }
 
-    public User getUser() {
-        return user;
+    public String getRecipe_title() {
+        return recipe_title;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setRecipe_title(String recipe_title) {
+        this.recipe_title = recipe_title;
     }
-
-    public RecipeCategories getRecipeCategories() {
-        return recipeCategories;
-    }
-
-    public void setRecipeCategories(RecipeCategories recipeCategories) {
-        this.recipeCategories = recipeCategories;
-    }
-
-
 
     public String getRecipe_thumbnail() {
         return recipe_thumbnail;
@@ -129,11 +103,5 @@ public class Recipe {
         this.resting_time_minutes = resting_time_minutes;
     }
 
-    public Date getTime() {
-        return time;
-    }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
 }

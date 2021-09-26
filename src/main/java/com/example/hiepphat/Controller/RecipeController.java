@@ -1,11 +1,14 @@
 package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.Recipe;
+import com.example.hiepphat.Entity.RecipeCategories;
+import com.example.hiepphat.Entity.Role;
+import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
-import com.example.hiepphat.response.BlogResponse;
-import com.example.hiepphat.response.RecipeResponse;
-import com.example.hiepphat.response.TenRecipesResponse;
+import com.example.hiepphat.request.RecipeRequest;
+import com.example.hiepphat.request.SignUpRequest;
+import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,8 +17,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.sql.Date;
 
 
 @CrossOrigin
@@ -74,5 +81,36 @@ public class RecipeController {
         result.setListResult(likeRecipeService.findbestRecipe());
         return result;
     }
+    @GetMapping("/find")
+    public TenRecipesResponse searchRecipe(@RequestParam("search") String search) {
+        TenRecipesResponse result=new TenRecipesResponse();
+        result.setListResult(recipeService.findAllByRecipeTitleLike(search));
+        return result;
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("/add")
+    public ResponseEntity<?> addRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
+                            Recipe recipe=new Recipe();
+                            User user=new User();
+                            user.setUserID(recipeRequest.getUser_id());
+                            recipe.setUser(user);
+                            recipe.setRecipe_content(recipeRequest.getRecipe_content());
+                            recipe.setRecipeTitle(recipeRequest.getRecipe_title());
+                            recipe.setRecipe_thumbnail(recipeRequest.getRecipe_thumbnail());
+                         RecipeCategories recipeCategories=new RecipeCategories();
+                          recipeCategories.setRecipe_category_id(recipeRequest.getRecipe_categories_id());
+                            recipe.setRecipeCategories(recipeCategories);
+                            recipe.setBaking_time_minutes(recipeRequest.getBaking_time_minutes());
+                            recipe.setPortion_size(recipeRequest.getPortion_size());
+                            recipe.setPortion_type(recipeRequest.getPortion_type());
+                            recipe.setPrep_time_minutes(recipeRequest.getPrep_time_minutes());
+                            Date date=new Date(new java.util.Date().getTime());
+                            recipe.setTime(date);
+                            recipe.setRecipe_difficulty(recipeRequest.getRecipe_difficulty());
+                            recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
+                            recipeService.save(recipe);
+             return ResponseEntity.ok(new MessageResponse("Add recipe successfully!!!"));
+        }
+    }
 
-}
+
