@@ -49,6 +49,7 @@ public class Converter {
         dto.setLast_name(entity.getUser().getLast_name());
         dto.setBlog_id(entity.getBlogID());
         dto.setTime(entity.getTime());
+        dto.setBlog_subtitle(entity.getBlog_subtitle());
         return dto;
     }
     public BlogDTO toDTOBLOG(Blog entity) {

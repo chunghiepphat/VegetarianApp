@@ -8,8 +8,18 @@ public class TenBlogDTO {
     private String blog_content;
     private String first_name;
     private String last_name;
+    private String blog_subtitle;
     private long blog_id;
     private Date time;
+
+    public String getBlog_subtitle() {
+        return blog_subtitle;
+    }
+
+    public void setBlog_subtitle(String blog_subtitle) {
+        this.blog_subtitle = blog_subtitle;
+    }
+
     public String getBlog_title() {
         return blog_title;
     }
