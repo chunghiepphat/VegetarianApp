@@ -3,6 +3,7 @@ package com.example.hiepphat.service;
 import com.example.hiepphat.Entity.LikeRecipe;
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.dtos.RecipeCategoriesDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.dtos.TenBlogDTO;
 import com.example.hiepphat.dtos.TenRecipeDTO;
@@ -24,4 +25,5 @@ public interface RecipeService {
     int countByUser_UserID(int userID);
     List<TenRecipeDTO> findAllByRecipeTitleLike(String search);
     public Recipe save(Recipe recipe);
+    List<RecipeCategoriesDTO> getAllRecipeCategory();
 }

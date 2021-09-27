@@ -111,6 +111,12 @@ public class RecipeController {
                             recipeService.save(recipe);
              return ResponseEntity.ok(new MessageResponse("Add recipe successfully!!!"));
         }
+    @GetMapping("/categories")
+    public RecipeCategoriesResponse getAllCategory() {
+        RecipeCategoriesResponse result=new RecipeCategoriesResponse();
+        result.setListResult(recipeService.getAllRecipeCategory());
+        return result;
+    }
     }
 
 

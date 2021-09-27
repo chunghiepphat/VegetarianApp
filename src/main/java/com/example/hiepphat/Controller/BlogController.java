@@ -1,17 +1,25 @@
 package com.example.hiepphat.Controller;
 
+import com.example.hiepphat.Entity.Blog;
+import com.example.hiepphat.Entity.Recipe;
+import com.example.hiepphat.Entity.RecipeCategories;
+import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
-import com.example.hiepphat.response.BlogResponse;
-import com.example.hiepphat.response.RecipeResponse;
-import com.example.hiepphat.response.TenBlogResponse;
-import com.example.hiepphat.response.TenRecipesResponse;
+import com.example.hiepphat.request.BlogRequest;
+import com.example.hiepphat.request.RecipeRequest;
+import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.BlogServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.sql.Date;
 
 @CrossOrigin
 @RestController
@@ -56,5 +64,22 @@ public class BlogController {
         result2.setListResult(blogService.findAllByUser_UserID(pageable,id));
         result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
         return result2;
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("/add")
+    public ResponseEntity<?> addBlog(@Valid @RequestBody BlogRequest blogRequest) {
+        Blog blog=new Blog();
+        User user=new User();
+        user.setUserID(blogRequest.getUser_id());
+        blog.setUser(user);
+        blog.setBlog_content(blogRequest.getBlog_content());
+        blog.setBlog_title(blogRequest.getBlog_title());
+        blog.setBlog_subtitle(blogRequest.getBlog_subtitle());
+        blog.setBlog_thumbnail(blogRequest.getBlog_thumbnail());
+        blog.setIs_active(true);
+        Date date=new Date(new java.util.Date().getTime());
+        blog.setTime(date);
+        blogService.save(blog);
+        return ResponseEntity.ok(new MessageResponse("Post blog successfully!!!"));
     }
 }

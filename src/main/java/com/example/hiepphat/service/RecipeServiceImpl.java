@@ -3,10 +3,13 @@ package com.example.hiepphat.service;
 import com.example.hiepphat.Entity.Blog;
 import com.example.hiepphat.Entity.LikeRecipe;
 import com.example.hiepphat.Entity.Recipe;
+import com.example.hiepphat.Entity.RecipeCategories;
+import com.example.hiepphat.dtos.RecipeCategoriesDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.dtos.TenBlogDTO;
 import com.example.hiepphat.dtos.TenRecipeDTO;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
+import com.example.hiepphat.repositories.RecipeCategoriesRepository;
 import com.example.hiepphat.repositories.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,8 @@ RecipeRepository recipeRepository;
     private Converter converter;
     @Autowired
     LikeRecipeRepository likeRecipeRepository;
+    @Autowired
+    RecipeCategoriesRepository recipeCategoriesRepository;
     @Override
     public List<TenRecipeDTO> findAll(Pageable pageable) {
         List<TenRecipeDTO> results=new ArrayList<>();
@@ -106,6 +111,19 @@ RecipeRepository recipeRepository;
     @Override
     public Recipe save(Recipe recipe) {
         return recipeRepository.save(recipe);
+    }
+
+    @Override
+    public List<RecipeCategoriesDTO> getAllRecipeCategory() {
+        List<RecipeCategoriesDTO> result=new ArrayList<>();
+        List<RecipeCategories> entities=recipeCategoriesRepository.getAll();
+        for(RecipeCategories item:entities){
+            RecipeCategoriesDTO recipeCategoriesDTO=new RecipeCategoriesDTO();
+            recipeCategoriesDTO.setCategory_id(item.getRecipe_category_id());
+            recipeCategoriesDTO.setCategory_name(item.getRecipe_category_name());
+            result.add(recipeCategoriesDTO);
+        }
+        return result;
     }
 
 

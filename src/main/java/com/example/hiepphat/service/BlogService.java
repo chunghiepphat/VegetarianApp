@@ -1,6 +1,7 @@
 package com.example.hiepphat.service;
 
 import com.example.hiepphat.Entity.Blog;
+import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.dtos.TenBlogDTO;
@@ -18,4 +19,5 @@ public interface BlogService {
     List<TenBlogDTO> findTop10ByUser_UserIDOrderByTimeDesc(int userID);
     List<TenBlogDTO> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
+    public Blog save(Blog blog);
 }

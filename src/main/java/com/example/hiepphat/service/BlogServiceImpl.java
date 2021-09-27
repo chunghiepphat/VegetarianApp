@@ -86,5 +86,10 @@ private BlogRepository blogRepository;
         return blogRepository.countByUser_UserID(userID);
     }
 
+    @Override
+    public Blog save(Blog blog) {
+        return blogRepository.save(blog);
+    }
+
 
 }
