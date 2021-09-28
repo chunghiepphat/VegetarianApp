@@ -11,7 +11,4 @@ import java.util.List;
 public interface LikeRecipeRepository extends JpaRepository<LikeRecipe,Long> {
     @Query(value = "SELECT TOP 5 recipe_id FROM Likes_Recipe GROUP BY recipe_id ORDER BY COUNT (user_id) DESC ",nativeQuery = true)
     List<Integer> findbestRecipe();
-
-
-
 }

@@ -10,6 +10,8 @@ import com.example.hiepphat.request.BlogRequest;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.BlogServiceImpl;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +19,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
-import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @CrossOrigin
 @RestController
@@ -67,7 +76,7 @@ public class BlogController {
     }
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
-    public ResponseEntity<?> addBlog(@Valid @RequestBody BlogRequest blogRequest) {
+    public ResponseEntity<?> addBlog(@Valid @RequestBody BlogRequest blogRequest) throws ParseException {
         Blog blog=new Blog();
         User user=new User();
         user.setUserID(blogRequest.getUser_id());
@@ -77,9 +86,10 @@ public class BlogController {
         blog.setBlog_subtitle(blogRequest.getBlog_subtitle());
         blog.setBlog_thumbnail(blogRequest.getBlog_thumbnail());
         blog.setIs_active(true);
-        Date date=new Date(new java.util.Date().getTime());
+        java.sql.Date date=new java.sql.Date(new java.util.Date().getTime());
         blog.setTime(date);
         blogService.save(blog);
         return ResponseEntity.ok(new MessageResponse("Post blog successfully!!!"));
     }
+
 }

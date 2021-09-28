@@ -22,8 +22,15 @@ public class RecipeDTO {
     private Date time_created;
     private String first_name;
     private String last_name;
+    private IngredientDTO nutrition;
 
+    public IngredientDTO getNutrition() {
+        return nutrition;
+    }
 
+    public void setNutrition(IngredientDTO nutrition) {
+        this.nutrition = nutrition;
+    }
 
     public Date getTime_created() {
         return time_created;

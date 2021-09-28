@@ -4,6 +4,7 @@ import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.Entity.RecipeCategories;
 import com.example.hiepphat.Entity.Role;
 import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.dtos.IngredientDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
 import com.example.hiepphat.request.RecipeRequest;
@@ -37,6 +38,8 @@ public class RecipeController {
     private Converter converter;
     @Autowired
     private LikeRecipeService likeRecipeService;
+    @Autowired
+    private IngredientServiceImpl ingredientService;
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
@@ -55,9 +58,8 @@ public class RecipeController {
     @GetMapping("/getrecipeby/{id}")
     public RecipeDTO showRecipesbyID(@PathVariable long id) throws Exception {
         RecipeDTO result=recipeService.findrecipebyID(id);
-        if(result==null){
-           throw new Exception("Nout found recipe id:"+ id);
-        }
+        IngredientDTO nutrition=ingredientService.getIngredientByRecipe(id);
+        result.setNutrition(nutrition);
         return result;
     }
     @GetMapping("/get10recipebyuser/{id}")
