@@ -34,6 +34,8 @@ public class JwtUtils {
 				.claim("about_me",userPrincipal.getAbout_me()).claim("phone_number",userPrincipal.getPhone_number())
 				.claim("profile_image",userPrincipal.getProfile_image()).claim("country",userPrincipal.getCountry())
 				.claim("facebook_link",userPrincipal.getFacebook_link()).claim("instagram_link",userPrincipal.getInstagram_link())
+				.claim("birth_date",userPrincipal.getBirth_date())
+				.claim("gender",userPrincipal.getGender())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)

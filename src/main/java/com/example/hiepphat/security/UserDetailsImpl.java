@@ -9,10 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserDetailsImpl implements UserDetails {
@@ -31,11 +28,13 @@ public class UserDetailsImpl implements UserDetails {
 	private String country;
 	private String facebook_link;
 	private String instagram_link;
+	private java.sql.Date birth_date;
+	private String gender;
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(int id, String first_name,String last_name, String email, String password,String about_me,String phone_number,String profile_image,String country,
-			String facebook_link,String instagram_link,
-			Collection<? extends GrantedAuthority> authorities) {
+	public UserDetailsImpl(int id, String first_name, String last_name, String email, String password, String about_me, String phone_number, String profile_image, String country,
+						   String facebook_link, String instagram_link, java.sql.Date birth_date, String gender,
+						   Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.first_name=first_name;
 		this.last_name=last_name;
@@ -48,6 +47,8 @@ public class UserDetailsImpl implements UserDetails {
 		this.country=country;
 		this.facebook_link=facebook_link;
 		this.instagram_link=instagram_link;
+		this.birth_date=birth_date;
+		this.gender=gender;
 	}
 
 	public static UserDetailsImpl build(User user) {
@@ -65,6 +66,8 @@ public class UserDetailsImpl implements UserDetails {
 				user.getCountry(),
 				user.getFacebook_link(),
 				user.getInstagram_link(),
+				user.getBirth_date(),
+				user.getGender(),
 				authorities);
 	}
 
@@ -148,8 +151,16 @@ public class UserDetailsImpl implements UserDetails {
 	public String getFirst_name() {
 		return first_name;
 	}
-
 	public String getLast_name() {
 		return last_name;
 	}
+	public java.sql.Date getBirth_date() {
+		return birth_date;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+
 }
