@@ -3,17 +3,12 @@ package com.example.hiepphat.service;
 import com.example.hiepphat.Entity.Ingredient;
 import com.example.hiepphat.dtos.IngredientDTO;
 import com.example.hiepphat.repositories.IngredientRepository;
-import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 @Service
 public class IngredientServiceImpl implements IngredientService {

@@ -89,7 +89,6 @@ public class RecipeController {
         result.setListResult(recipeService.findAllByRecipeTitleLike(search));
         return result;
     }
-
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
     public ResponseEntity<?> addRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
