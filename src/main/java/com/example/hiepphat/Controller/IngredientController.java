@@ -1,14 +1,9 @@
 package com.example.hiepphat.Controller;
 
-import com.example.hiepphat.dtos.IngredientDTO;
-import com.example.hiepphat.dtos.NutritionDTO;
 import com.example.hiepphat.response.IngredientResponse;
-import com.example.hiepphat.response.TenBlogResponse;
 import com.example.hiepphat.service.IngredientServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController

@@ -1,7 +1,7 @@
 package com.example.hiepphat.service;
 
 import com.example.hiepphat.Entity.Ingredient;
-import com.example.hiepphat.dtos.IngredientDTO;
+import com.example.hiepphat.dtos.NutritionDTO;
 import com.example.hiepphat.repositories.IngredientRepository;
 import com.jayway.jsonpath.JsonPath;
 import org.json.JSONObject;
@@ -15,41 +15,46 @@ public class IngredientServiceImpl implements IngredientService {
     @Autowired
     IngredientRepository ingredientRepository;
     @Override
-    public IngredientDTO getIngredientByRecipe(long recipeID) {
+    public NutritionDTO getIngredientByRecipe(long recipeID) {
         float totalProtein=0;
         float totalCalo=0;
         float totalFat=0;
         float totalCarb=0;
-       IngredientDTO result=new IngredientDTO();
+       NutritionDTO result=new NutritionDTO();
         List<Ingredient> entites=ingredientRepository.getIngredient(recipeID);
-        for(Ingredient item:entites) {
-            String querry = item.getIngredientName();
-            final String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=dIiAPHLfEenzJusaaqLPNvS4F3x9pjKxhteiR6ft&query=" + querry + "&pageSize=1&pageNumber=1";
-            RestTemplate restTemplate = new RestTemplate();
-            String resultJson = restTemplate.getForObject(uri, String.class);
-            JSONObject root=new JSONObject(resultJson);
-            net.minidev.json.JSONArray protein = JsonPath.read(resultJson,"foods[0].foodNutrients[?(@.nutrientName == 'Protein')].value");
-            net.minidev.json.JSONArray fat = JsonPath.read(resultJson,"foods[0].foodNutrients[?(@.nutrientName == 'Total lipid (fat)')].value");
-            net.minidev.json.JSONArray carb =JsonPath.read(resultJson,"foods[0].foodNutrients[?(@.nutrientName == 'Carbohydrate, by difference')].value");
-            net.minidev.json.JSONArray calories =JsonPath.read(resultJson,"foods[0].foodNutrients[?(@.nutrientName == 'Energy')].value");
-            if(protein.isEmpty() && fat.isEmpty() && carb.isEmpty() && calories.isEmpty()){
-                protein.add(0,Float.valueOf(0));
-                fat.add(0,Float.valueOf(0));
-                carb.add(0,Float.valueOf(0));
-                calories.add(0,Float.valueOf(0));
-                totalProtein+=Float.parseFloat(protein.get(0).toString());
-                totalCalo+=Float.parseFloat(calories.get(0).toString());
-                totalCarb+=Float.parseFloat(carb.get(0).toString());
-                totalFat+=Float.parseFloat(fat.get(0).toString());
-            }
-            else{
-                totalProtein+=Float.parseFloat(protein.get(0).toString());
-                totalCalo+=Float.parseFloat(calories.get(0).toString());
-                totalCarb+=Float.parseFloat(carb.get(0).toString());
-                totalFat+=Float.parseFloat(fat.get(0).toString());
-            }
-
-        }
+        List<Integer> listInt=ingredientRepository.getAmount(recipeID);
+          for(int i=0;i<listInt.size();i++) {
+              for (Ingredient item : entites) {
+                  String querry = item.getIngredientName();
+                  final String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=dIiAPHLfEenzJusaaqLPNvS4F3x9pjKxhteiR6ft&query=" + querry + "&pageSize=1&pageNumber=1";
+                  RestTemplate restTemplate = new RestTemplate();
+                  String resultJson = restTemplate.getForObject(uri, String.class);
+                  net.minidev.json.JSONArray protein = JsonPath.read(resultJson, "foods[0].foodNutrients[?(@.nutrientName == 'Protein')].value");
+                  net.minidev.json.JSONArray fat = JsonPath.read(resultJson, "foods[0].foodNutrients[?(@.nutrientName == 'Total lipid (fat)')].value");
+                  net.minidev.json.JSONArray carb = JsonPath.read(resultJson, "foods[0].foodNutrients[?(@.nutrientName == 'Carbohydrate, by difference')].value");
+                  net.minidev.json.JSONArray calories = JsonPath.read(resultJson, "foods[0].foodNutrients[?(@.nutrientName == 'Energy')].value");
+                  if (protein.isEmpty() && fat.isEmpty() && carb.isEmpty() && calories.isEmpty()) {
+                      protein.add(0, Float.valueOf(0));
+                      fat.add(0, Float.valueOf(0));
+                      carb.add(0, Float.valueOf(0));
+                      calories.add(0, Float.valueOf(0));
+                      totalProtein += Float.parseFloat(protein.get(0).toString());
+                      totalCalo += Float.parseFloat(calories.get(0).toString());
+                      totalCarb += Float.parseFloat(carb.get(0).toString());
+                      totalFat += Float.parseFloat(fat.get(0).toString());
+                  } else {
+                      float protein1 = (Float.parseFloat(protein.get(0).toString()) * listInt.get(i)) / 100;
+                      float fat1 = (Float.parseFloat(fat.get(0).toString()) * listInt.get(i)) / 100;
+                      float carb1 = (Float.parseFloat(carb.get(0).toString()) * listInt.get(i)) / 100;
+                      float calo1 = (Float.parseFloat(calories.get(0).toString()) * listInt.get(i)) / 100;
+                      totalProtein += protein1;
+                      totalCalo += calo1;
+                      totalCarb += carb1;
+                      totalFat += fat1;
+                  }
+                 i++;
+              }
+          }
         result.setCarb(totalCarb);
         result.setFat(totalFat);
         result.setProtein(totalProtein);

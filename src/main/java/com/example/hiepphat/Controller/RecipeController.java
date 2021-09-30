@@ -2,11 +2,11 @@ package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.IngredientDTO;
+import com.example.hiepphat.dtos.NutritionDTO;
 import com.example.hiepphat.dtos.IngredientRecipeDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
 import com.example.hiepphat.request.RecipeRequest;
-import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +18,11 @@ import org.springframework.data.domain.Sort;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @CrossOrigin
@@ -64,7 +59,8 @@ public class RecipeController {
     @GetMapping("/getrecipeby/{id}")
     public RecipeDTO showRecipesbyID(@PathVariable long id) throws Exception {
         RecipeDTO result=recipeService.findrecipebyID(id);
-        IngredientDTO nutrition=ingredientService.getIngredientByRecipe(id);
+        NutritionDTO nutrition=ingredientService.getIngredientByRecipe(id);
+        result.setIngredients(recipeIngredientService.findByRecipe_RecipeID(id));
         result.setNutrition(nutrition);
         return result;
     }

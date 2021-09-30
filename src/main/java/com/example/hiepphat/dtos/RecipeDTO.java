@@ -1,10 +1,8 @@
 package com.example.hiepphat.dtos;
 
-import com.example.hiepphat.Entity.RecipeCategories;
-import com.example.hiepphat.Entity.User;
-
-import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeDTO {
     private long recipe_id;
@@ -22,13 +20,21 @@ public class RecipeDTO {
     private java.util.Date time_created;
     private String first_name;
     private String last_name;
-    private IngredientDTO nutrition;
+    private NutritionDTO nutrition;
+    private List<IngredientDTO> ingredients=new ArrayList<>();
+    public List<IngredientDTO> getIngredients() {
+        return ingredients;
+    }
 
-    public IngredientDTO getNutrition() {
+    public void setIngredients(List<IngredientDTO> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public NutritionDTO getNutrition() {
         return nutrition;
     }
 
-    public void setNutrition(IngredientDTO nutrition) {
+    public void setNutrition(NutritionDTO nutrition) {
         this.nutrition = nutrition;
     }
 

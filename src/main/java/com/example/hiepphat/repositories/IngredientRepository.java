@@ -12,4 +12,6 @@ public interface IngredientRepository extends JpaRepository<Ingredient,Long> {
     boolean existsByIngredientName(String name);
     @Query(value = "Select ingredient_id from Ingredients where ingredient_name=?",nativeQuery = true)
     int findIngredientID(String name);
+    @Query(value = "Select amount_in_mg from Recipes_Ingredients where recipe_id=?",nativeQuery = true)
+    List<Integer> getAmount(long recipeID);
 }
