@@ -1,6 +1,10 @@
 package com.example.hiepphat.request;
 
+import com.example.hiepphat.dtos.IngredientRecipeDTO;
+
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeRequest {
     private int user_id;
@@ -14,7 +18,15 @@ public class RecipeRequest {
     private int prep_time_minutes;
     private int baking_time_minutes;
     private int resting_time_minutes;
+    private List<IngredientRecipeDTO>ingredients=new ArrayList<>();
 
+    public List<IngredientRecipeDTO> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<IngredientRecipeDTO> ingredients) {
+        this.ingredients = ingredients;
+    }
     public int getUser_id() {
         return user_id;
     }

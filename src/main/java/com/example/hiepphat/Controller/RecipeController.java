@@ -1,10 +1,8 @@
 package com.example.hiepphat.Controller;
 
-import com.example.hiepphat.Entity.Recipe;
-import com.example.hiepphat.Entity.RecipeCategories;
-import com.example.hiepphat.Entity.Role;
-import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.IngredientDTO;
+import com.example.hiepphat.dtos.IngredientRecipeDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
 import com.example.hiepphat.request.RecipeRequest;
@@ -20,10 +18,14 @@ import org.springframework.data.domain.Sort;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @CrossOrigin
@@ -40,6 +42,8 @@ public class RecipeController {
     private LikeRecipeService likeRecipeService;
     @Autowired
     private IngredientServiceImpl ingredientService;
+    @Autowired
+    private RecipeIngredientServiceImpl recipeIngredientService;
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
@@ -110,7 +114,35 @@ public class RecipeController {
                             recipe.setTime(date);
                             recipe.setRecipe_difficulty(recipeRequest.getRecipe_difficulty());
                             recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
-                            recipeService.save(recipe);
+//                            Set<Ingredient>ingredientSet=new HashSet<>();
+//                            Ingredient ingredient=new Ingredient();
+//                            if(!ingredientService.existsByIngredient_name(recipeRequest.getIngredient_name())){
+//                                ingredient.setIngredientName(recipeRequest.getIngredient_name());
+//                                ingredientSet.add(ingredient);
+//                                ingredientService.save(ingredient);
+//                            }
+//                            recipe.setIngredients(ingredientSet);
+                     recipeService.save(recipe);
+                     List<IngredientRecipeDTO>ingredientlistDTO=recipeRequest.getIngredients();
+                     for(IngredientRecipeDTO item:ingredientlistDTO){
+                         Ingredient ingredient=new Ingredient();
+                         if(!ingredientService.existsByIngredient_name(item.getIngredient_name())){
+                             ingredient.setIngredientName(item.getIngredient_name());
+                             ingredientService.save(ingredient);
+                         }
+                         RecipeIngredient recipeIngredient=new RecipeIngredient();
+                         int recipeID=recipeService.findrecipeID(recipeRequest.getRecipe_title(),recipeRequest.getUser_id());
+                         Recipe recipe1=new Recipe();
+                         recipe1.setRecipeID(recipeID);
+                         int ingreID=ingredientService.findIngredientID(item.getIngredient_name());
+                         Ingredient ingredient1= new Ingredient();
+                         ingredient1.setIngredientID(ingreID);
+                         recipeIngredient.setRecipe(recipe1);
+                         recipeIngredient.setIngredient(ingredient1);
+                         recipeIngredient.setAmount(item.getAmount_in_mg());
+                         recipeIngredientService.save(recipeIngredient);
+                     }
+
              return ResponseEntity.ok(new MessageResponse("Add recipe successfully!!!"));
         }
     @GetMapping("/categories")

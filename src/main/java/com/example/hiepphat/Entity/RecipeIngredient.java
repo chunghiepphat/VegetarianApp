@@ -15,8 +15,8 @@ public class RecipeIngredient {
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
-    @Column(name = "amount_in_mg")
-    private int amountInmg;
+    @Column(name="amount_in_mg")
+    private int amount;
 
     public int getId() {
         return id;
@@ -42,11 +42,11 @@ public class RecipeIngredient {
         this.ingredient = ingredient;
     }
 
-    public int getAmountInmg() {
-        return amountInmg;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setAmountInmg(int amountInmg) {
-        this.amountInmg = amountInmg;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

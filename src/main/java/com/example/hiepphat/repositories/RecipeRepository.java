@@ -24,6 +24,7 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     List<Recipe> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
     List<Recipe> findByRecipeTitleLike(String search);
-
+    @Query(value = "Select recipe_id from Recipes where recipe_title=? and user_id=?",nativeQuery = true)
+    int findrecipeID(String title,int userID);
 
 }

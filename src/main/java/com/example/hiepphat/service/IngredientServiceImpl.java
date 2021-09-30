@@ -23,7 +23,7 @@ public class IngredientServiceImpl implements IngredientService {
        IngredientDTO result=new IngredientDTO();
         List<Ingredient> entites=ingredientRepository.getIngredient(recipeID);
         for(Ingredient item:entites) {
-            String querry = item.getIngredient_name();
+            String querry = item.getIngredientName();
             final String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=dIiAPHLfEenzJusaaqLPNvS4F3x9pjKxhteiR6ft&query=" + querry + "&pageSize=1&pageNumber=1";
             RestTemplate restTemplate = new RestTemplate();
             String resultJson = restTemplate.getForObject(uri, String.class);
@@ -43,4 +43,21 @@ public class IngredientServiceImpl implements IngredientService {
         result.setCalories(totalCalo);
         return result;
     }
+
+    @Override
+    public boolean existsByIngredient_name(String name) {
+        return ingredientRepository.existsByIngredientName(name);
+    }
+
+    @Override
+    public Ingredient save(Ingredient ingredient) {
+        return ingredientRepository.save(ingredient);
+    }
+
+    @Override
+    public int findIngredientID(String name) {
+        return ingredientRepository.findIngredientID(name);
+    }
+
+
 }

@@ -30,9 +30,21 @@ public class Recipe {
     private int resting_time_minutes;
     @Column(name = "time_created")
     private Date time;
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "Recipes_Ingredients",
+            joinColumns = @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+    private Set<Ingredient>ingredients=new HashSet<>();
     public String getRecipeTitle() {
         return recipeTitle;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public void setRecipeTitle(String recipeTitle) {
