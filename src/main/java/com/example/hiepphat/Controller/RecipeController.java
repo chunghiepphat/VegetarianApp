@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -117,8 +119,9 @@ public class RecipeController {
                             recipe.setPortion_size(recipeRequest.getPortion_size());
                             recipe.setPortion_type(recipeRequest.getPortion_type());
                             recipe.setPrep_time_minutes(recipeRequest.getPrep_time_minutes());
-                            Date date=new Date(new java.util.Date().getTime());
-                            recipe.setTime(date);
+                            Calendar calendar = Calendar.getInstance();
+                            java.util.Date currentTime = calendar.getTime();
+                            recipe.setTime(currentTime);
                             recipe.setRecipe_difficulty(recipeRequest.getRecipe_difficulty());
                             recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
 //                            Set<Ingredient>ingredientSet=new HashSet<>();

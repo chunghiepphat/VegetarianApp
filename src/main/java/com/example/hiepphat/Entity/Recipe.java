@@ -29,7 +29,7 @@ public class Recipe {
     private int baking_time_minutes;
     private int resting_time_minutes;
     @Column(name = "time_created")
-    private Date time;
+    private java.util.Date time;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(	name = "Recipes_Ingredients",
             joinColumns = @JoinColumn(name = "recipe_id"),
@@ -141,8 +141,12 @@ public class Recipe {
         this.resting_time_minutes = resting_time_minutes;
     }
 
-    public Date getTime() {
+    public java.util.Date getTime() {
         return time;
+    }
+
+    public void setTime(java.util.Date time) {
+        this.time = time;
     }
 
     public void setTime(Date time) {

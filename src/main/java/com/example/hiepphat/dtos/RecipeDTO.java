@@ -19,7 +19,7 @@ public class RecipeDTO {
     private int prep_time_minutes;
     private int baking_time_minutes;
     private int resting_time_minutes;
-    private Date time_created;
+    private java.util.Date time_created;
     private String first_name;
     private String last_name;
     private IngredientDTO nutrition;
@@ -32,8 +32,12 @@ public class RecipeDTO {
         this.nutrition = nutrition;
     }
 
-    public Date getTime_created() {
+    public java.util.Date getTime_created() {
         return time_created;
+    }
+
+    public void setTime_created(java.util.Date time_created) {
+        this.time_created = time_created;
     }
 
     public void setTime_created(Date time_created) {
