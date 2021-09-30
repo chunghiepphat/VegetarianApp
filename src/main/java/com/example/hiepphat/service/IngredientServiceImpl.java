@@ -32,10 +32,23 @@ public class IngredientServiceImpl implements IngredientService {
             net.minidev.json.JSONArray fat = JsonPath.read(resultJson,"foods[0].foodNutrients[?(@.nutrientName == 'Total lipid (fat)')].value");
             net.minidev.json.JSONArray carb =JsonPath.read(resultJson,"foods[0].foodNutrients[?(@.nutrientName == 'Carbohydrate, by difference')].value");
             net.minidev.json.JSONArray calories =JsonPath.read(resultJson,"foods[0].foodNutrients[?(@.nutrientName == 'Energy')].value");
-            totalProtein+=Float.parseFloat(protein.get(0).toString());
-            totalCalo+=Float.parseFloat(calories.get(0).toString());
-            totalCarb+=Float.parseFloat(carb.get(0).toString());
-            totalFat+=Float.parseFloat(fat.get(0).toString());
+            if(protein.isEmpty() && fat.isEmpty() && carb.isEmpty() && calories.isEmpty()){
+                protein.add(0,Float.valueOf(0));
+                fat.add(0,Float.valueOf(0));
+                carb.add(0,Float.valueOf(0));
+                calories.add(0,Float.valueOf(0));
+                totalProtein+=Float.parseFloat(protein.get(0).toString());
+                totalCalo+=Float.parseFloat(calories.get(0).toString());
+                totalCarb+=Float.parseFloat(carb.get(0).toString());
+                totalFat+=Float.parseFloat(fat.get(0).toString());
+            }
+            else{
+                totalProtein+=Float.parseFloat(protein.get(0).toString());
+                totalCalo+=Float.parseFloat(calories.get(0).toString());
+                totalCarb+=Float.parseFloat(carb.get(0).toString());
+                totalFat+=Float.parseFloat(fat.get(0).toString());
+            }
+
         }
         result.setCarb(totalCarb);
         result.setFat(totalFat);
