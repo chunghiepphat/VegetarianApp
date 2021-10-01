@@ -120,30 +120,24 @@ public class RecipeController {
                             recipe.setTime(currentTime);
                             recipe.setRecipe_difficulty(recipeRequest.getRecipe_difficulty());
                             recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
-//                            Set<Ingredient>ingredientSet=new HashSet<>();
-//                            Ingredient ingredient=new Ingredient();
-//                            if(!ingredientService.existsByIngredient_name(recipeRequest.getIngredient_name())){
-//                                ingredient.setIngredientName(recipeRequest.getIngredient_name());
-//                                ingredientSet.add(ingredient);
-//                                ingredientService.save(ingredient);
-//                            }
-//                            recipe.setIngredients(ingredientSet);
                      recipeService.save(recipe);
                      List<IngredientRecipeDTO>ingredientlistDTO=recipeRequest.getIngredients();
                      for(IngredientRecipeDTO item:ingredientlistDTO){
                          Ingredient ingredient=new Ingredient();
-                         NutritionDTO dto=ingredientService.findByIngredientName(item.getIngredient_name());
                          if(!ingredientService.existsByIngredient_name(item.getIngredient_name())){
                              ingredient.setIngredientName(item.getIngredient_name());
-                             ingredient.setFat(dto.getFat());
-                             ingredient.setProtein(dto.getProtein());
-                             ingredient.setCarb(dto.getCarb());
-                             ingredient.setCalories(dto.getCalories());
+                             ingredientService.save(ingredient);
+                             NutritionDTO dto=ingredientService.findByIngredientName(item.getIngredient_name());
+                             Ingredient ingredient1=ingredientService.findIngredientName(item.getIngredient_name());
+                             ingredient1.setFat(dto.getFat());
+                             ingredient1.setProtein(dto.getProtein());
+                             ingredient1.setCarb(dto.getCarb());
+                             ingredient1.setCalories(dto.getCalories());
                              ingredientService.save(ingredient);
                          }
                          else{
-
                              Ingredient ingredient1=ingredientService.findIngredientName(item.getIngredient_name());
+                             NutritionDTO dto=ingredientService.findByIngredientName(item.getIngredient_name());
                              ingredient1.setCalories(dto.getCalories());
                              ingredient1.setCarb(dto.getCarb());
                              ingredient1.setProtein(dto.getProtein());
