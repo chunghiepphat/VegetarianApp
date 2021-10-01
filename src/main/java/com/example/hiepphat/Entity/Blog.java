@@ -1,7 +1,7 @@
 package com.example.hiepphat.Entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Table(name = "Blogs")
@@ -19,7 +19,7 @@ public class Blog {
     private String blog_thumbnail;
     private boolean is_active;
     @Column(name = "time_created")
-    private Date time;
+    private java.util.Date time;
 
     public String getBlog_thumbnail() {
         return blog_thumbnail;

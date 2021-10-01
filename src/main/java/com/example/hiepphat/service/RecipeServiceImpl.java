@@ -127,7 +127,7 @@ RecipeRepository recipeRepository;
     }
 
     @Override
-    public int findrecipeID(String title,int user_id) {
+    public long findrecipeID(String title,int user_id) {
         return  recipeRepository.findrecipeID(title,user_id);
     }
 

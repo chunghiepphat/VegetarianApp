@@ -8,4 +8,6 @@ public interface IngredientService {
     boolean existsByIngredient_name(String name);
     Ingredient save(Ingredient ingredient);
     int findIngredientID(String name);
+    NutritionDTO findByIngredientName(String name);
+    Ingredient findIngredientName(String name);
 }

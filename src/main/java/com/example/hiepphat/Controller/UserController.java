@@ -95,5 +95,22 @@ UserRepository userRepository;
              }
          return model;
     }
-
+    @GetMapping("/{id}")
+    public UserDTO getUser(@PathVariable("id")int id) {
+        User user=userRepository.findByUserID(id);
+        UserDTO dto=new UserDTO();
+        dto.setId(user.getUserID());
+        dto.setFirst_name(user.getFirst_name());
+        dto.setLast_name(user.getLast_name());
+        dto.setEmail(user.getEmail());
+        dto.setCountry(user.getCountry());
+        dto.setBirth_date(user.getBirth_date());
+        dto.setGender(user.getGender());
+        dto.setAbout_me(user.getAbout_me());
+        dto.setFacebook_link(user.getFacebook_link());
+        dto.setInstagram_link(user.getInstagram_link());
+        dto.setPhone_number(user.getPhone_number());
+        dto.setProfile_image(user.getProfile_image());
+        return dto;
+    }
 }

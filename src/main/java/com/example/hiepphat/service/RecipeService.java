@@ -26,5 +26,5 @@ public interface RecipeService {
     List<TenRecipeDTO> findAllByRecipeTitleLike(String search);
     public Recipe save(Recipe recipe);
     List<RecipeCategoriesDTO> getAllRecipeCategory();
-    int findrecipeID(String title,int user_id);
+    long findrecipeID(String title,int user_id);
 }

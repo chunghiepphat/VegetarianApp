@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import java.sql.Date;
+import java.util.Date;
 
 public class BlogDTO {
     private long blog_id;
@@ -14,7 +14,7 @@ public class BlogDTO {
     private String blog_title;
     private String blog_subtitle;
     private String blog_content;
-    private Date time;
+    private java.util.Date time;
     private String first_name;
     private String last_name;
     private String blog_thumbnail;
@@ -58,7 +58,6 @@ public class BlogDTO {
     public void setBlog_content(String blog_content) {
         this.blog_content = blog_content;
     }
-
 
 
     public Date getTime() {

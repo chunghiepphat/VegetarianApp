@@ -1,6 +1,6 @@
 package com.example.hiepphat.dtos;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class TenBlogDTO {
     private String blog_title;
@@ -10,7 +10,7 @@ public class TenBlogDTO {
     private String last_name;
     private String blog_subtitle;
     private long blog_id;
-    private Date time;
+    private java.util.Date time;
 
     public String getBlog_subtitle() {
         return blog_subtitle;
