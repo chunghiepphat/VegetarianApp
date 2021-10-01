@@ -28,14 +28,22 @@ public class IngredientServiceImpl implements IngredientService {
         List<Integer> listInt=ingredientRepository.getAmount(recipeID);
           for(int i=0;i<listInt.size();i++) {
               for (Ingredient item : entites) {
-                  float protein1 = (item.getProtein() * listInt.get(i))/ 100;
-                  float fat1 = (item.getFat() * listInt.get(i))/ 100;
-                  float carb1 = (item.getCarb() * listInt.get(i))/ 100;
-                  float calo1 = (item.getCalories() * listInt.get(i))/ 100;
-                  totalProtein += protein1;
-                  totalCalo += calo1;
-                  totalCarb += carb1;
-                  totalFat += fat1;
+                  if(item.getCalories()==null && item.getCarb()==null && item.getFat()==null &&item.getProtein()==null){
+                      totalProtein+=0;
+                      totalCalo+=0;
+                      totalCarb+=0;
+                      totalFat +=0;
+                  }
+                  else {
+                      float protein1 = (item.getProtein() * listInt.get(i)) / 100;
+                      float fat1 = (item.getFat() * listInt.get(i)) / 100;
+                      float carb1 = (item.getCarb() * listInt.get(i)) / 100;
+                      float calo1 = (item.getCalories() * listInt.get(i)) / 100;
+                      totalProtein += protein1;
+                      totalCalo += calo1;
+                      totalCarb += carb1;
+                      totalFat += fat1;
+                  }
                  i++;
               }
           }
