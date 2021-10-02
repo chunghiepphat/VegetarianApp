@@ -3,6 +3,7 @@ package com.example.hiepphat.dtos;
 import com.example.hiepphat.Entity.Role;
 import com.example.hiepphat.Entity.User;
 
+import javax.persistence.Column;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;

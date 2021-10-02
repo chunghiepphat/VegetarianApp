@@ -91,5 +91,10 @@ public class BlogController {
         blogService.save(blog);
         return ResponseEntity.ok(new MessageResponse("Post blog successfully!!!"));
     }
-
+    @GetMapping("/get5bestblog")
+    public TenBlogResponse getbestblog() {
+        TenBlogResponse result=new TenBlogResponse();
+        result.setListResult(blogService.findBestBlog());
+        return result;
+    }
 }

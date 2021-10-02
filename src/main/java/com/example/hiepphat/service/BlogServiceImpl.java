@@ -91,5 +91,28 @@ private BlogRepository blogRepository;
         return blogRepository.save(blog);
     }
 
+    @Override
+    public List<TenBlogDTO> findByBlog_titleLike(String title) {
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entities=blogRepository.findBlog("%"+title+"%");
+        for (Blog item: entities){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            results.add(blogDTO);
+        }
+        return results;
+
+    }
+
+    @Override
+    public List<TenBlogDTO> findBestBlog() {
+        List<TenBlogDTO> result=new ArrayList<>();
+        List<Blog>entities=blogRepository.findBestBlog();
+        for(Blog item:entities){
+            TenBlogDTO dto=converter.toDTO10BLOG(item);
+            result.add(dto);
+        }
+        return result;
+    }
+
 
 }

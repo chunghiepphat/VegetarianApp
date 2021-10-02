@@ -41,6 +41,8 @@ public class RecipeController {
     private IngredientServiceImpl ingredientService;
     @Autowired
     private RecipeIngredientServiceImpl recipeIngredientService;
+    @Autowired
+    private BlogServiceImpl blogService;
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
@@ -85,12 +87,7 @@ public class RecipeController {
         result.setListResult(likeRecipeService.findbestRecipe());
         return result;
     }
-    @GetMapping("/find")
-    public TenRecipesResponse searchRecipe(@RequestParam("search") String search) {
-        TenRecipesResponse result=new TenRecipesResponse();
-        result.setListResult(recipeService.findAllByRecipeTitleLike(search));
-        return result;
-    }
+
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
     public ResponseEntity<?> addRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {

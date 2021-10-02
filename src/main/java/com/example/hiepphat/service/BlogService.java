@@ -9,6 +9,7 @@ import com.example.hiepphat.dtos.TenRecipeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
 import java.util.List;
 
 public interface BlogService {
@@ -20,4 +21,6 @@ public interface BlogService {
     List<TenBlogDTO> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
     public Blog save(Blog blog);
+    List<TenBlogDTO>findByBlog_titleLike(String title);
+    List<TenBlogDTO>findBestBlog();
 }
