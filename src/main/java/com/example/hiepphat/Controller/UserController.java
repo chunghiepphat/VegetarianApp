@@ -1,14 +1,20 @@
 package com.example.hiepphat.Controller;
 
+import com.example.hiepphat.Entity.Blog;
+import com.example.hiepphat.Entity.CommentBlog;
 import com.example.hiepphat.Entity.Role;
 import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.JWTUtils.JwtUtils;
+import com.example.hiepphat.dtos.CommentBlogDTO;
 import com.example.hiepphat.dtos.UserDTO;
 import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.request.LoginRequest;
 import com.example.hiepphat.request.SignUpRequest;
+import com.example.hiepphat.request.UpdateUserRequest;
 import com.example.hiepphat.response.JwtResponse;
+import com.example.hiepphat.response.MessageResponse;
 import com.example.hiepphat.response.SignupResponse;
+import com.example.hiepphat.service.CommentBlogServiceImpl;
 import com.example.hiepphat.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +27,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/api/user")
@@ -35,7 +44,8 @@ public class UserController {
     JwtUtils jwtUtils;
 @Autowired
 UserRepository userRepository;
-
+@Autowired
+    CommentBlogServiceImpl commentBlogService;
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -74,26 +84,44 @@ UserRepository userRepository;
         return "User.";
     }
 
-    @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('user')")
-    public UserDTO update(@RequestBody UserDTO model,@PathVariable("id") int id){
+    @PutMapping("/update/password/{id}")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
              User oldUser=userService.findByUser_id(id);
              if(oldUser!=null) {
-                 model.setId(oldUser.getUserID());
-                 model.setEmail(oldUser.getEmail());
-                 oldUser.setFirst_name(model.getFirst_name());
-                 oldUser.setLast_name(model.getLast_name());
-                 oldUser.setAbout_me(model.getAbout_me());
-                 oldUser.setCountry(model.getCountry());
-                 oldUser.setFacebook_link(model.getFacebook_link());
-                 oldUser.setInstagram_link(model.getInstagram_link());
-                 oldUser.setProfile_image(model.getProfile_image());
-                 oldUser.setPhone_number(model.getPhone_number());
-                 oldUser.setGender(model.getGender());
-                 oldUser.setBirth_date(model.getBirth_date());
+                 oldUser.setPassword(passwordEncoder.encode(model.getPassword()));
                  userService.save(oldUser);
              }
-         return model;
+         return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/update/profile/{id}")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
+        User oldUser=userService.findByUser_id(id);
+        if(oldUser!=null) {
+            oldUser.setProfile_image(model.getProfile_image());
+            userService.save(oldUser);
+        }
+        return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
+    }
+
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/update/details/{id}")
+    public ResponseEntity<?> updateDetail(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
+        User oldUser=userService.findByUser_id(id);
+        if(oldUser!=null) {
+            oldUser.setFirst_name(model.getFirst_name());
+            oldUser.setLast_name(model.getLast_name());
+            oldUser.setGender(model.getGender());
+            oldUser.setCountry(model.getCountry());
+            oldUser.setAbout_me(model.getAbout_me());
+            oldUser.setBirth_date(model.getBirth_date());
+            oldUser.setPhone_number(model.getPhone_number());
+            oldUser.setInstagram_link(model.getInstagram_link());
+            oldUser.setFacebook_link(model.getFacebook_link());
+            userService.save(oldUser);
+        }
+        return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
     }
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable("id")int id) {
@@ -113,4 +141,28 @@ UserRepository userRepository;
         dto.setProfile_image(user.getProfile_image());
         return dto;
     }
+
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("/commentblog")
+    public CommentBlogDTO commentBlog(@RequestBody CommentBlogDTO dto) throws ParseException {
+        CommentBlog commentBlog=new CommentBlog();
+        Blog blog=new Blog();
+        User user=new User();
+        user.setUserID(dto.getUser_id());
+        blog.setBlogID(dto.getBlog_id());
+        commentBlog.setUser(user);
+        commentBlog.setBlog(blog);
+        commentBlog.setContent(dto.getContent());
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date=new Date();
+        String spf=simpleDateFormat.format(date);
+        commentBlog.setTime(simpleDateFormat.parse(spf));
+        dto.setTime(simpleDateFormat.parse(spf));
+        User oldUser=userService.findByUser_id(dto.getUser_id());
+        dto.setFirst_name(oldUser.getFirst_name());
+        dto.setLast_name(oldUser.getLast_name());
+        commentBlogService.save(commentBlog);
+        return dto;
+    }
+
 }
