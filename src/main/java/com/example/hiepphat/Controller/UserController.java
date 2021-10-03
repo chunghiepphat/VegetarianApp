@@ -1,11 +1,9 @@
 package com.example.hiepphat.Controller;
 
-import com.example.hiepphat.Entity.Blog;
-import com.example.hiepphat.Entity.CommentBlog;
-import com.example.hiepphat.Entity.Role;
-import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.JWTUtils.JwtUtils;
 import com.example.hiepphat.dtos.CommentBlogDTO;
+import com.example.hiepphat.dtos.CommentRecipeDTO;
 import com.example.hiepphat.dtos.UserDTO;
 import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.request.LoginRequest;
@@ -15,6 +13,7 @@ import com.example.hiepphat.response.JwtResponse;
 import com.example.hiepphat.response.MessageResponse;
 import com.example.hiepphat.response.SignupResponse;
 import com.example.hiepphat.service.CommentBlogServiceImpl;
+import com.example.hiepphat.service.CommentRecipeServiceImpl;
 import com.example.hiepphat.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +45,8 @@ public class UserController {
 UserRepository userRepository;
 @Autowired
     CommentBlogServiceImpl commentBlogService;
+@Autowired
+    CommentRecipeServiceImpl commentRecipeService;
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -89,8 +90,15 @@ UserRepository userRepository;
     public ResponseEntity<?> updatePassword(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
              User oldUser=userService.findByUser_id(id);
              if(oldUser!=null) {
-                 oldUser.setPassword(passwordEncoder.encode(model.getPassword()));
-                 userService.save(oldUser);
+                 String oldPasswordDB=oldUser.getPassword();
+                 String oldpassword=model.getOldPassword();
+                 if(passwordEncoder.matches(oldpassword,oldPasswordDB)){
+                     oldUser.setPassword(passwordEncoder.encode(model.getPassword()));
+                     userService.save(oldUser);
+                 }
+                 else{
+                     return ResponseEntity.ok(new MessageResponse("Old password not correct!!!"));
+                 }
              }
          return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
     }
@@ -164,5 +172,25 @@ UserRepository userRepository;
         commentBlogService.save(commentBlog);
         return dto;
     }
-
+    @PostMapping("/commentrecipe")
+    public CommentRecipeDTO commentRecipe(@RequestBody CommentRecipeDTO dto) throws ParseException {
+        CommentRecipe commentRecipe=new CommentRecipe();
+        Recipe recipe=new Recipe();
+        User user=new User();
+        user.setUserID(dto.getUser_id());
+        recipe.setRecipeID(dto.getRecipe_id());
+        commentRecipe.setUser(user);
+        commentRecipe.setRecipe(recipe);
+        commentRecipe.setContent(dto.getContent());
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date=new Date();
+        String spf=simpleDateFormat.format(date);
+        commentRecipe.setTime(simpleDateFormat.parse(spf));
+        dto.setTime(simpleDateFormat.parse(spf));
+        User oldUser=userService.findByUser_id(dto.getUser_id());
+        dto.setFirst_name(oldUser.getFirst_name());
+        dto.setLast_name(oldUser.getLast_name());
+        commentRecipeService.save(commentRecipe);
+        return dto;
+    }
 }

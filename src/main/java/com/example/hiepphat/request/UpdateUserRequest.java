@@ -16,6 +16,15 @@ public class UpdateUserRequest {
     private Date birth_date;
     private String gender;
     private String password;
+    private String oldPassword;
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
 
     public int getId() {
         return id;
