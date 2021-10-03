@@ -1,10 +1,7 @@
 package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.*;
-import com.example.hiepphat.dtos.IngredientDTO;
-import com.example.hiepphat.dtos.NutritionDTO;
-import com.example.hiepphat.dtos.IngredientRecipeDTO;
-import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.dtos.*;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
@@ -18,12 +15,12 @@ import org.springframework.data.domain.Sort;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Calendar;
 import java.util.List;
-
 
 @CrossOrigin
 @RestController
@@ -43,6 +40,8 @@ public class RecipeController {
     private RecipeIngredientServiceImpl recipeIngredientService;
     @Autowired
     private BlogServiceImpl blogService;
+    @Autowired
+    private CommentRecipeServiceImpl commentRecipeService;
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
@@ -156,11 +155,41 @@ public class RecipeController {
 
              return ResponseEntity.ok(new MessageResponse("Add recipe successfully!!!"));
         }
+
     @GetMapping("/categories")
     public RecipeCategoriesResponse getAllCategory() {
         RecipeCategoriesResponse result=new RecipeCategoriesResponse();
         result.setListResult(recipeService.getAllRecipeCategory());
         return result;
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?>deleteRecipe(@PathVariable("id")long id){
+        recipeService.deleteLike(id);
+        recipeIngredientService.deleteRecipeIngre(id);
+        commentRecipeService.deleteComment(id);
+        recipeService.deleteByRecipeID(id);
+        return ResponseEntity.ok(new MessageResponse("Delete Successfuly!!!"));
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("like")
+    public ResponseEntity<?>likeRecipe(@RequestBody LikeRecipeDTO dto){
+        LikeRecipe likeRecipe=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(dto.getRecipe_id(),dto.getUser_id());
+        if(likeRecipe!=null){
+            likeRecipeRepository.delete(likeRecipe);
+            return ResponseEntity.ok(new MessageResponse("Unlike"));
+        }
+        else{
+            LikeRecipe newLike=new LikeRecipe();
+            User user=new User();
+            user.setUserID(dto.getUser_id());
+            Recipe recipe=new Recipe();
+            recipe.setRecipeID(dto.getRecipe_id());
+            newLike.setUser(user);
+            newLike.setRecipe(recipe);
+            likeRecipeRepository.save(newLike);
+            return ResponseEntity.ok(new MessageResponse("Liked"));
+        }
     }
     }
 

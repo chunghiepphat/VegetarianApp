@@ -1,11 +1,10 @@
 package com.example.hiepphat.Entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "Likes_Recipe")
-public class LikeRecipe implements Serializable {
+@Table(name = "Likes_Blog")
+public class LikeBlog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
@@ -14,20 +13,8 @@ public class LikeRecipe implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
-    @JoinColumn(name = "recipe_id")
-    private Recipe recipe;
-    public User getUser() {
-        return user;
-    }
-    public void setUser(User user) {
-        this.user = user;
-    }
-    public Recipe getRecipe() {
-        return recipe;
-    }
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
+    @JoinColumn(name = "blog_id")
+    private Blog blog;
 
     public long getId() {
         return id;
@@ -35,5 +22,21 @@ public class LikeRecipe implements Serializable {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Blog getBlog() {
+        return blog;
+    }
+
+    public void setBlog(Blog blog) {
+        this.blog = blog;
     }
 }

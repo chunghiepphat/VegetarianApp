@@ -41,5 +41,10 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
         return results;
     }
 
+    @Override
+    public LikeRecipe findByRecipe_RecipeIDAndUser_UserID(long recipeID, int userID) {
+        return likeRecipeRepository.findByRecipe_RecipeIDAndUser_UserID(recipeID,userID);
+    }
+
 
 }

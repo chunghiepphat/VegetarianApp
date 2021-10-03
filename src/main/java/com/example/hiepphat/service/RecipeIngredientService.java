@@ -8,4 +8,5 @@ import java.util.List;
 public interface RecipeIngredientService {
     RecipeIngredient save(RecipeIngredient recipeIngredient);
     List<IngredientDTO> findByRecipe_RecipeID(long id);
+    void deleteRecipeIngre(long id);
 }

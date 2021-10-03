@@ -28,4 +28,6 @@ public interface RecipeService {
     List<RecipeCategoriesDTO> getAllRecipeCategory();
     long findrecipeID(String title,int user_id);
     List<TenRecipeDTO>findLikedRecipe(int id);
+    void deleteByRecipeID(long id);
+    void deleteLike(long recipeID);
 }

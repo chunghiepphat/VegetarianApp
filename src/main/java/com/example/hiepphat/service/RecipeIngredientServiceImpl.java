@@ -33,5 +33,13 @@ public class RecipeIngredientServiceImpl implements RecipeIngredientService {
         return list;
     }
 
+    @Override
+    public void deleteRecipeIngre(long id) {
+        List<RecipeIngredient>entities=recipeIngredientRepository.findByRecipe_RecipeID(id);
+        for(RecipeIngredient item:entities){
+            recipeIngredientRepository.deleteById(item.getId());
+        }
+    }
+
 
 }

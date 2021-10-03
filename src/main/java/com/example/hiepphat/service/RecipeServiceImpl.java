@@ -142,5 +142,19 @@ RecipeRepository recipeRepository;
         return result;
     }
 
+    @Override
+    public void deleteByRecipeID(long id) {
+         Recipe entity=recipeRepository.findByRecipeID(id);
+         recipeRepository.delete(entity);
+    }
+
+    @Override
+    public void deleteLike(long recipeID) {
+        List<LikeRecipe>entities=likeRecipeRepository.findByRecipe_RecipeID(recipeID);
+       for(LikeRecipe item:entities){
+           likeRecipeRepository.deleteById(item.getId());
+       }
+    }
+
 
 }

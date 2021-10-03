@@ -1,6 +1,7 @@
 package com.example.hiepphat.repositories;
 
 import com.example.hiepphat.Entity.Blog;
+import com.example.hiepphat.Entity.LikeBlog;
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.dtos.TenBlogDTO;
 import org.springframework.data.domain.Page;

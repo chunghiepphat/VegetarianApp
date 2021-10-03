@@ -1,15 +1,16 @@
 package com.example.hiepphat.Controller;
 
-import com.example.hiepphat.Entity.Blog;
-import com.example.hiepphat.Entity.Recipe;
-import com.example.hiepphat.Entity.RecipeCategories;
-import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.BlogDTO;
+import com.example.hiepphat.dtos.LikeBlogDTO;
+import com.example.hiepphat.dtos.LikeRecipeDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.repositories.LikeBlogRepository;
 import com.example.hiepphat.request.BlogRequest;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.BlogServiceImpl;
+import com.example.hiepphat.service.LikeBlogService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,10 @@ import java.util.Date;
 public class BlogController {
     @Autowired
     BlogServiceImpl blogService;
+    @Autowired
+    LikeBlogService likeBlogService;
+    @Autowired
+    LikeBlogRepository likeBlogRepository;
     @GetMapping("/getall")
     public BlogResponse showBlog(@RequestParam("page") int page, @RequestParam("limit") int limit){
         BlogResponse result2=new BlogResponse();
@@ -96,5 +101,26 @@ public class BlogController {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findBestBlog());
         return result;
+    }
+
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("like")
+    public ResponseEntity<?>likeBlog(@RequestBody LikeBlogDTO dto){
+        LikeBlog likeBlog=likeBlogService.findByUser_UserIDAndBlog_BlogID(dto.getUser_id(),dto.getBlog_id());
+        if(likeBlog!=null){
+            likeBlogRepository.delete(likeBlog);
+            return ResponseEntity.ok(new MessageResponse("Unlike"));
+        }
+        else{
+            LikeBlog newLike=new LikeBlog();
+            User user=new User();
+            user.setUserID(dto.getUser_id());
+            Blog blog=new Blog();
+            blog.setBlogID(dto.getBlog_id());
+            newLike.setUser(user);
+            newLike.setBlog(blog);
+            likeBlogRepository.save(newLike);
+            return ResponseEntity.ok(new MessageResponse("Liked"));
+        }
     }
 }
