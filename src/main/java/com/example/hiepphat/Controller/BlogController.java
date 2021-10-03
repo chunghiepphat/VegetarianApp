@@ -49,7 +49,7 @@ public class BlogController {
     public BlogDTO showBlogbyID(@PathVariable long id) throws Exception {
         BlogDTO result=blogService.findblogbyID(id);
         if(result==null){
-            throw new Exception("Nout found recipe id:"+ id);
+            throw new Exception("Nout found blog id:"+ id);
         }
         return result;
     }

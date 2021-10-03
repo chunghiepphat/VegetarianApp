@@ -12,9 +12,8 @@ import com.example.hiepphat.request.UpdateUserRequest;
 import com.example.hiepphat.response.JwtResponse;
 import com.example.hiepphat.response.MessageResponse;
 import com.example.hiepphat.response.SignupResponse;
-import com.example.hiepphat.service.CommentBlogServiceImpl;
-import com.example.hiepphat.service.CommentRecipeServiceImpl;
-import com.example.hiepphat.service.UserServiceImpl;
+import com.example.hiepphat.response.ViewLikedResponse;
+import com.example.hiepphat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,6 +46,10 @@ UserRepository userRepository;
     CommentBlogServiceImpl commentBlogService;
 @Autowired
     CommentRecipeServiceImpl commentRecipeService;
+@Autowired
+    RecipeServiceImpl recipeService;
+@Autowired
+    BlogServiceImpl blogService;
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -172,6 +175,7 @@ UserRepository userRepository;
         commentBlogService.save(commentBlog);
         return dto;
     }
+    @PreAuthorize("hasAuthority('user')")
     @PostMapping("/commentrecipe")
     public CommentRecipeDTO commentRecipe(@RequestBody CommentRecipeDTO dto) throws ParseException {
         CommentRecipe commentRecipe=new CommentRecipe();
@@ -192,5 +196,13 @@ UserRepository userRepository;
         dto.setLast_name(oldUser.getLast_name());
         commentRecipeService.save(commentRecipe);
         return dto;
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @GetMapping("/{id}/liked")
+    public ViewLikedResponse viewLiked(@PathVariable("id") int id){
+        ViewLikedResponse viewLikedResponse=new ViewLikedResponse();
+        viewLikedResponse.setListRecipe(recipeService.findLikedRecipe(id));
+        viewLikedResponse.setListBlog(blogService.findLikedBlog(id));
+        return viewLikedResponse;
     }
 }

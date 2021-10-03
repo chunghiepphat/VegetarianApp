@@ -131,5 +131,16 @@ RecipeRepository recipeRepository;
         return  recipeRepository.findrecipeID(title,user_id);
     }
 
+    @Override
+    public List<TenRecipeDTO> findLikedRecipe(int id) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entities=recipeRepository.findLikedRecipe(id);
+        for(Recipe item:entities){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            result.add(dto);
+        }
+        return result;
+    }
+
 
 }

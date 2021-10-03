@@ -26,5 +26,7 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     List<Recipe> findByRecipeTitleLike(String search);
     @Query(value = "Select recipe_id from Recipes where recipe_title=? and user_id=?",nativeQuery = true)
     long findrecipeID(String title,int userID);
-
+    @Query(value = "Select * from Recipes where recipe_id in (select recipe_id from Likes_Recipe where user_id=? )"
+            ,nativeQuery = true)
+    List<Recipe>findLikedRecipe(int id);
 }

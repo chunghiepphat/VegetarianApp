@@ -23,4 +23,5 @@ public interface BlogService {
     public Blog save(Blog blog);
     List<TenBlogDTO>findByBlog_titleLike(String title);
     List<TenBlogDTO>findBestBlog();
+    List<TenBlogDTO>findLikedBlog(int id);
 }

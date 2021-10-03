@@ -114,5 +114,16 @@ private BlogRepository blogRepository;
         return result;
     }
 
+    @Override
+    public List<TenBlogDTO> findLikedBlog(int id) {
+        List<TenBlogDTO> result=new ArrayList<>();
+        List<Blog>entities=blogRepository.findLikedBlog(id);
+        for(Blog item:entities){
+            TenBlogDTO dto=converter.toDTO10BLOG(item);
+            result.add(dto);
+        }
+        return result;
+    }
+
 
 }
