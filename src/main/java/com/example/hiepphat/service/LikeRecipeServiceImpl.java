@@ -35,6 +35,7 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
              dto.setRecipe_title(enties.getRecipeTitle());
              dto.setFirst_name(enties.getUser().getFirstName());
              dto.setLast_name(enties.getUser().getLastName());
+             dto.setTotalLike(recipeRepository.totalLike(enties.getRecipeID()));
              results.add(dto);
         }
 

@@ -38,6 +38,7 @@ RecipeRepository recipeRepository;
         List<Recipe> entites=recipeRepository.findAll(pageable).getContent();
         for(Recipe item:entites){
             TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
             results.add(recipeDTO);
         }
         return results;
@@ -55,6 +56,7 @@ RecipeRepository recipeRepository;
             List<Recipe> entities=recipeRepository.findTop10ByTimeLessThanEqualOrderByTimeDesc(date);
             for (Recipe item: entities){
                 TenRecipeDTO recipeDTO= converter.toDTO10(item);
+                recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
                 results.add(recipeDTO);
             }
             return results;
@@ -73,6 +75,7 @@ RecipeRepository recipeRepository;
         List<Recipe> entities=recipeRepository.findTop10ByUser_UserIDOrderByTimeDesc(userID);
         for (Recipe item: entities){
             TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
             results.add(recipeDTO);
         }
         return results;
@@ -84,6 +87,7 @@ RecipeRepository recipeRepository;
         List<Recipe> entites=recipeRepository.findAllByUser_UserID(pageable,userID);
         for(Recipe item:entites){
             TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
             results.add(recipeDTO);
 
         }
@@ -103,6 +107,7 @@ RecipeRepository recipeRepository;
         List<Recipe> entities=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
         for (Recipe item: entities){
             TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
             results.add(recipeDTO);
         }
         return results;
@@ -137,6 +142,7 @@ RecipeRepository recipeRepository;
         List<Recipe>entities=recipeRepository.findLikedRecipe(id);
         for(Recipe item:entities){
             TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
             result.add(dto);
         }
         return result;
@@ -154,6 +160,11 @@ RecipeRepository recipeRepository;
        for(LikeRecipe item:entities){
            likeRecipeRepository.deleteById(item.getId());
        }
+    }
+
+    @Override
+    public int totalLike(long id) {
+        return recipeRepository.totalLike(id);
     }
 
 

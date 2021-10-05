@@ -63,6 +63,7 @@ public class RecipeController {
         NutritionDTO nutrition=ingredientService.getIngredientByRecipe(id);
         result.setIngredients(recipeIngredientService.findByRecipe_RecipeID(id));
         result.setNutrition(nutrition);
+        result.setTotalLike(recipeService.totalLike(id));
         return result;
     }
     @GetMapping("/get10recipebyuser/{id}")
@@ -190,6 +191,12 @@ public class RecipeController {
             likeRecipeRepository.save(newLike);
             return ResponseEntity.ok(new MessageResponse("Liked"));
         }
+    }
+    @GetMapping("/{id}/comments")
+    public ListCommentRecipeResponse getListCommentRecipe(@PathVariable("id")long id){
+        ListCommentRecipeResponse response=new ListCommentRecipeResponse();
+        response.setListCommentRecipe(commentRecipeService.getAllCommentRecipe(id));
+        return response;
     }
     }
 

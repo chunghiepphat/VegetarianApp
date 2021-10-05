@@ -29,4 +29,6 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     @Query(value = "Select * from Recipes where recipe_id in (select recipe_id from Likes_Recipe where user_id=? )"
             ,nativeQuery = true)
     List<Recipe>findLikedRecipe(int id);
+    @Query(value = "SELECT COUNT(user_id) from Likes_Recipe where recipe_id=?",nativeQuery = true)
+    int totalLike(long id);
 }

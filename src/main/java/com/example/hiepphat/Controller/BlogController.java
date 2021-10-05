@@ -5,11 +5,14 @@ import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.LikeBlogDTO;
 import com.example.hiepphat.dtos.LikeRecipeDTO;
 import com.example.hiepphat.dtos.RecipeDTO;
+import com.example.hiepphat.repositories.BlogRepository;
+import com.example.hiepphat.repositories.CommentBlogRepository;
 import com.example.hiepphat.repositories.LikeBlogRepository;
 import com.example.hiepphat.request.BlogRequest;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.BlogServiceImpl;
+import com.example.hiepphat.service.CommentBlogServiceImpl;
 import com.example.hiepphat.service.LikeBlogService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,6 +44,10 @@ public class BlogController {
     LikeBlogService likeBlogService;
     @Autowired
     LikeBlogRepository likeBlogRepository;
+    @Autowired
+    CommentBlogServiceImpl commentBlogService;
+    @Autowired
+    BlogRepository blogRepository;
     @GetMapping("/getall")
     public BlogResponse showBlog(@RequestParam("page") int page, @RequestParam("limit") int limit){
         BlogResponse result2=new BlogResponse();
@@ -51,8 +58,9 @@ public class BlogController {
         return result2;
     }
     @GetMapping("/getblogby/{id}")
-    public BlogDTO showBlogbyID(@PathVariable long id) throws Exception {
+    public BlogDTO showBlogbyID(@PathVariable int id) throws Exception {
         BlogDTO result=blogService.findblogbyID(id);
+        result.setTotalLike(blogRepository.totalLike(id));
         if(result==null){
             throw new Exception("Nout found blog id:"+ id);
         }
@@ -122,5 +130,20 @@ public class BlogController {
             likeBlogRepository.save(newLike);
             return ResponseEntity.ok(new MessageResponse("Liked"));
         }
+    }
+    @GetMapping("/{id}/comments")
+    public ListCommentBlogResponse getListCommentBlog(@PathVariable("id")int id){
+        ListCommentBlogResponse response=new ListCommentBlogResponse();
+        response.setListCommentBlog(commentBlogService.findByBlog_BlogID(id));
+        return response;
+    }
+
+    @PreAuthorize("hasAuthority('user')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?>deleteBlog(@PathVariable("id")int id){
+        likeBlogService.deleteLike(id);
+        commentBlogService.deleteCommentBlog(id);
+        blogRepository.deleteById(id);
+        return ResponseEntity.ok(new MessageResponse("Delete Successfuly!!!"));
     }
 }

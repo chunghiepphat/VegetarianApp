@@ -3,6 +3,7 @@ package com.example.hiepphat.dtos;
 import java.util.Date;
 
 public class CommentBlogDTO {
+    private int id;
     private int user_id;
     private int blog_id;
     private String first_name;
@@ -55,5 +56,13 @@ public class CommentBlogDTO {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

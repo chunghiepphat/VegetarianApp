@@ -18,6 +18,15 @@ public class BlogDTO {
     private String first_name;
     private String last_name;
     private String blog_thumbnail;
+    private int totalLike;
+
+    public int getTotalLike() {
+        return totalLike;
+    }
+
+    public void setTotalLike(int totalLike) {
+        this.totalLike = totalLike;
+    }
 
     public long getBlog_id() {
         return blog_id;

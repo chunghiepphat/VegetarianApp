@@ -30,4 +30,5 @@ public interface RecipeService {
     List<TenRecipeDTO>findLikedRecipe(int id);
     void deleteByRecipeID(long id);
     void deleteLike(long recipeID);
+    int totalLike(long id);
 }

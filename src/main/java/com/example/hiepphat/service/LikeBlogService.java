@@ -4,4 +4,5 @@ import com.example.hiepphat.Entity.LikeBlog;
 
 public interface LikeBlogService {
     LikeBlog findByUser_UserIDAndBlog_BlogID(int user_id, long blog_id);
+    void deleteLike(int id);
 }

@@ -22,6 +22,16 @@ public class RecipeDTO {
     private String last_name;
     private NutritionDTO nutrition;
     private List<IngredientDTO> ingredients=new ArrayList<>();
+    private int totalLike;
+
+    public int getTotalLike() {
+        return totalLike;
+    }
+
+    public void setTotalLike(int totalLike) {
+        this.totalLike = totalLike;
+    }
+
     public List<IngredientDTO> getIngredients() {
         return ingredients;
     }

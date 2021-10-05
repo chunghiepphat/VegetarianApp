@@ -12,8 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.sql.Date;
 import java.util.List;
 
-public interface BlogRepository extends JpaRepository<Blog,Long> {
-    public Blog findByBlogID(long id);
+public interface BlogRepository extends JpaRepository<Blog,Integer> {
+    public Blog findByBlogID(int id);
     List<Blog> findTop10ByTimeLessThanEqualOrderByTimeDesc(Date date);
     List<Blog> findTop10ByUser_UserIDOrderByTimeDesc(int userID);
     List<Blog> findAllByUser_UserID(Pageable pageable, int userID);
@@ -25,4 +25,6 @@ public interface BlogRepository extends JpaRepository<Blog,Long> {
     @Query(value = "Select blog_id,user_id,blog_title,blog_subtitle,blog_thumbnail,blog_content,is_active,time_created from Blogs where blog_id in (select blog_id from Likes_Blog where user_id=? )"
             ,nativeQuery = true)
     List<Blog>findLikedBlog(int id);
+    @Query(value = "SELECT COUNT(user_id) from Likes_Blog where blog_id=?",nativeQuery = true)
+    int totalLike(int id);
 }

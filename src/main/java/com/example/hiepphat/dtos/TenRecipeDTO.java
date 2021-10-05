@@ -6,6 +6,15 @@ public class TenRecipeDTO {
     private String first_name;
     private String last_name;
     private long recipe_id;
+    private int totalLike;
+
+    public int getTotalLike() {
+        return totalLike;
+    }
+
+    public void setTotalLike(int totalLike) {
+        this.totalLike = totalLike;
+    }
 
     public long getRecipe_id() {
         return recipe_id;

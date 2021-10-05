@@ -28,6 +28,7 @@ private BlogRepository blogRepository;
         List<Blog> entites=blogRepository.findAll(pageable).getContent();
         for(Blog item:entites){
             TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
             results.add(blogDTO);
         }
         return results;
@@ -39,7 +40,7 @@ private BlogRepository blogRepository;
     }
 
     @Override
-    public BlogDTO findblogbyID(long id) {
+    public BlogDTO findblogbyID(int id) {
         Blog enties=blogRepository.findByBlogID(id);
         BlogDTO blogDTO= converter.toDTOBLOG(enties);
         return blogDTO;
@@ -52,6 +53,7 @@ private BlogRepository blogRepository;
         List<Blog> entities=blogRepository.findTop10ByTimeLessThanEqualOrderByTimeDesc(date);
         for (Blog item: entities){
             TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
             results.add(blogDTO);
         }
         return results;
@@ -63,6 +65,7 @@ private BlogRepository blogRepository;
         List<Blog> entities=blogRepository.findTop10ByUser_UserIDOrderByTimeDesc(userID);
         for (Blog item: entities){
             TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
             results.add(blogDTO);
         }
         return results;
@@ -74,6 +77,7 @@ private BlogRepository blogRepository;
         List<Blog> entites=blogRepository.findAllByUser_UserID(pageable,userID);
         for(Blog item:entites){
             TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
             results.add(blogDTO);
 
         }
@@ -97,6 +101,7 @@ private BlogRepository blogRepository;
         List<Blog> entities=blogRepository.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+title+"%","%"+fN+"%","%"+ln+"%");
         for (Blog item: entities){
             TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(item.getBlogID());
             results.add(blogDTO);
         }
         return results;
@@ -109,6 +114,7 @@ private BlogRepository blogRepository;
         List<Blog>entities=blogRepository.findBestBlog();
         for(Blog item:entities){
             TenBlogDTO dto=converter.toDTO10BLOG(item);
+            dto.setTotalLike(blogRepository.totalLike(item.getBlogID()));
             result.add(dto);
         }
         return result;
@@ -120,9 +126,15 @@ private BlogRepository blogRepository;
         List<Blog>entities=blogRepository.findLikedBlog(id);
         for(Blog item:entities){
             TenBlogDTO dto=converter.toDTO10BLOG(item);
+            dto.setTotalLike(item.getBlogID());
             result.add(dto);
         }
         return result;
+    }
+
+    @Override
+    public int totalLike(int id) {
+        return blogRepository.totalLike(id);
     }
 
 

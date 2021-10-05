@@ -5,6 +5,8 @@ import com.example.hiepphat.JWTUtils.JwtUtils;
 import com.example.hiepphat.dtos.CommentBlogDTO;
 import com.example.hiepphat.dtos.CommentRecipeDTO;
 import com.example.hiepphat.dtos.UserDTO;
+import com.example.hiepphat.repositories.CommentBlogRepository;
+import com.example.hiepphat.repositories.CommentRecipeRepository;
 import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.request.LoginRequest;
 import com.example.hiepphat.request.SignUpRequest;
@@ -50,6 +52,10 @@ UserRepository userRepository;
     RecipeServiceImpl recipeService;
 @Autowired
     BlogServiceImpl blogService;
+    @Autowired
+    CommentBlogRepository commentBlogRepository;
+    @Autowired
+    CommentRecipeRepository commentRecipeRepository;
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -164,7 +170,7 @@ UserRepository userRepository;
         commentBlog.setUser(user);
         commentBlog.setBlog(blog);
         commentBlog.setContent(dto.getContent());
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
         commentBlog.setTime(simpleDateFormat.parse(spf));
@@ -173,6 +179,8 @@ UserRepository userRepository;
         dto.setFirst_name(oldUser.getFirstName());
         dto.setLast_name(oldUser.getLastName());
         commentBlogService.save(commentBlog);
+        CommentBlog currentBlog=commentBlogRepository.findByBlog_BlogIDAndUser_UserIDAndTime(dto.getBlog_id(),dto.getUser_id(),simpleDateFormat.parse(spf));
+        dto.setId(currentBlog.getId());
         return dto;
     }
     @PreAuthorize("hasAuthority('user')")
@@ -186,7 +194,7 @@ UserRepository userRepository;
         commentRecipe.setUser(user);
         commentRecipe.setRecipe(recipe);
         commentRecipe.setContent(dto.getContent());
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
         commentRecipe.setTime(simpleDateFormat.parse(spf));
@@ -195,6 +203,8 @@ UserRepository userRepository;
         dto.setFirst_name(oldUser.getFirstName());
         dto.setLast_name(oldUser.getLastName());
         commentRecipeService.save(commentRecipe);
+        CommentRecipe currentComment=commentRecipeRepository.findByRecipe_RecipeIDAndUser_UserIDAndTime(dto.getRecipe_id(),dto.getUser_id(),simpleDateFormat.parse(spf));
+        dto.setId(currentComment.getId());
         return dto;
     }
     @PreAuthorize("hasAuthority('user')")
@@ -204,5 +214,18 @@ UserRepository userRepository;
         viewLikedResponse.setListRecipe(recipeService.findLikedRecipe(id));
         viewLikedResponse.setListBlog(blogService.findLikedBlog(id));
         return viewLikedResponse;
+    }
+
+    @PreAuthorize("hasAuthority('user')")
+    @DeleteMapping("/deleteComment/{commentID}/blog")
+    public ResponseEntity<?>deletecommentBlog(@PathVariable("commentID")int commentID){
+         commentBlogService.deleteUserCommentByID(commentID);
+        return ResponseEntity.ok(new MessageResponse("Delete successfully!!!"));
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @DeleteMapping("/deleteComment/{commentID}/recipe")
+    public ResponseEntity<?>deletecommentRecipe(@PathVariable("commentID")int commentID){
+        commentRecipeRepository.deleteById(commentID);
+        return ResponseEntity.ok(new MessageResponse("Delete successfully!!!"));
     }
 }

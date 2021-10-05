@@ -9,7 +9,17 @@ public class TenBlogDTO {
     private String first_name;
     private String last_name;
     private String blog_subtitle;
-    private long blog_id;
+    private int blog_id;
+    private int totalLike;
+
+    public int getTotalLike() {
+        return totalLike;
+    }
+
+    public void setTotalLike(int totalLike) {
+        this.totalLike = totalLike;
+    }
+
     private java.util.Date time;
 
     public String getBlog_subtitle() {
@@ -24,7 +34,7 @@ public class TenBlogDTO {
         return blog_title;
     }
 
-    public long getBlog_id() {
+    public int getBlog_id() {
         return blog_id;
     }
 
@@ -36,7 +46,7 @@ public class TenBlogDTO {
         this.time = time;
     }
 
-    public void setBlog_id(long blog_id) {
+    public void setBlog_id(int blog_id) {
         this.blog_id = blog_id;
     }
 

@@ -3,8 +3,9 @@ package com.example.hiepphat.dtos;
 import java.util.Date;
 
 public class CommentRecipeDTO {
+    private int id;
     private int user_id;
-    private int recipe_id;
+    private long recipe_id;
     private String first_name;
     private String last_name;
     private String content;
@@ -18,11 +19,11 @@ public class CommentRecipeDTO {
         this.user_id = user_id;
     }
 
-    public int getRecipe_id() {
+    public long getRecipe_id() {
         return recipe_id;
     }
 
-    public void setRecipe_id(int recipe_id) {
+    public void setRecipe_id(long recipe_id) {
         this.recipe_id = recipe_id;
     }
 
@@ -56,5 +57,13 @@ public class CommentRecipeDTO {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

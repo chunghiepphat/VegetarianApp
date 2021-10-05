@@ -9,7 +9,7 @@ public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blog_id")
-    private long blogID;
+    private int blogID;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -37,11 +37,11 @@ public class Blog {
         this.blog_content = blog_content;
     }
 
-    public long getBlogID() {
+    public int getBlogID() {
         return blogID;
     }
 
-    public void setBlogID(long blogID) {
+    public void setBlogID(int blogID) {
         this.blogID = blogID;
     }
 
