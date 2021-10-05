@@ -56,6 +56,7 @@ UserRepository userRepository;
     CommentBlogRepository commentBlogRepository;
     @Autowired
     CommentRecipeRepository commentRecipeRepository;
+    //login
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -67,7 +68,7 @@ UserRepository userRepository;
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
-
+//signup
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         if (userService.existsByEmail(signUpRequest.getEmail())){
@@ -88,12 +89,7 @@ UserRepository userRepository;
             return ResponseEntity.ok(new SignupResponse("Register Successfully",jwt));
         }
     }
-    @GetMapping("/test")
-    @PreAuthorize("hasAuthority('user')")
-    public String adminAccess() {
-        return "User.";
-    }
-
+//update user password
     @PreAuthorize("hasAuthority('user')")
     @PutMapping("/update/password/{id}")
     public ResponseEntity<?> updatePassword(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
@@ -111,6 +107,7 @@ UserRepository userRepository;
              }
          return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
     }
+    //update user profile
     @PreAuthorize("hasAuthority('user')")
     @PutMapping("/update/profile/{id}")
     public ResponseEntity<?> updateProfile(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
@@ -121,7 +118,7 @@ UserRepository userRepository;
         }
         return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
     }
-
+//update user detail
     @PreAuthorize("hasAuthority('user')")
     @PutMapping("/update/details/{id}")
     public ResponseEntity<?> updateDetail(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
@@ -140,6 +137,7 @@ UserRepository userRepository;
         }
         return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
     }
+    // chi tiết thông tin của 1 user dựa theo user id
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable("id")int id) {
         User user=userRepository.findByUserID(id);
@@ -158,7 +156,7 @@ UserRepository userRepository;
         dto.setProfile_image(user.getProfile_image());
         return dto;
     }
-
+//chức năng comment trên blog
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/commentblog")
     public CommentBlogDTO commentBlog(@RequestBody CommentBlogDTO dto) throws ParseException {
@@ -183,6 +181,7 @@ UserRepository userRepository;
         dto.setId(currentBlog.getId());
         return dto;
     }
+    // chức năng comment trên recipe
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/commentrecipe")
     public CommentRecipeDTO commentRecipe(@RequestBody CommentRecipeDTO dto) throws ParseException {
@@ -207,6 +206,7 @@ UserRepository userRepository;
         dto.setId(currentComment.getId());
         return dto;
     }
+    //chức năng hiện tất cả những recipe,blog mà user id nào đó đã like dựa theo user_id
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/{id}/liked")
     public ViewLikedResponse viewLiked(@PathVariable("id") int id){
@@ -216,12 +216,14 @@ UserRepository userRepository;
         return viewLikedResponse;
     }
 
+    //chức năng delete comment của blog dựa theo comment id
     @PreAuthorize("hasAuthority('user')")
     @DeleteMapping("/deleteComment/{commentID}/blog")
     public ResponseEntity<?>deletecommentBlog(@PathVariable("commentID")int commentID){
          commentBlogService.deleteUserCommentByID(commentID);
         return ResponseEntity.ok(new MessageResponse("Delete successfully!!!"));
     }
+    // chức năng delete comment của recipe dựa theo comment id
     @PreAuthorize("hasAuthority('user')")
     @DeleteMapping("/deleteComment/{commentID}/recipe")
     public ResponseEntity<?>deletecommentRecipe(@PathVariable("commentID")int commentID){

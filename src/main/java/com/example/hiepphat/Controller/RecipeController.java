@@ -42,6 +42,7 @@ public class RecipeController {
     private BlogServiceImpl blogService;
     @Autowired
     private CommentRecipeServiceImpl commentRecipeService;
+    //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
@@ -51,12 +52,14 @@ public class RecipeController {
         result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit ));
         return result;
     }
+    // chức năng get 10 recipe mới nhất theo time
     @GetMapping("/get10recipes")
     public TenRecipesResponse show10Recipes(){
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10Records());
         return result;
     }
+    // chức năng get chi tiết 1 recipe theo recipe id
     @GetMapping("/getrecipeby/{id}")
     public RecipeDTO showRecipesbyID(@PathVariable long id) throws Exception {
         RecipeDTO result=recipeService.findrecipebyID(id);
@@ -66,12 +69,14 @@ public class RecipeController {
         result.setTotalLike(recipeService.totalLike(id));
         return result;
     }
+    // chức năng get 10 recipe mới nhất của 1 user dựa theo user id
     @GetMapping("/get10recipebyuser/{id}")
     public TenRecipesResponse show10RecipesbyUserID(@PathVariable int id) throws Exception {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10ByUserOrderByTimeDesc(id));
         return result;
     }
+    // chức năng get tất cả recipe của 1 user dựa theo user id ( có phân trang  )
     @GetMapping("/getallbyuserID/{id}")
     public RecipeResponse showRecipebyID(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
         RecipeResponse result2=new RecipeResponse();
@@ -81,13 +86,14 @@ public class RecipeController {
         result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
         return result2;
     }
+    //get 5 recipe nhiều like nhất
     @GetMapping("/get5bestrecipes")
     public TenRecipesResponse getbestrecipe() {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(likeRecipeService.findbestRecipe());
         return result;
     }
-
+// tạo recipe
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
     public ResponseEntity<?> addRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
@@ -156,13 +162,14 @@ public class RecipeController {
 
              return ResponseEntity.ok(new MessageResponse("Add recipe successfully!!!"));
         }
-
+// view tất cả các categories của recipe
     @GetMapping("/categories")
     public RecipeCategoriesResponse getAllCategory() {
         RecipeCategoriesResponse result=new RecipeCategoriesResponse();
         result.setListResult(recipeService.getAllRecipeCategory());
         return result;
     }
+    //delete 1 recipe(delete cả comment , like của recipe đó)
     @PreAuthorize("hasAuthority('user')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?>deleteRecipe(@PathVariable("id")long id){
@@ -172,6 +179,7 @@ public class RecipeController {
         recipeService.deleteByRecipeID(id);
         return ResponseEntity.ok(new MessageResponse("Delete Successfuly!!!"));
     }
+    // like 1 recipe
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("like")
     public ResponseEntity<?>likeRecipe(@RequestBody LikeRecipeDTO dto){
@@ -192,6 +200,7 @@ public class RecipeController {
             return ResponseEntity.ok(new MessageResponse("Liked"));
         }
     }
+    // view tất cả comment của 1 recipe dựa theo recipe id
     @GetMapping("/{id}/comments")
     public ListCommentRecipeResponse getListCommentRecipe(@PathVariable("id")long id){
         ListCommentRecipeResponse response=new ListCommentRecipeResponse();

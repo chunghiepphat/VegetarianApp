@@ -48,6 +48,7 @@ public class BlogController {
     CommentBlogServiceImpl commentBlogService;
     @Autowired
     BlogRepository blogRepository;
+    //chức năng get all các blog có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public BlogResponse showBlog(@RequestParam("page") int page, @RequestParam("limit") int limit){
         BlogResponse result2=new BlogResponse();
@@ -57,6 +58,7 @@ public class BlogController {
         result2.setTotalPage((int)Math.ceil((double)blogService.totalItem()/limit ));
         return result2;
     }
+    // chức năng get chi tiết 1 blog dựa theo blogID
     @GetMapping("/getblogby/{id}")
     public BlogDTO showBlogbyID(@PathVariable int id) throws Exception {
         BlogDTO result=blogService.findblogbyID(id);
@@ -66,18 +68,21 @@ public class BlogController {
         }
         return result;
     }
+    // chức năng get 10 blogs mới nhất dựa theo thời gian
     @GetMapping("/get10blogs")
     public TenBlogResponse show10Blogs(){
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10Records());
         return result;
     }
+    // chức năng get 10 blog mới nhất của 1 user theo user id
     @GetMapping("/get10blogbyuser/{id}")
     public TenBlogResponse show10BlogsbyUserID(@PathVariable int id) throws Exception {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
         return result;
     }
+    //chức năng get all blog của 1 user theo user id
     @GetMapping("/getallbyuserID/{id}")
     public BlogResponse showBlogByID(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id){
         BlogResponse result2=new BlogResponse();
@@ -87,6 +92,7 @@ public class BlogController {
         result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
         return result2;
     }
+    // chức năng tạo blog
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
     public ResponseEntity<?> addBlog(@Valid @RequestBody BlogRequest blogRequest) throws ParseException {
@@ -104,13 +110,14 @@ public class BlogController {
         blogService.save(blog);
         return ResponseEntity.ok(new MessageResponse("Post blog successfully!!!"));
     }
+    //chức năng get 5 blog nhiều like nhết
     @GetMapping("/get5bestblog")
     public TenBlogResponse getbestblog() {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findBestBlog());
         return result;
     }
-
+// chức năng like blog
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("like")
     public ResponseEntity<?>likeBlog(@RequestBody LikeBlogDTO dto){
@@ -131,13 +138,14 @@ public class BlogController {
             return ResponseEntity.ok(new MessageResponse("Liked"));
         }
     }
+    // chức năng lấy list comment của 1 blog dựa theo blog id
     @GetMapping("/{id}/comments")
     public ListCommentBlogResponse getListCommentBlog(@PathVariable("id")int id){
         ListCommentBlogResponse response=new ListCommentBlogResponse();
         response.setListCommentBlog(commentBlogService.findByBlog_BlogID(id));
         return response;
     }
-
+// chức năng delete blog(delete hết cả like , comment, của blog delete)
     @PreAuthorize("hasAuthority('user')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?>deleteBlog(@PathVariable("id")int id){

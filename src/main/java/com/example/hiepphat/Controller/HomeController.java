@@ -16,6 +16,7 @@ public class HomeController {
 private BlogServiceImpl blogService;
 @Autowired
 private RecipeServiceImpl recipeService;
+// chức năng advance search ( nều type=all thì get hết recipe,blog,video, type=recipe : get recipe,type=blog : get blog,type=video: getvideo)
     @GetMapping("/find")
     public SearchResponse searchRecipe(@RequestParam("search") String search,@RequestParam("type")String type) {
         SearchResponse result=new SearchResponse();
