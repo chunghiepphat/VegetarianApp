@@ -21,7 +21,6 @@ public class HiepphatApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args)
 	{
-	//	getEmployees();
 	SpringApplication.run(HiepphatApplication.class,args);
 	}
 
@@ -41,32 +40,5 @@ public class HiepphatApplication extends SpringBootServletInitializer {
 			}
 		};
 	}
-	private static void getEmployees()
-	{
-		final String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=DEMO_KEY&query=tomato&pageSize=1&pageNumber=1";
 
-		RestTemplate restTemplate = new RestTemplate();
-		String result = restTemplate.getForObject(uri, String.class);
-		JSONObject jsonObject=new JSONObject(result);
-		JSONArray array=jsonObject.getJSONArray("foods");
-		for(int i=0;i<array.length();i++){
-			JSONObject raw=array.getJSONObject(i);
-			for(int j=0;j<raw.length();j++){
-				JSONArray array2=raw.getJSONArray("foodNutrients");
-				for(int m=0;m<array2.length();m++){
-					JSONObject jsonObject1=array2.getJSONObject(m);
-					String nutrion=jsonObject1.getString("nutrientName");
-					if(nutrion.contains("Protein")){
-
-					break;
-					}
-				}
-			}
-
-		}
-
-
-
-
-	}
 }

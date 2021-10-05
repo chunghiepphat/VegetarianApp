@@ -3,19 +3,13 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.LikeBlogDTO;
-import com.example.hiepphat.dtos.LikeRecipeDTO;
-import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.repositories.BlogRepository;
-import com.example.hiepphat.repositories.CommentBlogRepository;
 import com.example.hiepphat.repositories.LikeBlogRepository;
 import com.example.hiepphat.request.BlogRequest;
-import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.BlogServiceImpl;
 import com.example.hiepphat.service.CommentBlogServiceImpl;
 import com.example.hiepphat.service.LikeBlogService;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,16 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
 import javax.validation.Valid;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
+
 
 @CrossOrigin
 @RestController

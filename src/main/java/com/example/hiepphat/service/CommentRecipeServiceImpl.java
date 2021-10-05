@@ -1,8 +1,8 @@
 package com.example.hiepphat.service;
 
-import com.example.hiepphat.Entity.CommentBlog;
+
 import com.example.hiepphat.Entity.CommentRecipe;
-import com.example.hiepphat.dtos.CommentBlogDTO;
+
 import com.example.hiepphat.dtos.CommentRecipeDTO;
 import com.example.hiepphat.repositories.CommentRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

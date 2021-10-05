@@ -1,7 +1,6 @@
 package com.example.hiepphat.repositories;
 
 import com.example.hiepphat.Entity.CommentBlog;
-import com.example.hiepphat.dtos.CommentBlogDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;

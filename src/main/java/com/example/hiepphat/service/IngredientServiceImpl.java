@@ -4,14 +4,12 @@ import com.example.hiepphat.Entity.Ingredient;
 import com.example.hiepphat.dtos.NutritionDTO;
 import com.example.hiepphat.repositories.IngredientRepository;
 import com.jayway.jsonpath.JsonPath;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
+
 import java.util.List;
 @Service
 public class IngredientServiceImpl implements IngredientService {

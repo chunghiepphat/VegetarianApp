@@ -1,14 +1,14 @@
 package com.example.hiepphat.service;
 
 import com.example.hiepphat.Entity.Blog;
-import com.example.hiepphat.Entity.Recipe;
+
 import com.example.hiepphat.dtos.BlogDTO;
-import com.example.hiepphat.dtos.RecipeDTO;
+
 import com.example.hiepphat.dtos.TenBlogDTO;
-import com.example.hiepphat.dtos.TenRecipeDTO;
+
 import com.example.hiepphat.repositories.BlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

@@ -1,9 +1,8 @@
 package com.example.hiepphat.Controller;
 
-import com.example.hiepphat.response.IngredientResponse;
+
 import com.example.hiepphat.response.SearchResponse;
 import com.example.hiepphat.service.BlogServiceImpl;
-import com.example.hiepphat.service.IngredientServiceImpl;
 import com.example.hiepphat.service.RecipeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
