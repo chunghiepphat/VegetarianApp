@@ -21,7 +21,7 @@ public interface BlogService {
     List<TenBlogDTO> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
     public Blog save(Blog blog);
-    List<TenBlogDTO>findByBlog_titleLike(String title);
+    List<TenBlogDTO>findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(String title,String fn,String ln);
     List<TenBlogDTO>findBestBlog();
     List<TenBlogDTO>findLikedBlog(int id);
 }

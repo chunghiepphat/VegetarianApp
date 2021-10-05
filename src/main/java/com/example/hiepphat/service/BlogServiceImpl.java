@@ -92,9 +92,9 @@ private BlogRepository blogRepository;
     }
 
     @Override
-    public List<TenBlogDTO> findByBlog_titleLike(String title) {
+    public List<TenBlogDTO> findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(String title,String fN,String ln) {
         List<TenBlogDTO> results=new ArrayList<>();
-        List<Blog> entities=blogRepository.findBlog("%"+title+"%");
+        List<Blog> entities=blogRepository.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+title+"%","%"+fN+"%","%"+ln+"%");
         for (Blog item: entities){
             TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
             results.add(blogDTO);

@@ -121,8 +121,8 @@ UserRepository userRepository;
     public ResponseEntity<?> updateDetail(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
         User oldUser=userService.findByUser_id(id);
         if(oldUser!=null) {
-            oldUser.setFirst_name(model.getFirst_name());
-            oldUser.setLast_name(model.getLast_name());
+            oldUser.setFirstName(model.getFirst_name());
+            oldUser.setLastName(model.getLast_name());
             oldUser.setGender(model.getGender());
             oldUser.setCountry(model.getCountry());
             oldUser.setAbout_me(model.getAbout_me());
@@ -139,8 +139,8 @@ UserRepository userRepository;
         User user=userRepository.findByUserID(id);
         UserDTO dto=new UserDTO();
         dto.setId(user.getUserID());
-        dto.setFirst_name(user.getFirst_name());
-        dto.setLast_name(user.getLast_name());
+        dto.setFirst_name(user.getFirstName());
+        dto.setLast_name(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setCountry(user.getCountry());
         dto.setBirth_date(user.getBirth_date());
@@ -170,8 +170,8 @@ UserRepository userRepository;
         commentBlog.setTime(simpleDateFormat.parse(spf));
         dto.setTime(simpleDateFormat.parse(spf));
         User oldUser=userService.findByUser_id(dto.getUser_id());
-        dto.setFirst_name(oldUser.getFirst_name());
-        dto.setLast_name(oldUser.getLast_name());
+        dto.setFirst_name(oldUser.getFirstName());
+        dto.setLast_name(oldUser.getLastName());
         commentBlogService.save(commentBlog);
         return dto;
     }
@@ -192,8 +192,8 @@ UserRepository userRepository;
         commentRecipe.setTime(simpleDateFormat.parse(spf));
         dto.setTime(simpleDateFormat.parse(spf));
         User oldUser=userService.findByUser_id(dto.getUser_id());
-        dto.setFirst_name(oldUser.getFirst_name());
-        dto.setLast_name(oldUser.getLast_name());
+        dto.setFirst_name(oldUser.getFirstName());
+        dto.setLast_name(oldUser.getLastName());
         commentRecipeService.save(commentRecipe);
         return dto;
     }

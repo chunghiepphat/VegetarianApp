@@ -17,10 +17,18 @@ private BlogServiceImpl blogService;
 @Autowired
 private RecipeServiceImpl recipeService;
     @GetMapping("/find")
-    public SearchResponse searchRecipe(@RequestParam("search") String search) {
+    public SearchResponse searchRecipe(@RequestParam("search") String search,@RequestParam("type")String type) {
         SearchResponse result=new SearchResponse();
-        result.setListRecipe(recipeService.findAllByRecipeTitleLike(search));
-        result.setListBlog(blogService.findByBlog_titleLike(search));
+        if(type.equals("all")){
+            result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
+            result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
+        }
+        else if(type.equals("recipe")){
+            result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
+        }
+        else if(type.equals("blog")){
+            result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
+        }
         return result;
     }
 }

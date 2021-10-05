@@ -27,16 +27,16 @@ public class Converter {
         dto.setRecipe_categories_id(entity.getRecipeCategories().getRecipe_category_id());
         dto.setResting_time_minutes(entity.getResting_time_minutes());
         dto.setTime_created(entity.getTime());
-        dto.setLast_name(entity.getUser().getLast_name());
-        dto.setFirst_name(entity.getUser().getFirst_name());
+        dto.setLast_name(entity.getUser().getLastName());
+        dto.setFirst_name(entity.getUser().getFirstName());
         return dto;
     }
     public TenRecipeDTO toDTO10(Recipe entity) {
         TenRecipeDTO dto = new TenRecipeDTO();
         dto.setRecipe_thumbnail(entity.getRecipe_thumbnail());
         dto.setRecipe_title(entity.getRecipeTitle());
-        dto.setLast_name(entity.getUser().getLast_name());
-        dto.setFirst_name(entity.getUser().getFirst_name());
+        dto.setLast_name(entity.getUser().getLastName());
+        dto.setFirst_name(entity.getUser().getFirstName());
         dto.setRecipe_id(entity.getRecipeID());
         return dto;
     }
@@ -44,9 +44,9 @@ public class Converter {
         TenBlogDTO dto=new TenBlogDTO();
         dto.setBlog_thumbnail(entity.getBlog_thumbnail());
         dto.setBlog_content(entity.getBlog_content());
-        dto.setBlog_title(entity.getBlog_title());
-        dto.setFirst_name(entity.getUser().getFirst_name());
-        dto.setLast_name(entity.getUser().getLast_name());
+        dto.setBlog_title(entity.getBlogTitle());
+        dto.setFirst_name(entity.getUser().getFirstName());
+        dto.setLast_name(entity.getUser().getLastName());
         dto.setBlog_id(entity.getBlogID());
         dto.setTime(entity.getTime());
         dto.setBlog_subtitle(entity.getBlog_subtitle());
@@ -55,10 +55,10 @@ public class Converter {
     public BlogDTO toDTOBLOG(Blog entity) {
         BlogDTO dto = new BlogDTO();
         dto.setBlog_id(entity.getBlogID());
-        dto.setBlog_title(entity.getBlog_title());
+        dto.setBlog_title(entity.getBlogTitle());
         dto.setBlog_subtitle(entity.getBlog_subtitle());
-        dto.setFirst_name(entity.getUser().getFirst_name());
-        dto.setLast_name(entity.getUser().getLast_name());
+        dto.setFirst_name(entity.getUser().getFirstName());
+        dto.setLast_name(entity.getUser().getLastName());
         dto.setTime(entity.getTime());
         dto.setBlog_content(entity.getBlog_content());
         dto.setBlog_thumbnail(entity.getBlog_thumbnail());

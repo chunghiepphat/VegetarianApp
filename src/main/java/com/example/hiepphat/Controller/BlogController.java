@@ -87,7 +87,7 @@ public class BlogController {
         user.setUserID(blogRequest.getUser_id());
         blog.setUser(user);
         blog.setBlog_content(blogRequest.getBlog_content());
-        blog.setBlog_title(blogRequest.getBlog_title());
+        blog.setBlogTitle(blogRequest.getBlog_title());
         blog.setBlog_subtitle(blogRequest.getBlog_subtitle());
         blog.setBlog_thumbnail(blogRequest.getBlog_thumbnail());
         blog.setIs_active(true);

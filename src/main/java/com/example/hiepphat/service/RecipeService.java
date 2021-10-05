@@ -23,7 +23,7 @@ public interface RecipeService {
     List<TenRecipeDTO> findTop10ByUserOrderByTimeDesc(int userID);
     List<TenRecipeDTO> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
-    List<TenRecipeDTO> findAllByRecipeTitleLike(String search);
+    List<TenRecipeDTO> findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(String search,String fn,String ln);
     public Recipe save(Recipe recipe);
     List<RecipeCategoriesDTO> getAllRecipeCategory();
     long findrecipeID(String title,int user_id);

@@ -13,7 +13,7 @@ public class Blog {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    private String blog_title;
+    private String blogTitle;
     private String blog_subtitle;
     private String blog_content;
     private String blog_thumbnail;
@@ -53,12 +53,12 @@ public class Blog {
         this.user = user;
     }
 
-    public String getBlog_title() {
-        return blog_title;
+    public String getBlogTitle() {
+        return blogTitle;
     }
 
-    public void setBlog_title(String blog_title) {
-        this.blog_title = blog_title;
+    public void setBlogTitle(String blogTitle) {
+        this.blogTitle = blogTitle;
     }
 
     public String getBlog_subtitle() {

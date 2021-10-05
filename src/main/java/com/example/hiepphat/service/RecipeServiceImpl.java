@@ -98,9 +98,9 @@ RecipeRepository recipeRepository;
     }
 
     @Override
-    public List<TenRecipeDTO> findAllByRecipeTitleLike(String search) {
+    public List<TenRecipeDTO> findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(String search,String fn,String ln) {
         List<TenRecipeDTO> results=new ArrayList<>();
-        List<Recipe> entities=recipeRepository.findByRecipeTitleLike("%"+search+"%");
+        List<Recipe> entities=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
         for (Recipe item: entities){
             TenRecipeDTO recipeDTO= converter.toDTO10(item);
             results.add(recipeDTO);
