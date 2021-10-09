@@ -102,7 +102,7 @@ UserRepository userRepository;
                      userService.save(oldUser);
                  }
                  else{
-                     return ResponseEntity.ok(new MessageResponse("Old password not correct!!!"));
+                     return ResponseEntity.badRequest().body(new MessageResponse("Old password not correct!!!"));
                  }
              }
          return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
