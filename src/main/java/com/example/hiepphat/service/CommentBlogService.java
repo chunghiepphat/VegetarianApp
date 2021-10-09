@@ -10,4 +10,5 @@ public interface CommentBlogService {
     List<CommentBlogDTO> findByBlog_BlogID(int id);
     void deleteUserCommentByID(int id);
     void deleteCommentBlog(int id);
+    CommentBlog findById(int id);
 }

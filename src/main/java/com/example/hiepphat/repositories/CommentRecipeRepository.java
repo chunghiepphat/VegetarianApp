@@ -12,4 +12,5 @@ public interface CommentRecipeRepository extends JpaRepository<CommentRecipe,Int
     List<CommentRecipe> findByRecipe_RecipeID(long id);
     void deleteById(int id);
     CommentRecipe findByRecipe_RecipeIDAndUser_UserIDAndTime(long recipeID, int userID, Date date);
+    CommentRecipe findById(int id);
 }

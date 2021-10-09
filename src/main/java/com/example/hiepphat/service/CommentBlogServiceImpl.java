@@ -50,4 +50,9 @@ public class CommentBlogServiceImpl implements CommentBlogService {
             commentBlogRepository.delete(item);
         }
     }
+
+    @Override
+    public CommentBlog findById(int id) {
+        return commentBlogRepository.findById(id);
+    }
 }

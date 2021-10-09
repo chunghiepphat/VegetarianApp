@@ -46,4 +46,9 @@ public class CommentRecipeServiceImpl implements CommentRecipeService {
         }
         return result;
     }
+
+    @Override
+    public CommentRecipe findById(int id) {
+        return commentRecipeRepository.findById(id);
+    }
 }

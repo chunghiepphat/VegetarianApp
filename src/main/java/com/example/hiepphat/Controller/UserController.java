@@ -230,4 +230,32 @@ UserRepository userRepository;
         commentRecipeRepository.deleteById(commentID);
         return ResponseEntity.ok(new MessageResponse("Delete successfully!!!"));
     }
+    //chức năng edit comment blog
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/edit/commentblog/{id}")
+    public ResponseEntity<?> editCommentBlog(@RequestBody CommentBlogDTO dto,@PathVariable("id")int id) throws ParseException {
+        CommentBlog commentBlog=commentBlogService.findById(id);
+        if(commentBlog!=null){
+            commentBlog.setContent(dto.getContent());
+            commentBlogService.save(commentBlog);
+        }
+        else{
+            return ResponseEntity.badRequest().body(new MessageResponse("Comment ID nout found"));
+        }
+        return ResponseEntity.ok(new MessageResponse("Edit comment blog successfully!!!"));
+    }
+    //chức năng edit comment recipe
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/edit/commentrecipe/{id}")
+    public ResponseEntity<?> editCommentRecipe(@RequestBody CommentRecipeDTO dto,@PathVariable("id")int id) throws ParseException {
+        CommentRecipe commentRecipe=commentRecipeService.findById(id);
+        if(commentRecipe!=null){
+            commentRecipe.setContent(dto.getContent());
+            commentRecipeService.save(commentRecipe);
+        }
+        else{
+            return ResponseEntity.badRequest().body(new MessageResponse("Comment ID nout found"));
+        }
+        return ResponseEntity.ok(new MessageResponse("Edit comment recipe successfully!!!"));
+    }
 }

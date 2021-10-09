@@ -9,4 +9,5 @@ import java.util.List;
 public interface CommentBlogRepository extends JpaRepository<CommentBlog,Integer> {
     List<CommentBlog> findByBlog_BlogID(int id);
     CommentBlog findByBlog_BlogIDAndUser_UserIDAndTime(int blogID, int userID, Date date);
+    CommentBlog findById(int id);
 }

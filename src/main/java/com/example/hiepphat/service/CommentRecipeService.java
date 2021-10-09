@@ -9,4 +9,5 @@ public interface CommentRecipeService {
     CommentRecipe save(CommentRecipe commentRecipe);
     void deleteComment(long id);
     List<CommentRecipeDTO>getAllCommentRecipe(long id);
+    CommentRecipe findById(int id);
 }
