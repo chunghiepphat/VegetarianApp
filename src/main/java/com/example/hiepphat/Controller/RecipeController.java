@@ -182,13 +182,12 @@ public class RecipeController {
     // like 1 recipe
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("like")
-    public LikeResponse likeRecipe(@RequestBody LikeRecipeDTO dto){
-        LikeResponse likeResponse=new LikeResponse();
+    public ResponseEntity<?> likeRecipe(@RequestBody LikeRecipeDTO dto){
+
         LikeRecipe likeRecipe=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(dto.getRecipe_id(),dto.getUser_id());
         if(likeRecipe!=null){
             likeRecipeRepository.delete(likeRecipe);
-            likeResponse.setIs_Liked(false);
-            return likeResponse;
+            return ResponseEntity.ok(new MessageResponse("Unlike"));
         }
         else{
             LikeRecipe newLike=new LikeRecipe();
@@ -199,8 +198,8 @@ public class RecipeController {
             newLike.setUser(user);
             newLike.setRecipe(recipe);
             likeRecipeRepository.save(newLike);
-            likeResponse.setIs_Liked(true);
-            return likeResponse;
+            return ResponseEntity.ok(new MessageResponse("Liked"));
+
         }
     }
     // view tất cả comment của 1 recipe dựa theo recipe id

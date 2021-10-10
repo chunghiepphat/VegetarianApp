@@ -2,19 +2,14 @@ package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.JWTUtils.JwtUtils;
-import com.example.hiepphat.dtos.CommentBlogDTO;
-import com.example.hiepphat.dtos.CommentRecipeDTO;
-import com.example.hiepphat.dtos.UserDTO;
+import com.example.hiepphat.dtos.*;
 import com.example.hiepphat.repositories.CommentBlogRepository;
 import com.example.hiepphat.repositories.CommentRecipeRepository;
 import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.request.LoginRequest;
 import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.request.UpdateUserRequest;
-import com.example.hiepphat.response.JwtResponse;
-import com.example.hiepphat.response.MessageResponse;
-import com.example.hiepphat.response.SignupResponse;
-import com.example.hiepphat.response.ViewLikedResponse;
+import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +51,10 @@ UserRepository userRepository;
     CommentBlogRepository commentBlogRepository;
     @Autowired
     CommentRecipeRepository commentRecipeRepository;
+    @Autowired
+    LikeRecipeService likeRecipeService;
+    @Autowired
+    LikeBlogService likeBlogService;
     //login
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -257,5 +256,35 @@ UserRepository userRepository;
             return ResponseEntity.badRequest().body(new MessageResponse("Comment ID nout found"));
         }
         return ResponseEntity.ok(new MessageResponse("Edit comment recipe successfully!!!"));
+    }
+    //check like blog
+    @PreAuthorize("hasAuthority('user')")
+    @GetMapping("/blog/islike")
+    public LikeResponse checklikeBlog(@RequestBody LikeBlogDTO dto){
+        LikeResponse likeResponse=new LikeResponse();
+        LikeBlog likeBlog=likeBlogService.findByUser_UserIDAndBlog_BlogID(dto.getUser_id(),dto.getBlog_id());
+        if(likeBlog!=null){
+            likeResponse.setIs_Liked(true);
+            return likeResponse;
+        }
+        else{
+           likeResponse.setIs_Liked(false);
+            return likeResponse;
+        }
+    }
+    //check like recipe
+    @PreAuthorize("hasAuthority('user')")
+    @GetMapping("/recipe/islike")
+    public LikeResponse checklikeRecipe(@RequestBody LikeRecipeDTO dto) {
+        LikeResponse likeResponse=new LikeResponse();
+        LikeRecipe likeRecipe = likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(dto.getRecipe_id(), dto.getUser_id());
+        if (likeRecipe != null) {
+            likeResponse.setIs_Liked(true);
+            return likeResponse;
+        }
+        else {
+            likeResponse.setIs_Liked(false);
+            return likeResponse;
+        }
     }
 }
