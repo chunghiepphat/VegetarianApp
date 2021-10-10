@@ -13,7 +13,7 @@ public class LikeBlogServiceImpl implements LikeBlogService {
     private LikeBlogRepository likeBlogRepository;
 
     @Override
-    public LikeBlog findByUser_UserIDAndBlog_BlogID(int user_id, long blog_id) {
+    public LikeBlog findByUser_UserIDAndBlog_BlogID(int user_id, int blog_id) {
         return likeBlogRepository.findByUser_UserIDAndBlog_BlogID(user_id,blog_id);
     }
 

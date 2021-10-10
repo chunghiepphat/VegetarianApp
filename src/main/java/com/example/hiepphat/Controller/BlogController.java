@@ -107,11 +107,13 @@ public class BlogController {
 // chức năng like blog
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("like")
-    public ResponseEntity<?>likeBlog(@RequestBody LikeBlogDTO dto){
+    public LikeResponse likeBlog(@RequestBody LikeBlogDTO dto){
+        LikeResponse likeResponse=new LikeResponse();
         LikeBlog likeBlog=likeBlogService.findByUser_UserIDAndBlog_BlogID(dto.getUser_id(),dto.getBlog_id());
         if(likeBlog!=null){
             likeBlogRepository.delete(likeBlog);
-            return ResponseEntity.ok(new MessageResponse("Unlike"));
+            likeResponse.setIs_Liked(false);
+            return likeResponse;
         }
         else{
             LikeBlog newLike=new LikeBlog();
@@ -122,7 +124,8 @@ public class BlogController {
             newLike.setUser(user);
             newLike.setBlog(blog);
             likeBlogRepository.save(newLike);
-            return ResponseEntity.ok(new MessageResponse("Liked"));
+            likeResponse.setIs_Liked(true);
+            return likeResponse;
         }
     }
     // chức năng lấy list comment của 1 blog dựa theo blog id
