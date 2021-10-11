@@ -141,4 +141,12 @@ public class BlogController {
         blogRepository.deleteById(id);
         return ResponseEntity.ok(new MessageResponse("Delete Successfuly!!!"));
     }
+    // chuc nang hien listUser da like blog va tong so like
+    @GetMapping("/{id}/listuserlike")
+    public ListUserLikeResponse viewListlikeBlog(@PathVariable("id")int id){
+         ListUserLikeResponse listUserLikeResponse=new ListUserLikeResponse();
+         listUserLikeResponse.setListUserlike(likeBlogService.viewListUserLike(id));
+         listUserLikeResponse.setTotalLike(blogRepository.totalLike(id));
+         return listUserLikeResponse;
+    }
 }

@@ -3,6 +3,7 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.*;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
+import com.example.hiepphat.repositories.RecipeRepository;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
@@ -42,6 +43,8 @@ public class RecipeController {
     private BlogServiceImpl blogService;
     @Autowired
     private CommentRecipeServiceImpl commentRecipeService;
+    @Autowired
+    private RecipeRepository recipeRepository;
     //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
@@ -208,6 +211,14 @@ public class RecipeController {
         ListCommentRecipeResponse response=new ListCommentRecipeResponse();
         response.setListCommentRecipe(commentRecipeService.getAllCommentRecipe(id));
         return response;
+    }
+    // chuc nang hien listUser da like recipe va tong so like
+    @GetMapping("/{id}/listuserlike")
+    public ListUserLikeResponse viewListlikeRecipe(@PathVariable("id")long id){
+        ListUserLikeResponse listUserLikeResponse=new ListUserLikeResponse();
+        listUserLikeResponse.setListUserlike(likeRecipeService.viewListUserLike(id));
+        listUserLikeResponse.setTotalLike(recipeRepository.totalLike(id));
+        return listUserLikeResponse;
     }
     }
 

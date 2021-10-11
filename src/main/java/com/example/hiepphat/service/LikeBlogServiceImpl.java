@@ -1,10 +1,12 @@
 package com.example.hiepphat.service;
 
 import com.example.hiepphat.Entity.LikeBlog;
+import com.example.hiepphat.dtos.ListLikeDTO;
 import com.example.hiepphat.repositories.LikeBlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,5 +25,17 @@ public class LikeBlogServiceImpl implements LikeBlogService {
         for(LikeBlog item:entities){
             likeBlogRepository.delete(item);
         }
+    }
+
+    @Override
+    public List<ListLikeDTO> viewListUserLike(int id) {
+       List<ListLikeDTO>result=new ArrayList<>();
+       List<LikeBlog>entity=likeBlogRepository.findByBlog_BlogID(id);
+       for(LikeBlog item:entity){
+           ListLikeDTO dto=new ListLikeDTO();
+           dto.setUser_id(item.getUser().getUserID());
+           result.add(dto);
+       }
+        return result;
     }
 }

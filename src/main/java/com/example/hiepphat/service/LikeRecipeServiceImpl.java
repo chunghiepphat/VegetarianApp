@@ -2,6 +2,7 @@ package com.example.hiepphat.service;
 
 import com.example.hiepphat.Entity.LikeRecipe;
 import com.example.hiepphat.Entity.Recipe;
+import com.example.hiepphat.dtos.ListLikeDTO;
 import com.example.hiepphat.dtos.TenRecipeDTO;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
 import com.example.hiepphat.repositories.RecipeRepository;
@@ -45,6 +46,18 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
     @Override
     public LikeRecipe findByRecipe_RecipeIDAndUser_UserID(long recipeID, int userID) {
         return likeRecipeRepository.findByRecipe_RecipeIDAndUser_UserID(recipeID,userID);
+    }
+
+    @Override
+    public List<ListLikeDTO> viewListUserLike(long id) {
+        List<ListLikeDTO>result=new ArrayList<>();
+        List<LikeRecipe> entity=likeRecipeRepository.findByRecipe_RecipeID(id);
+        for(LikeRecipe item:entity){
+            ListLikeDTO dto=new ListLikeDTO();
+            dto.setUser_id(item.getUser().getUserID());
+            result.add(dto);
+        }
+        return result;
     }
 
 
