@@ -3,6 +3,15 @@ package com.example.hiepphat.dtos;
 public class RecipeCategoriesDTO {
     private int category_id;
     private String category_name;
+    private String thumbnail;
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 
     public int getCategory_id() {
         return category_id;

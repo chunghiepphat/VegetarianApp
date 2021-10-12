@@ -31,4 +31,5 @@ public interface RecipeService {
     void deleteByRecipeID(long id);
     void deleteLike(long recipeID);
     int totalLike(long id);
+
 }

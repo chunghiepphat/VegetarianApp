@@ -3,6 +3,7 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.*;
 import com.example.hiepphat.repositories.LikeRecipeRepository;
+import com.example.hiepphat.repositories.RecipeCategoriesRepository;
 import com.example.hiepphat.repositories.RecipeRepository;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
@@ -14,14 +15,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -45,6 +47,8 @@ public class RecipeController {
     private CommentRecipeServiceImpl commentRecipeService;
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private RecipeCategoriesRepository recipeCategoriesRepository;
     //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
@@ -115,7 +119,7 @@ public class RecipeController {
                                 recipe.setRecipe_thumbnail(thumbnail);
                             }
                          RecipeCategories recipeCategories=new RecipeCategories();
-                          recipeCategories.setRecipe_category_id(recipeRequest.getRecipe_categories_id());
+                          recipeCategories.setRecipeCategoryID(recipeRequest.getRecipe_categories_id());
                             recipe.setRecipeCategories(recipeCategories);
                             recipe.setBaking_time_minutes(recipeRequest.getBaking_time_minutes());
                             recipe.setPortion_size(recipeRequest.getPortion_size());
@@ -202,7 +206,6 @@ public class RecipeController {
             newLike.setRecipe(recipe);
             likeRecipeRepository.save(newLike);
             return ResponseEntity.ok(new MessageResponse("Liked"));
-
         }
     }
     // view tất cả comment của 1 recipe dựa theo recipe id
@@ -219,6 +222,26 @@ public class RecipeController {
         listUserLikeResponse.setListUserlike(likeRecipeService.viewListUserLike(id));
         listUserLikeResponse.setTotalLike(recipeRepository.totalLike(id));
         return listUserLikeResponse;
+    }
+// chuc nang tao recipe category
+    @PreAuthorize("hasAuthority('admin')")
+    @PostMapping("/create/category")
+    public ResponseEntity<?> createRecipeCategory(@RequestBody RecipeCategoriesDTO dto){
+        recipeCategoriesRepository.saveRecipeCategory(dto.getCategory_name(),dto.getThumbnail());
+        return ResponseEntity.ok(new MessageResponse("Create recipe category successfully!!!"));
+    }
+    //chuc nang delete recipe category
+    @PreAuthorize("hasAuthority('admin')")
+    @DeleteMapping("/delete/category/{id}")
+    public ResponseEntity<?> deleteRecipeCategory(@PathVariable("id")int id){
+        RecipeCategories recipeCategories=recipeCategoriesRepository.getRecipeCategories(id);
+        if(recipeCategories!=null){
+            recipeCategoriesRepository.deleteRecipeCategory(id);
+        }
+        else{
+            return ResponseEntity.badRequest().body(new MessageResponse("Not found recipe category id!!!"));
+        }
+        return ResponseEntity.ok(new MessageResponse("Delete recipe category successfully!!!"));
     }
     }
 

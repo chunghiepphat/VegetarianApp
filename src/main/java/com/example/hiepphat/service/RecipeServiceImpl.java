@@ -124,8 +124,9 @@ RecipeRepository recipeRepository;
         List<RecipeCategories> entities=recipeCategoriesRepository.getAll();
         for(RecipeCategories item:entities){
             RecipeCategoriesDTO recipeCategoriesDTO=new RecipeCategoriesDTO();
-            recipeCategoriesDTO.setCategory_id(item.getRecipe_category_id());
-            recipeCategoriesDTO.setCategory_name(item.getRecipe_category_name());
+            recipeCategoriesDTO.setCategory_id(item.getRecipeCategoryID());
+            recipeCategoriesDTO.setCategory_name(item.getRecipeCategoryName());
+            recipeCategoriesDTO.setThumbnail(item.getRecipeCategoryThumbnail());
             result.add(recipeCategoriesDTO);
         }
         return result;
@@ -166,6 +167,8 @@ RecipeRepository recipeRepository;
     public int totalLike(long id) {
         return recipeRepository.totalLike(id);
     }
+
+
 
 
 }

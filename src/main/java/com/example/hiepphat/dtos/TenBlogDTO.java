@@ -11,7 +11,6 @@ public class TenBlogDTO {
     private String blog_subtitle;
     private int blog_id;
     private int totalLike;
-
     public int getTotalLike() {
         return totalLike;
     }
