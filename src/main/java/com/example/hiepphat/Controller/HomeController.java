@@ -4,6 +4,7 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.response.SearchResponse;
 import com.example.hiepphat.service.BlogServiceImpl;
 import com.example.hiepphat.service.RecipeServiceImpl;
+import com.example.hiepphat.service.VideoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,8 @@ public class HomeController {
 private BlogServiceImpl blogService;
 @Autowired
 private RecipeServiceImpl recipeService;
+@Autowired
+private VideoServiceImpl videoService;
 // chức năng advance search ( nều type=all thì get hết recipe,blog,video, type=recipe : get recipe,type=blog : get blog,type=video: getvideo)
     @GetMapping("/find")
     public SearchResponse searchRecipe(@RequestParam("search") String search,@RequestParam("type")String type) {
@@ -22,12 +25,16 @@ private RecipeServiceImpl recipeService;
         if(type.equals("all")){
             result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
             result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
+            result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
         }
         else if(type.equals("recipe")){
             result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
         }
         else if(type.equals("blog")){
             result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
+        }
+        else if(type.equals("video")){
+            result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
         }
         return result;
     }
