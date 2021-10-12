@@ -19,6 +19,16 @@ public class Video {
     private String title;
     @Column(name = "video_link")
     private String videoLink;
+    @Column(name = "video_description")
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public int getId() {
         return id;

@@ -5,6 +5,15 @@ public class VideoDTO {
     private int video_category_id;
     private String video_title;
     private String video_link;
+    private String video_description;
+
+    public String getVideo_description() {
+        return video_description;
+    }
+
+    public void setVideo_description(String video_description) {
+        this.video_description = video_description;
+    }
 
     public int getUser_id() {
         return user_id;

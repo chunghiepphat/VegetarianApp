@@ -24,6 +24,7 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_link(item.getVideoLink());
             dto.setVideo_category_id(item.getVideoCategory().getId());
             dto.setVideo_title(item.getTitle());
+            dto.setVideo_description(item.getDescription());
             result.add(dto);
         }
         return result;

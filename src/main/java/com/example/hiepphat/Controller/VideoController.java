@@ -30,6 +30,7 @@ public class VideoController {
         video.setVideoCategory(videoCategory);
         video.setTitle(dto.getVideo_title());
         video.setVideoLink(dto.getVideo_link());
+        video.setDescription(dto.getVideo_description());
         videoRepository.save(video);
         return ResponseEntity.ok(new MessageResponse("Upload video successfully!!!"));
     }
