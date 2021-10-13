@@ -13,5 +13,5 @@ public interface VideoService {
     List<VideoDTO>findAll(Pageable pageable);
     int totalItem();
     List<VideoDTO>find3latestVideo();
-    VideoDTO findById(int id);
+    VideoDTO findById(int id) throws Exception;
 }

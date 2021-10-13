@@ -3,6 +3,7 @@ package com.example.hiepphat.service;
 import com.example.hiepphat.Entity.Video;
 import com.example.hiepphat.dtos.VideoDTO;
 import com.example.hiepphat.repositories.VideoRepository;
+import com.example.hiepphat.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_category_id(item.getVideoCategory().getId());
             dto.setFirst_name(item.getUser().getFirstName());
             dto.setLast_name(item.getUser().getLastName());
+            dto.setTime_created(item.getTimeCreated());
             result.add(dto);
         }
         return result;
@@ -72,23 +74,30 @@ public class VideoServiceImpl implements VideoService {
             dto.setUser_id(item.getUser().getUserID());
             dto.setFirst_name(item.getUser().getFirstName());
             dto.setLast_name(item.getUser().getLastName());
+            dto.setTime_created(item.getTimeCreated());
             result.add(dto);
         }
         return result;
     }
 
     @Override
-    public VideoDTO findById(int id) {
+    public VideoDTO findById(int id) throws Exception {
         Video video=videoRepository.findById(id);
         VideoDTO dto=new VideoDTO();
-        dto.setUser_id(video.getUser().getUserID());
-        dto.setVideo_title(video.getTitle());
-        dto.setId(video.getId());
-        dto.setVideo_link(video.getVideoLink());
-        dto.setVideo_description(video.getDescription());
-        dto.setVideo_category_id(video.getVideoCategory().getId());
-        dto.setLast_name(video.getUser().getLastName());
-        dto.setFirst_name(video.getUser().getFirstName());
+        if(video!=null){
+            dto.setUser_id(video.getUser().getUserID());
+            dto.setVideo_title(video.getTitle());
+            dto.setId(video.getId());
+            dto.setVideo_link(video.getVideoLink());
+            dto.setVideo_description(video.getDescription());
+            dto.setVideo_category_id(video.getVideoCategory().getId());
+            dto.setLast_name(video.getUser().getLastName());
+            dto.setFirst_name(video.getUser().getFirstName());
+            dto.setTime_created(video.getTimeCreated());
+        }
+       else{
+           throw new Exception("Video not found");
+        }
         return dto;
     }
 }

@@ -1,5 +1,7 @@
 package com.example.hiepphat.dtos;
 
+import java.util.Date;
+
 public class VideoDTO {
     private int id;
     private int user_id;
@@ -9,6 +11,15 @@ public class VideoDTO {
     private String video_description;
     private String first_name;
     private String last_name;
+    private Date time_created;
+
+    public Date getTime_created() {
+        return time_created;
+    }
+
+    public void setTime_created(Date time_created) {
+        this.time_created = time_created;
+    }
 
     public String getFirst_name() {
         return first_name;
