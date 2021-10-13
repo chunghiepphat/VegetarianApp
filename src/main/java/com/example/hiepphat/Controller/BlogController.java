@@ -19,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 @CrossOrigin
@@ -148,5 +150,26 @@ public class BlogController {
          listUserLikeResponse.setListUserlike(likeBlogService.viewListUserLike(id));
          listUserLikeResponse.setTotalLike(blogRepository.totalLike(id));
          return listUserLikeResponse;
+    }
+    //chuc nang update blog dua theo blog id
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?>updateBlog(@RequestBody BlogDTO dto,@PathVariable("id")int id) throws ParseException {
+        Blog blog= blogRepository.findByBlogID(id);
+        if(blog!=null){
+            blog.setBlogTitle(dto.getBlog_title());
+            blog.setBlog_subtitle(dto.getBlog_subtitle());
+            blog.setBlog_thumbnail(dto.getBlog_thumbnail());
+            blog.setBlog_content(dto.getBlog_content());
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date=new Date();
+            String spf=simpleDateFormat.format(date);
+            blog.setTimeUpdated(simpleDateFormat.parse(spf));
+            blogRepository.save(blog);
+            return ResponseEntity.ok(new MessageResponse("Update blog successfully"));
+        }
+        else{
+           return ResponseEntity.badRequest().body(new MessageResponse("Nout found blog id"));
+        }
     }
 }

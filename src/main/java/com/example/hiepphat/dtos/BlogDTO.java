@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import java.util.Date;
 
 public class BlogDTO {
-    private long blog_id;
+    private int blog_id;
     private int user_id;
     private String blog_title;
     private String blog_subtitle;
@@ -28,11 +28,11 @@ public class BlogDTO {
         this.totalLike = totalLike;
     }
 
-    public long getBlog_id() {
+    public int getBlog_id() {
         return blog_id;
     }
 
-    public void setBlog_id(long blog_id) {
+    public void setBlog_id(int blog_id) {
         this.blog_id = blog_id;
     }
 

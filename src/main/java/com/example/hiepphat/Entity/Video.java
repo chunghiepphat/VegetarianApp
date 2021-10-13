@@ -1,6 +1,7 @@
 package com.example.hiepphat.Entity;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "Videos")
@@ -21,6 +22,26 @@ public class Video {
     private String videoLink;
     @Column(name = "video_description")
     private String description;
+    @Column(name = "time_created")
+    private Date timeCreated;
+    @Column(name = "time_updated")
+    private Date timeUpdated;
+
+    public Date getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    public void setTimeUpdated(Date timeUpdated) {
+        this.timeUpdated = timeUpdated;
+    }
+
+    public Date getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
+    }
 
     public String getDescription() {
         return description;

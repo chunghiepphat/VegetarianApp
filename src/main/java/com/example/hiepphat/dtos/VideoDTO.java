@@ -1,11 +1,20 @@
 package com.example.hiepphat.dtos;
 
 public class VideoDTO {
+    private int id;
     private int user_id;
     private int video_category_id;
     private String video_title;
     private String video_link;
     private String video_description;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getVideo_description() {
         return video_description;

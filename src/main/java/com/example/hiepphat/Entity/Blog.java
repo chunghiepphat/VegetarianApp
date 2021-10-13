@@ -20,6 +20,16 @@ public class Blog {
     private boolean is_active;
     @Column(name = "time_created")
     private java.util.Date time;
+    @Column(name = "time_updated")
+    private Date timeUpdated;
+
+    public Date getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    public void setTimeUpdated(Date timeUpdated) {
+        this.timeUpdated = timeUpdated;
+    }
 
     public String getBlog_thumbnail() {
         return blog_thumbnail;

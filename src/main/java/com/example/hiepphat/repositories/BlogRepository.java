@@ -27,4 +27,5 @@ public interface BlogRepository extends JpaRepository<Blog,Integer> {
     List<Blog>findLikedBlog(int id);
     @Query(value = "SELECT COUNT(user_id) from Likes_Blog where blog_id=?",nativeQuery = true)
     int totalLike(int id);
+
 }
