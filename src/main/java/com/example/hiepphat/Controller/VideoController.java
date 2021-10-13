@@ -60,7 +60,7 @@ public class VideoController {
         return videoResponse;
     }
     //chuc nang get 3 video moi nhat
-    @GetMapping("/get3videos")
+    @GetMapping("/get4videos")
     public ThreeVideoResponse show10Blogs(){
         ThreeVideoResponse result=new ThreeVideoResponse();
         result.setListVideo(videoService.find3latestVideo());
