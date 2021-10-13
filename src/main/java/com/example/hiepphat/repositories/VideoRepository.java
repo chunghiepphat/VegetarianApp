@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface VideoRepository extends JpaRepository<Video,Integer> {
     List<Video>findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(String title,String fn,String ln);
-    List<Video>findTop10ByTimeCreatedLessThanEqualOrderByTimeCreatedDesc(Date date);
+    List<Video>findTop4ByTimeCreatedLessThanEqualOrderByTimeCreatedDesc(Date date);
     Video findById(int id);
 }

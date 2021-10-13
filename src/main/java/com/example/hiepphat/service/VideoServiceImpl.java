@@ -3,7 +3,6 @@ package com.example.hiepphat.service;
 import com.example.hiepphat.Entity.Video;
 import com.example.hiepphat.dtos.VideoDTO;
 import com.example.hiepphat.repositories.VideoRepository;
-import com.example.hiepphat.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -63,7 +62,7 @@ public class VideoServiceImpl implements VideoService {
     public List<VideoDTO> find3latestVideo() {
         List<VideoDTO>result=new ArrayList<>();
         Date date=new Date();
-        List<Video>entity=videoRepository.findTop10ByTimeCreatedLessThanEqualOrderByTimeCreatedDesc(date);
+        List<Video>entity=videoRepository.findTop4ByTimeCreatedLessThanEqualOrderByTimeCreatedDesc(date);
         for(Video item:entity){
             VideoDTO dto=new VideoDTO();
             dto.setId(item.getId());
