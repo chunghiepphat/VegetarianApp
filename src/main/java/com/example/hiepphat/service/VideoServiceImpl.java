@@ -45,6 +45,8 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_link(item.getVideoLink());
             dto.setUser_id(item.getUser().getUserID());
             dto.setVideo_category_id(item.getVideoCategory().getId());
+            dto.setFirst_name(item.getUser().getFirstName());
+            dto.setLast_name(item.getUser().getLastName());
             result.add(dto);
         }
         return result;
@@ -68,8 +70,25 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_description(item.getDescription());
             dto.setVideo_title(item.getTitle());
             dto.setUser_id(item.getUser().getUserID());
+            dto.setFirst_name(item.getUser().getFirstName());
+            dto.setLast_name(item.getUser().getLastName());
             result.add(dto);
         }
         return result;
+    }
+
+    @Override
+    public VideoDTO findById(int id) {
+        Video video=videoRepository.findById(id);
+        VideoDTO dto=new VideoDTO();
+        dto.setUser_id(video.getUser().getUserID());
+        dto.setVideo_title(video.getTitle());
+        dto.setId(video.getId());
+        dto.setVideo_link(video.getVideoLink());
+        dto.setVideo_description(video.getDescription());
+        dto.setVideo_category_id(video.getVideoCategory().getId());
+        dto.setLast_name(video.getUser().getLastName());
+        dto.setFirst_name(video.getUser().getFirstName());
+        return dto;
     }
 }

@@ -3,6 +3,7 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.Entity.Video;
 import com.example.hiepphat.Entity.VideoCategory;
+import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.VideoDTO;
 import com.example.hiepphat.repositories.VideoRepository;
 import com.example.hiepphat.response.*;
@@ -100,5 +101,14 @@ public class VideoController {
         else{
             return ResponseEntity.badRequest().body(new MessageResponse("Nout found video id"));
         }
+    }
+    //chuc nang get video detail theo id
+    @GetMapping("/getvideoby/{id}")
+    public VideoDTO showVideobyID(@PathVariable int id) throws Exception {
+        VideoDTO result=videoService.findById(id);
+        if(result==null){
+            throw new Exception("Nout found blog id:"+ id);
+        }
+        return result;
     }
 }
