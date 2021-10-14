@@ -157,7 +157,10 @@ public class RecipeController {
                          recipeIngredient.setIngredient(ingredient1);
                          recipeIngredient.setAmount(item.getAmount_in_mg());
                          NutritionDTO nutrition=ingredientService.getIngredientByRecipe(recipeID);
-                         float totalCalo=nutrition.getCalories();
+                         int totalCalo=(int)nutrition.getCalories();
+                         Recipe updateRecipe=recipeRepository.findByRecipeID(recipeID);
+                         updateRecipe.setTotalCalo(totalCalo);
+                         recipeService.save(updateRecipe);
                          recipeIngredientService.save(recipeIngredient);
                      }
 
