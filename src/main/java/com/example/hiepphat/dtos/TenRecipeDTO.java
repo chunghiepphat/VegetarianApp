@@ -7,7 +7,6 @@ public class TenRecipeDTO {
     private String last_name;
     private long recipe_id;
     private int totalLike;
-
     public int getTotalLike() {
         return totalLike;
     }

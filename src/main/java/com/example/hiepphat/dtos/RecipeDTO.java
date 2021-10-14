@@ -23,7 +23,6 @@ public class RecipeDTO {
     private NutritionDTO nutrition;
     private List<IngredientDTO> ingredients=new ArrayList<>();
     private int totalLike;
-
     public int getTotalLike() {
         return totalLike;
     }
