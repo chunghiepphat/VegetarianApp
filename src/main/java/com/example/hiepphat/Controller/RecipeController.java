@@ -122,6 +122,7 @@ public class RecipeController {
                             recipe.setTime(currentTime);
                             recipe.setRecipe_difficulty(recipeRequest.getRecipe_difficulty());
                             recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
+                     recipeService.save(recipe);
                      List<IngredientRecipeDTO>ingredientlistDTO=recipeRequest.getIngredients();
                      for(IngredientRecipeDTO item:ingredientlistDTO){
                          Ingredient ingredient=new Ingredient();
@@ -156,9 +157,7 @@ public class RecipeController {
                          recipeIngredient.setIngredient(ingredient1);
                          recipeIngredient.setAmount(item.getAmount_in_mg());
                          NutritionDTO nutrition=ingredientService.getIngredientByRecipe(recipeID);
-                         int totalCalo=(int)nutrition.getCalories();
-                         recipe.setTotalCalo(totalCalo);
-                         recipeService.save(recipe);
+                         float totalCalo=nutrition.getCalories();
                          recipeIngredientService.save(recipeIngredient);
                      }
 
