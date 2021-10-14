@@ -29,6 +29,10 @@ public class User {
     private String country;
     private String facebook_link;
     private String instagram_link;
+    private float weight;
+    private int height;
+    @Column(name = "workout_routine")
+    private int typeWorkout;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Recipe> recipes;
@@ -37,6 +41,31 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Blog> blogs;
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getTypeWorkout() {
+        return typeWorkout;
+    }
+
+    public void setTypeWorkout(int typeWorkout) {
+        this.typeWorkout = typeWorkout;
+    }
+
     private String provider;
 
     public String getProvider() {
