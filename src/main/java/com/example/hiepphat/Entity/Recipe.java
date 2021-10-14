@@ -28,6 +28,7 @@ public class Recipe {
     private int prep_time_minutes;
     private int baking_time_minutes;
     private int resting_time_minutes;
+    @Column(name = "total_calo")
     private int totalCalo;
     @Column(name = "time_created")
     private java.util.Date time;

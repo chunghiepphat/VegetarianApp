@@ -93,7 +93,7 @@ public class RecipeController {
         return result;
     }
 // tạo recipe
-    @PreAuthorize("hasAuthority('user')")
+@PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
     public ResponseEntity<?> addRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
                             Recipe recipe=new Recipe();
@@ -122,7 +122,8 @@ public class RecipeController {
                             recipe.setTime(currentTime);
                             recipe.setRecipe_difficulty(recipeRequest.getRecipe_difficulty());
                             recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
-                     recipeService.save(recipe);
+                            recipe.setTotalCalo(0);
+                            recipeService.save(recipe);
                      List<IngredientRecipeDTO>ingredientlistDTO=recipeRequest.getIngredients();
                      for(IngredientRecipeDTO item:ingredientlistDTO){
                          Ingredient ingredient=new Ingredient();
