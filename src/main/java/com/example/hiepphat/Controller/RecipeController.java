@@ -157,12 +157,13 @@ public class RecipeController {
                          recipeIngredient.setRecipe(recipe1);
                          recipeIngredient.setIngredient(ingredient1);
                          recipeIngredient.setAmount(item.getAmount_in_mg());
+                         recipeIngredientService.save(recipeIngredient);
                          NutritionDTO nutrition=ingredientService.getIngredientByRecipe(recipeID);
                          int totalCalo=(int)nutrition.getCalories();
+                         System.out.println(nutrition.getCalories()+" ne");
                          Recipe updateRecipe=recipeRepository.findByRecipeID(recipeID);
                          updateRecipe.setTotalCalo(totalCalo);
                          recipeService.save(updateRecipe);
-                         recipeIngredientService.save(recipeIngredient);
                      }
 
              return ResponseEntity.ok(new MessageResponse("Add recipe successfully!!!"));
