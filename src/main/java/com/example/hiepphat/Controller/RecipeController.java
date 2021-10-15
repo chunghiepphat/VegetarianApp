@@ -102,14 +102,7 @@ public class RecipeController {
                             recipe.setUser(user);
                             recipe.setRecipe_content(recipeRequest.getRecipe_content());
                             recipe.setRecipeTitle(recipeRequest.getRecipe_title());
-                            String thumbnail=recipeRequest.getRecipe_thumbnail();
-                            if(thumbnail.isEmpty()){
-                                thumbnail="https://images.unsplash.com/photo-1599020792689-9fde458e7e17?ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8dmVnZXRhcmlhbiUyMGZvb2R8ZW58MHx8MHx8&ixlib=rb-1.2.1&w=1000&q=80&fbclid=IwAR2lbdXG_WZiw2dq25_C3jbMvjJNqBvdpYjWasPupjuhbfbcfd-y8AWs6sI";
-                                recipe.setRecipe_thumbnail(thumbnail);
-                            }
-                            else{
-                                recipe.setRecipe_thumbnail(thumbnail);
-                            }
+                            recipe.setRecipe_thumbnail(recipeRequest.getRecipe_thumbnail());
                          RecipeCategories recipeCategories=new RecipeCategories();
                           recipeCategories.setRecipeCategoryID(recipeRequest.getRecipe_categories_id());
                             recipe.setRecipeCategories(recipeCategories);
