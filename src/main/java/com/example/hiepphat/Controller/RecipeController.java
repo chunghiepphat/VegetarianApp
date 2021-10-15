@@ -141,7 +141,7 @@ public class RecipeController {
                              ingredientService.save(ingredient1);
                          }
                          RecipeIngredient recipeIngredient=new RecipeIngredient();
-                         long recipeID=recipeService.findrecipeID(recipeRequest.getRecipe_title(),recipeRequest.getUser_id());
+                         long recipeID=recipeService.findrecipeID(recipeRequest.getRecipe_title(),recipeRequest.getUser_id(),currentTime);
                          Recipe recipe1=new Recipe();
                          recipe1.setRecipeID(recipeID);
                          int ingreID=ingredientService.findIngredientID(item.getIngredient_name());

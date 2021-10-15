@@ -10,8 +10,7 @@ import com.example.hiepphat.dtos.TenRecipeDTO;
 import org.springframework.data.domain.Pageable;
 
 
-
-
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,7 +25,7 @@ public interface RecipeService {
     List<TenRecipeDTO> findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(String search,String fn,String ln);
     public Recipe save(Recipe recipe);
     List<RecipeCategoriesDTO> getAllRecipeCategory();
-    long findrecipeID(String title,int user_id);
+    long findrecipeID(String title, int user_id, Date time);
     List<TenRecipeDTO>findLikedRecipe(int id);
     void deleteByRecipeID(long id);
     void deleteLike(long recipeID);
