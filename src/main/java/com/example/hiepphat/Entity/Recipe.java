@@ -1,5 +1,7 @@
 package com.example.hiepphat.Entity;
 
+import com.example.hiepphat.dtos.MenuDTO;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.HashSet;
@@ -7,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Recipes")
-public class Recipe {
+public class Recipe implements Comparable<Recipe> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recipe_id")
@@ -161,5 +163,10 @@ public class Recipe {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    @Override
+    public int compareTo(Recipe o) {
+        return o.getTotalCalo()-this.getTotalCalo();
     }
 }

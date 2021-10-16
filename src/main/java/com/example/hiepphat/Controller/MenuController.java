@@ -1,20 +1,19 @@
 package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.Menu;
+import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.dtos.MenuDTO;
 import com.example.hiepphat.repositories.MenuRespository;
+import com.example.hiepphat.repositories.RecipeRepository;
 import com.example.hiepphat.repositories.UserRepository;
-import com.example.hiepphat.response.TenRecipesResponse;
+import com.example.hiepphat.response.MenuResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -24,8 +23,11 @@ public class MenuController {
     MenuRespository menuRespository;
 @Autowired
     UserRepository userRepository;
+@Autowired
+    RecipeRepository recipeRepository;
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
-    public int generateMenu(@RequestParam("id")int userID) throws ParseException {
+    public MenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
@@ -60,8 +62,43 @@ public class MenuController {
                 caloNeed=((existUser.getWeight()*9.247)+(3.098*existUser.getHeight())-(4.330*age)+447.593)*r;
             }
         }
-
-        return (int)caloNeed;
+        List<Recipe>listRecipe=recipeRepository.findAll();
+        ArrayList<List<Recipe>>listParent=new ArrayList<>();
+        List<Recipe>recipeList=new ArrayList<>();
+        for(int i=0;i< listRecipe.size()-2;i++){
+            for(int j=i+1;j<listRecipe.size()-1;j++){
+                for(int k=j+1;k<listRecipe.size();k++){
+                    if(listRecipe.get(i).getTotalCalo()+listRecipe.get(j).getTotalCalo()+listRecipe.get(k).getTotalCalo()>=caloNeed-20&&listRecipe.get(i).getTotalCalo()+listRecipe.get(j).getTotalCalo()+listRecipe.get(k).getTotalCalo()<=caloNeed){
+                        List<Recipe>listRe=new ArrayList<>();
+                        listRe.add(listRecipe.get(i));
+                        listRe.add(listRecipe.get(j));
+                        listRe.add(listRecipe.get(k));
+                        Collections.sort(listRe);
+                        listParent.add(listRe);;
+                    }
+                }
+            }
+        }
+        List<MenuDTO>result=new ArrayList<>();
+        Random rand=new Random();
+        String dayofWeek[]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
+        for(int l=0;l<dayofWeek.length;l++){
+            int randomIndex=rand.nextInt(listParent.size());
+            List<Recipe> randomArray=listParent.get(randomIndex);
+            String mealofDay[]={"Breakfast","Lunch","Dinner"};
+            for(int b=0;b<mealofDay.length;b++){
+                MenuDTO dto=new MenuDTO();
+                dto.setCalo(randomArray.get(b).getTotalCalo());
+                dto.setRecipe_id(randomArray.get(b).getRecipeID());
+                dto.setRecipe_thumbnail(randomArray.get(b).getRecipe_thumbnail());
+                dto.setMeal_of_day(mealofDay[b]);
+                dto.setDay_of_week(dayofWeek[l]);
+                result.add(dto);
+            }
+        }
+      MenuResponse menuResponse=new MenuResponse();
+        menuResponse.setListRecipe(result);
+        return menuResponse;
     }
 
 }
