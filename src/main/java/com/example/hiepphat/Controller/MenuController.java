@@ -64,7 +64,6 @@ public class MenuController {
         }
         List<Recipe>listRecipe=recipeRepository.findAll();
         ArrayList<List<Recipe>>listParent=new ArrayList<>();
-        List<Recipe>recipeList=new ArrayList<>();
         for(int i=0;i< listRecipe.size()-2;i++){
             for(int j=i+1;j<listRecipe.size()-1;j++){
                 for(int k=j+1;k<listRecipe.size();k++){

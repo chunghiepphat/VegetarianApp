@@ -1,6 +1,7 @@
 package com.example.hiepphat.request;
 
 import com.example.hiepphat.dtos.IngredientRecipeDTO;
+import com.example.hiepphat.dtos.StepRecipeDTO;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class RecipeRequest {
     private int recipe_categories_id;
     private String recipe_title;
     private String recipe_thumbnail;
-    private String recipe_content;
+    private List<StepRecipeDTO>steps=new ArrayList<>();
     private int recipe_difficulty;
     private int portion_size;
     private String portion_type;
@@ -59,12 +60,12 @@ public class RecipeRequest {
         this.recipe_thumbnail = recipe_thumbnail;
     }
 
-    public String getRecipe_content() {
-        return recipe_content;
+    public List<StepRecipeDTO> getSteps() {
+        return steps;
     }
 
-    public void setRecipe_content(String recipe_content) {
-        this.recipe_content = recipe_content;
+    public void setSteps(List<StepRecipeDTO> steps) {
+        this.steps = steps;
     }
 
     public int getRecipe_difficulty() {

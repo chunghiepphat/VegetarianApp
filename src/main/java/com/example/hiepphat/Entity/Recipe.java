@@ -39,6 +39,8 @@ public class Recipe implements Comparable<Recipe> {
             joinColumns = @JoinColumn(name = "recipe_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private Set<Ingredient>ingredients=new HashSet<>();
+    @Column(name = "time_updated")
+    private java.util.Date timeUpdated;
     public String getRecipeTitle() {
         return recipeTitle;
     }
@@ -163,6 +165,14 @@ public class Recipe implements Comparable<Recipe> {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public java.util.Date getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    public void setTimeUpdated(java.util.Date timeUpdated) {
+        this.timeUpdated = timeUpdated;
     }
 
     @Override

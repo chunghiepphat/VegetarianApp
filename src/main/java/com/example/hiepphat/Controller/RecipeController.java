@@ -1,9 +1,7 @@
 package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.*;
-import com.example.hiepphat.repositories.LikeRecipeRepository;
-import com.example.hiepphat.repositories.RecipeCategoriesRepository;
-import com.example.hiepphat.repositories.RecipeRepository;
+import com.example.hiepphat.repositories.*;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
@@ -11,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @CrossOrigin
@@ -41,6 +42,12 @@ public class RecipeController {
     private RecipeRepository recipeRepository;
     @Autowired
     private RecipeCategoriesRepository recipeCategoriesRepository;
+    @Autowired
+    private RecipeStepRepository recipeStepRepository;
+    @Autowired
+    private RecipeStepServiceImpl recipeStepService;
+    @Autowired
+    private RecipeIngredientRepository recipeIngredientRepository;
     //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
@@ -66,6 +73,7 @@ public class RecipeController {
         result.setIngredients(recipeIngredientService.findByRecipe_RecipeID(id));
         result.setNutrition(nutrition);
         result.setTotalLike(recipeService.totalLike(id));
+        result.setSteps(recipeStepService.findByRecipe_RecipeID(id));
         return result;
     }
     // chức năng get 10 recipe mới nhất của 1 user dựa theo user id
@@ -93,14 +101,14 @@ public class RecipeController {
         return result;
     }
 // tạo recipe
-@PreAuthorize("hasAuthority('user')")
+    @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
     public ResponseEntity<?> addRecipe(@Valid @RequestBody RecipeRequest recipeRequest) {
                             Recipe recipe=new Recipe();
                             User user=new User();
                             user.setUserID(recipeRequest.getUser_id());
                             recipe.setUser(user);
-                            recipe.setRecipe_content(recipeRequest.getRecipe_content());
+                            List<StepRecipeDTO>listStep=recipeRequest.getSteps();
                             recipe.setRecipeTitle(recipeRequest.getRecipe_title());
                             recipe.setRecipe_thumbnail(recipeRequest.getRecipe_thumbnail());
                          RecipeCategories recipeCategories=new RecipeCategories();
@@ -117,6 +125,13 @@ public class RecipeController {
                             recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
                             recipe.setTotalCalo(0);
                             recipeService.save(recipe);
+                            for(StepRecipeDTO itemStep:listStep) {
+                                RecipeStep recipeStep = new RecipeStep();
+                                recipeStep.setRecipe(recipe);
+                                recipeStep.setStepIndex(listStep.indexOf(itemStep));
+                                recipeStep.setContent(itemStep.getStep_content());
+                                recipeStepRepository.save(recipeStep);
+                            }
                      List<IngredientRecipeDTO>ingredientlistDTO=recipeRequest.getIngredients();
                      for(IngredientRecipeDTO item:ingredientlistDTO){
                          Ingredient ingredient=new Ingredient();
@@ -141,23 +156,20 @@ public class RecipeController {
                              ingredientService.save(ingredient1);
                          }
                          RecipeIngredient recipeIngredient=new RecipeIngredient();
-                         long recipeID=recipeService.findrecipeID(recipeRequest.getRecipe_title(),recipeRequest.getUser_id(),currentTime);
-                         Recipe recipe1=new Recipe();
-                         recipe1.setRecipeID(recipeID);
                          int ingreID=ingredientService.findIngredientID(item.getIngredient_name());
                          Ingredient ingredient1= new Ingredient();
                          ingredient1.setIngredientID(ingreID);
-                         recipeIngredient.setRecipe(recipe1);
+                         recipeIngredient.setRecipe(recipe);
                          recipeIngredient.setIngredient(ingredient1);
                          recipeIngredient.setAmount(item.getAmount_in_mg());
                          recipeIngredientService.save(recipeIngredient);
-                         NutritionDTO nutrition=ingredientService.getIngredientByRecipe(recipeID);
+                         NutritionDTO nutrition=ingredientService.getIngredientByRecipe(recipe.getRecipeID());
                          int totalCalo=(int)nutrition.getCalories();
-                         System.out.println(nutrition.getCalories()+" ne");
-                         Recipe updateRecipe=recipeRepository.findByRecipeID(recipeID);
+                         Recipe updateRecipe=recipeRepository.findByRecipeID(recipe.getRecipeID());
                          updateRecipe.setTotalCalo(totalCalo);
                          recipeService.save(updateRecipe);
                      }
+
 
              return ResponseEntity.ok(new MessageResponse("Add recipe successfully!!!"));
         }
@@ -234,6 +246,80 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(new MessageResponse("Not found recipe category id!!!"));
         }
         return ResponseEntity.ok(new MessageResponse("Delete recipe category successfully!!!"));
+    }
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?>editRecipe(@RequestBody RecipeRequest dto,@PathVariable("id")long id) throws ParseException {
+        Recipe recipe=recipeRepository.findByRecipeID(id);
+        if(recipe!=null){
+            RecipeCategories recipeCategories=new RecipeCategories();
+            recipeCategories.setRecipeCategoryID(dto.getRecipe_categories_id());
+            recipe.setRecipeCategories(recipeCategories);
+            recipe.setRecipe_thumbnail(dto.getRecipe_thumbnail());
+            recipe.setRecipe_difficulty(dto.getRecipe_difficulty());
+            recipe.setPortion_type(dto.getPortion_type());
+            recipe.setPortion_size(dto.getPortion_size());
+            recipe.setPrep_time_minutes(dto.getPrep_time_minutes());
+            recipe.setBaking_time_minutes(dto.getBaking_time_minutes());
+            recipe.setResting_time_minutes(dto.getResting_time_minutes());
+            List<RecipeStep>entity=recipeStepRepository.findByRecipe_RecipeID(id);
+            for(RecipeStep items:entity){
+                recipeStepRepository.delete(items);
+            }
+                for(StepRecipeDTO step:dto.getSteps()){
+                    RecipeStep recipeStep=new RecipeStep();
+                    recipeStep.setRecipe(recipe);
+                    recipeStep.setStepIndex(dto.getSteps().indexOf(step));
+                    recipeStep.setContent(step.getStep_content());
+                    recipeStepRepository.save(recipeStep);
+                }
+            List<RecipeIngredient>oldIngredient=recipeIngredientRepository.findByRecipe_RecipeID(id);
+            for(RecipeIngredient item2:oldIngredient){
+                recipeIngredientRepository.delete(item2);
+            }
+            for(IngredientRecipeDTO newIngre:dto.getIngredients()){
+                Ingredient ingredient=new Ingredient();
+                if(!ingredientService.existsByIngredient_name(newIngre.getIngredient_name())){
+                    ingredient.setIngredientName(newIngre.getIngredient_name());
+                    ingredientService.save(ingredient);
+                    NutritionDTO nutriDTO=ingredientService.findByIngredientName(newIngre.getIngredient_name());
+                    Ingredient ingredient1=ingredientService.findIngredientName(newIngre.getIngredient_name());
+                    ingredient1.setFat(nutriDTO.getFat());
+                    ingredient1.setProtein(nutriDTO.getProtein());
+                    ingredient1.setCarb(nutriDTO.getCarb());
+                    ingredient1.setCalories(nutriDTO.getCalories());
+                    ingredientService.save(ingredient);
+                }
+                else{
+                    Ingredient ingredient1=ingredientService.findIngredientName(newIngre.getIngredient_name());
+                    NutritionDTO nutriDTO=ingredientService.findByIngredientName(newIngre.getIngredient_name());
+                    ingredient1.setCalories(nutriDTO.getCalories());
+                    ingredient1.setCarb(nutriDTO.getCarb());
+                    ingredient1.setProtein(nutriDTO.getProtein());
+                    ingredient1.setFat(nutriDTO.getFat());
+                    ingredientService.save(ingredient1);
+                }
+                int ingreID=ingredientService.findIngredientID(newIngre.getIngredient_name());
+                ingredient.setIngredientID(ingreID);
+                RecipeIngredient recipeIngredient=new RecipeIngredient();
+                recipeIngredient.setRecipe(recipe);
+                recipeIngredient.setIngredient(ingredient);
+                recipeIngredient.setAmount(newIngre.getAmount_in_mg());
+                recipeIngredientRepository.save(recipeIngredient);
+            }
+            NutritionDTO nutrition=ingredientService.getIngredientByRecipe(id);
+            int totalCalo=(int)nutrition.getCalories();
+            recipe.setTotalCalo(totalCalo);
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date=new Date();
+            String spf=simpleDateFormat.format(date);
+            recipe.setTimeUpdated(simpleDateFormat.parse(spf));
+            recipeRepository.save(recipe);
+            return ResponseEntity.ok(new MessageResponse("Update recipe successfully!!!"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(new MessageResponse("Nout found recipe ID "+id));
+        }
     }
     }
 

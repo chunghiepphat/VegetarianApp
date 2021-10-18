@@ -1,5 +1,8 @@
 package com.example.hiepphat.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +13,7 @@ public class RecipeDTO {
     private int recipe_categories_id;
     private String recipe_title;
     private String recipe_thumbnail;
-    private String recipe_content;
+    private List<StepRecipeDTO>steps=new ArrayList<>();
     private int recipe_difficulty;
     private int portion_size;
     private String portion_type;
@@ -18,6 +21,7 @@ public class RecipeDTO {
     private int baking_time_minutes;
     private int resting_time_minutes;
     private java.util.Date time_created;
+    private java.util.Date time_updated;
     private String first_name;
     private String last_name;
     private NutritionDTO nutrition;
@@ -55,9 +59,7 @@ public class RecipeDTO {
         this.time_created = time_created;
     }
 
-    public void setTime_created(Date time_created) {
-        this.time_created = time_created;
-    }
+
 
     public String getFirst_name() {
         return first_name;
@@ -115,12 +117,12 @@ public class RecipeDTO {
         this.recipe_thumbnail = recipe_thumbnail;
     }
 
-    public String getRecipe_content() {
-        return recipe_content;
+    public List<StepRecipeDTO> getSteps() {
+        return steps;
     }
 
-    public void setRecipe_content(String recipe_content) {
-        this.recipe_content = recipe_content;
+    public void setSteps(List<StepRecipeDTO> steps) {
+        this.steps = steps;
     }
 
     public int getRecipe_difficulty() {
@@ -171,4 +173,11 @@ public class RecipeDTO {
         this.resting_time_minutes = resting_time_minutes;
     }
 
+    public java.util.Date getTime_updated() {
+        return time_updated;
+    }
+
+    public void setTime_updated(java.util.Date time_updated) {
+        this.time_updated = time_updated;
+    }
 }
