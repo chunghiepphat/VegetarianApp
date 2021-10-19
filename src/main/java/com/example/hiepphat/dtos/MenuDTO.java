@@ -7,7 +7,6 @@ public class MenuDTO implements Comparable<MenuDTO> {
     private long recipe_id;
     private String recipe_thumbnail;
     private String meal_of_day;
-    private String day_of_week;
     private int calo;
     public long getRecipe_id() {
         return recipe_id;
@@ -39,14 +38,6 @@ public class MenuDTO implements Comparable<MenuDTO> {
 
     public void setMeal_of_day(String meal_of_day) {
         this.meal_of_day = meal_of_day;
-    }
-
-    public String getDay_of_week() {
-        return day_of_week;
-    }
-
-    public void setDay_of_week(String day_of_week) {
-        this.day_of_week = day_of_week;
     }
 
     @Override

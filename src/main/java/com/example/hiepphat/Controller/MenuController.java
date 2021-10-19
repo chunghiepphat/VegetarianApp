@@ -3,11 +3,12 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.Menu;
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.dtos.ListMenuDTO;
 import com.example.hiepphat.dtos.MenuDTO;
 import com.example.hiepphat.repositories.MenuRespository;
 import com.example.hiepphat.repositories.RecipeRepository;
 import com.example.hiepphat.repositories.UserRepository;
-import com.example.hiepphat.response.MenuResponse;
+import com.example.hiepphat.response.ListMenuResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class MenuController {
     RecipeRepository recipeRepository;
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
-    public MenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
+    public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
@@ -63,7 +64,7 @@ public class MenuController {
             }
         }
         List<Recipe>listRecipe=recipeRepository.findAll();
-        ArrayList<List<Recipe>>listParent=new ArrayList<>();
+       ArrayList<List<Recipe>>listParent=new ArrayList<>();
         for(int i=0;i< listRecipe.size()-2;i++){
             for(int j=i+1;j<listRecipe.size()-1;j++){
                 for(int k=j+1;k<listRecipe.size();k++){
@@ -73,31 +74,34 @@ public class MenuController {
                         listRe.add(listRecipe.get(j));
                         listRe.add(listRecipe.get(k));
                         Collections.sort(listRe);
-                        listParent.add(listRe);;
+                        listParent.add(listRe);
                     }
                 }
             }
         }
-        List<MenuDTO>result=new ArrayList<>();
-        Random rand=new Random();
+        List<ListMenuDTO>listMenu=new ArrayList<>();
         String dayofWeek[]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
         for(int l=0;l<dayofWeek.length;l++){
+            ListMenuDTO listMenuDTO=new ListMenuDTO();
+            Random rand=new Random();
             int randomIndex=rand.nextInt(listParent.size());
-            List<Recipe> randomArray=listParent.get(randomIndex);
+            List<Recipe> randomRecipe=listParent.get(randomIndex);
+            listMenuDTO.setDay_of_week(dayofWeek[l]);
             String mealofDay[]={"Breakfast","Lunch","Dinner"};
-            for(int b=0;b<mealofDay.length;b++){
-                MenuDTO dto=new MenuDTO();
-                dto.setCalo(randomArray.get(b).getTotalCalo());
-                dto.setRecipe_id(randomArray.get(b).getRecipeID());
-                dto.setRecipe_thumbnail(randomArray.get(b).getRecipe_thumbnail());
+            List<MenuDTO>result=new ArrayList<>();
+            for(int b=0;b<mealofDay.length;b++) {
+                MenuDTO dto = new MenuDTO();
+                dto.setCalo(randomRecipe.get(b).getTotalCalo());
+                dto.setRecipe_thumbnail(randomRecipe.get(b).getRecipe_thumbnail());
+                dto.setRecipe_id(randomRecipe.get(b).getRecipeID());
                 dto.setMeal_of_day(mealofDay[b]);
-                dto.setDay_of_week(dayofWeek[l]);
                 result.add(dto);
             }
+            listMenuDTO.setListRecipe(result);
+            listMenu.add(listMenuDTO);
         }
-      MenuResponse menuResponse=new MenuResponse();
-        menuResponse.setListRecipe(result);
-        return menuResponse;
+        ListMenuResponse listMenuResponse=new ListMenuResponse();
+        listMenuResponse.setMenu(listMenu);
+        return listMenuResponse;
     }
-
 }
