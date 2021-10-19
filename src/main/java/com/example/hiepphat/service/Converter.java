@@ -63,6 +63,7 @@ public class Converter {
         dto.setBlog_content(entity.getBlog_content());
         dto.setBlog_thumbnail(entity.getBlog_thumbnail());
         dto.setUser_id(entity.getUser().getUserID());
+        dto.setTime_updated(entity.getTimeUpdated());
         return dto;
     }
 }

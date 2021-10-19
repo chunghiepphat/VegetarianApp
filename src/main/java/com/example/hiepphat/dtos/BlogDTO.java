@@ -19,6 +19,15 @@ public class BlogDTO {
     private String last_name;
     private String blog_thumbnail;
     private int totalLike;
+    private Date time_updated;
+
+    public Date getTime_updated() {
+        return time_updated;
+    }
+
+    public void setTime_updated(Date time_updated) {
+        this.time_updated = time_updated;
+    }
 
     public int getTotalLike() {
         return totalLike;
