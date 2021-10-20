@@ -260,9 +260,9 @@ UserRepository userRepository;
     //check like blog
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/blog/islike")
-    public LikeResponse checklikeBlog(@RequestBody LikeBlogDTO dto){
+    public LikeResponse checklikeBlog(@RequestParam("userID")int userID,@RequestParam("blogID")int blogID){
         LikeResponse likeResponse=new LikeResponse();
-        LikeBlog likeBlog=likeBlogService.findByUser_UserIDAndBlog_BlogID(dto.getUser_id(),dto.getBlog_id());
+        LikeBlog likeBlog=likeBlogService.findByUser_UserIDAndBlog_BlogID(userID,blogID);
         if(likeBlog!=null){
             likeResponse.setIs_Liked(true);
             return likeResponse;
@@ -275,9 +275,9 @@ UserRepository userRepository;
     //check like recipe
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/recipe/islike")
-    public LikeResponse checklikeRecipe(@RequestBody LikeRecipeDTO dto) {
+    public LikeResponse checklikeRecipe(@RequestParam("userID")int userID,@RequestParam("recipeID")long recipeID) {
         LikeResponse likeResponse=new LikeResponse();
-        LikeRecipe likeRecipe = likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(dto.getRecipe_id(), dto.getUser_id());
+        LikeRecipe likeRecipe = likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(recipeID, userID);
         if (likeRecipe != null) {
             likeResponse.setIs_Liked(true);
             return likeResponse;

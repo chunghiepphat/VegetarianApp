@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RecipeStepService {
     List<StepRecipeDTO> findByRecipe_RecipeID(long id);
+    void deleteRecipeStep(long id);
 }

@@ -5,6 +5,7 @@ import com.example.hiepphat.Entity.Recipe;
 
 public class MenuDTO implements Comparable<MenuDTO> {
     private long recipe_id;
+    private String recipe_title;
     private String recipe_thumbnail;
     private String meal_of_day;
     private int calo;
@@ -38,6 +39,14 @@ public class MenuDTO implements Comparable<MenuDTO> {
 
     public void setMeal_of_day(String meal_of_day) {
         this.meal_of_day = meal_of_day;
+    }
+
+    public String getRecipe_title() {
+        return recipe_title;
+    }
+
+    public void setRecipe_title(String recipe_title) {
+        this.recipe_title = recipe_title;
     }
 
     @Override

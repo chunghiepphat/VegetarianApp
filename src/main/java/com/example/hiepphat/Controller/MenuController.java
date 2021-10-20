@@ -95,6 +95,7 @@ public class MenuController {
                 dto.setRecipe_thumbnail(randomRecipe.get(b).getRecipe_thumbnail());
                 dto.setRecipe_id(randomRecipe.get(b).getRecipeID());
                 dto.setMeal_of_day(mealofDay[b]);
+                dto.setRecipe_title(randomRecipe.get(b).getRecipeTitle());
                 result.add(dto);
             }
             listMenuDTO.setListRecipe(result);

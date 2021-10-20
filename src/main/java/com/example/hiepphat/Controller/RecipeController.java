@@ -187,6 +187,7 @@ public class RecipeController {
         recipeService.deleteLike(id);
         recipeIngredientService.deleteRecipeIngre(id);
         commentRecipeService.deleteComment(id);
+        recipeStepService.deleteRecipeStep(id);
         recipeService.deleteByRecipeID(id);
         return ResponseEntity.ok(new MessageResponse("Delete Successfuly!!!"));
     }

@@ -25,4 +25,12 @@ public class RecipeStepServiceImpl implements RecipeStepService {
         }
         return result;
     }
+
+    @Override
+    public void deleteRecipeStep(long id) {
+        List<RecipeStep>entity=recipeStepRepository.findByRecipe_RecipeID(id);
+        for(RecipeStep item:entity){
+            recipeStepRepository.delete(item);
+        }
+    }
 }
