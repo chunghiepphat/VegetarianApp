@@ -1,15 +1,19 @@
 package com.example.hiepphat.Controller;
 
 import com.example.hiepphat.Entity.Menu;
+import com.example.hiepphat.Entity.MenuRecipe;
 import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.dtos.ListMenuDTO;
 import com.example.hiepphat.dtos.MenuDTO;
+import com.example.hiepphat.repositories.MenuRecipeRepository;
 import com.example.hiepphat.repositories.MenuRespository;
 import com.example.hiepphat.repositories.RecipeRepository;
 import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.response.ListMenuResponse;
+import com.example.hiepphat.response.MessageResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
@@ -26,17 +30,14 @@ public class MenuController {
     UserRepository userRepository;
 @Autowired
     RecipeRepository recipeRepository;
+@Autowired
+    MenuRecipeRepository menuRecipeRepository;
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
     public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
-        Menu menu=new Menu();
-        User user=new User();
-        user.setUserID(userID);
-        menu.setUser(user);
-        menu.setTime(simpleDateFormat.parse(spf));
         User existUser=userRepository.findByUserID(userID);
         double caloNeed=0;
         if(existUser!=null){
@@ -70,11 +71,13 @@ public class MenuController {
                 for(int k=j+1;k<listRecipe.size();k++){
                     if(listRecipe.get(i).getTotalCalo()+listRecipe.get(j).getTotalCalo()+listRecipe.get(k).getTotalCalo()>=caloNeed-20&&listRecipe.get(i).getTotalCalo()+listRecipe.get(j).getTotalCalo()+listRecipe.get(k).getTotalCalo()<=caloNeed){
                         List<Recipe>listRe=new ArrayList<>();
-                        listRe.add(listRecipe.get(i));
-                        listRe.add(listRecipe.get(j));
-                        listRe.add(listRecipe.get(k));
+                            listRe.add(listRecipe.get(i));
+                            listRe.add(listRecipe.get(j));
+                            listRe.add(listRecipe.get(k));
                         Collections.sort(listRe);
-                        listParent.add(listRe);
+                        if(listRe.get(0).getTotalCalo()<=800&&listRe.get(1).getTotalCalo()<=800&&listRe.get(2).getTotalCalo()<=800){
+                            listParent.add(listRe);
+                        }
                     }
                 }
             }
@@ -104,5 +107,32 @@ public class MenuController {
         ListMenuResponse listMenuResponse=new ListMenuResponse();
         listMenuResponse.setMenu(listMenu);
         return listMenuResponse;
+    }
+    //add menu vao database
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("/add/{id}")
+    public ResponseEntity<?>addMenu(@PathVariable("id")int userID,@RequestBody List<ListMenuDTO> list) throws ParseException {
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date=new Date();
+        String spf=simpleDateFormat.format(date);
+        Menu menu=new Menu();
+        User user=new User();
+        user.setUserID(userID);
+        menu.setUser(user);
+        menu.setTime(simpleDateFormat.parse(spf));
+        menuRespository.save(menu);
+        for(ListMenuDTO item:list){
+            for(MenuDTO item2:item.getListRecipe()){
+                MenuRecipe menuRecipe=new MenuRecipe();
+                menuRecipe.setMenu(menu);
+                Recipe recipe=new Recipe();
+                recipe.setRecipeID(item2.getRecipe_id());
+                menuRecipe.setRecipe(recipe);
+                menuRecipe.setDayOfweek(item.getDay_of_week());
+                menuRecipe.setMealOfday(item2.getMeal_of_day());
+                menuRecipeRepository.save(menuRecipe);
+            }
+        }
+        return ResponseEntity.ok(new MessageResponse("Add menu successfully!!!"));
     }
 }

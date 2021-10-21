@@ -48,6 +48,8 @@ public class RecipeController {
     private RecipeStepServiceImpl recipeStepService;
     @Autowired
     private RecipeIngredientRepository recipeIngredientRepository;
+    @Autowired
+    private UserTendencyRepository userTendencyRepository;
     //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
@@ -199,6 +201,19 @@ public class RecipeController {
         LikeRecipe likeRecipe=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(dto.getRecipe_id(),dto.getUser_id());
         if(likeRecipe!=null){
             likeRecipeRepository.delete(likeRecipe);
+            List<RecipeIngredient>recipeIngredients=recipeIngredientRepository.findByRecipe_RecipeID(dto.getRecipe_id());
+            for(RecipeIngredient item:recipeIngredients){
+                Ingredient ingredient=new Ingredient();
+                ingredient.setIngredientID(item.getIngredient().getIngredientID());
+                UserTendency userTendency=userTendencyRepository.findByUser_UserIDAndIngredient_IngredientID(dto.getUser_id(),ingredient.getIngredientID());
+                if(userTendency.getFrequency()==1){
+                    userTendencyRepository.delete(userTendency);
+                }
+                else{
+                    userTendency.setFrequency(userTendency.getFrequency()-1);
+                    userTendencyRepository.save(userTendency);
+                }
+            }
             return ResponseEntity.ok(new MessageResponse("Unlike"));
         }
         else{
@@ -210,6 +225,25 @@ public class RecipeController {
             newLike.setUser(user);
             newLike.setRecipe(recipe);
             likeRecipeRepository.save(newLike);
+            List<RecipeIngredient>recipeIngredients=recipeIngredientRepository.findByRecipe_RecipeID(dto.getRecipe_id());
+            for(RecipeIngredient item:recipeIngredients){
+                Ingredient ingredient=new Ingredient();
+                ingredient.setIngredientID(item.getIngredient().getIngredientID());
+                UserTendency userTendency1=userTendencyRepository.findByUser_UserIDAndIngredient_IngredientID(dto.getUser_id(),ingredient.getIngredientID());
+                if(userTendency1!=null){
+                    if(userTendency1.getFrequency()>=1){
+                        userTendency1.setFrequency(userTendency1.getFrequency()+1);
+                        userTendencyRepository.save(userTendency1);
+                    }
+                }
+                else{
+                    UserTendency userTendency=new UserTendency();
+                    userTendency.setUser(user);
+                    userTendency.setIngredient(ingredient);
+                    userTendency.setFrequency(1);
+                    userTendencyRepository.save(userTendency);
+                }
+            }
             return ResponseEntity.ok(new MessageResponse("Liked"));
         }
     }

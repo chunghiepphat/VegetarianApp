@@ -17,6 +17,33 @@ public class UpdateUserRequest {
     private String gender;
     private String password;
     private String oldPassword;
+    private int height;
+    private float weight;
+    private int workout_routine;
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public int getWorkout_routine() {
+        return workout_routine;
+    }
+
+    public void setWorkout_routine(int workout_routine) {
+        this.workout_routine = workout_routine;
+    }
 
     public String getOldPassword() {
         return oldPassword;

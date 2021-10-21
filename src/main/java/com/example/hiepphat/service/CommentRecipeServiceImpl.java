@@ -32,7 +32,7 @@ public class CommentRecipeServiceImpl implements CommentRecipeService {
     @Override
     public List<CommentRecipeDTO> getAllCommentRecipe(long id) {
         List<CommentRecipeDTO>result=new ArrayList<>();
-        List<CommentRecipe>entities=commentRecipeRepository.findByRecipe_RecipeID(id);
+        List<CommentRecipe>entities=commentRecipeRepository.findByRecipe_RecipeIDOrderByTimeDesc(id);
         for(CommentRecipe item:entities){
             CommentRecipeDTO dto=new CommentRecipeDTO();
             dto.setFirst_name(item.getUser().getFirstName());

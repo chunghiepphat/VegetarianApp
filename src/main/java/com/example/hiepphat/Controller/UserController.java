@@ -3,9 +3,7 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.JWTUtils.JwtUtils;
 import com.example.hiepphat.dtos.*;
-import com.example.hiepphat.repositories.CommentBlogRepository;
-import com.example.hiepphat.repositories.CommentRecipeRepository;
-import com.example.hiepphat.repositories.UserRepository;
+import com.example.hiepphat.repositories.*;
 import com.example.hiepphat.request.LoginRequest;
 import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.request.UpdateUserRequest;
@@ -55,6 +53,10 @@ UserRepository userRepository;
     LikeRecipeService likeRecipeService;
     @Autowired
     LikeBlogService likeBlogService;
+    @Autowired
+    UserPreferencesRepository userPreferencesRepository;
+    @Autowired
+    UserAllergiesRepository userAllergiesRepository;
     //login
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -136,6 +138,20 @@ UserRepository userRepository;
         }
         return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
     }
+    //update body index(height,weight,workout_rountine)
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/update/bodyindex/{id}")
+    public ResponseEntity<?> updateBodyindex(@RequestBody UpdateUserRequest model, @PathVariable("id") int id){
+        User oldUser=userService.findByUser_id(id);
+        if(oldUser!=null) {
+            oldUser.setHeight(model.getHeight());
+            oldUser.setTypeWorkout(model.getWorkout_routine());
+            oldUser.setWeight(model.getWeight());
+            userService.save(oldUser);
+        }
+        return ResponseEntity.ok(new MessageResponse("Update successfully!!!"));
+    }
+
     // chi tiết thông tin của 1 user dựa theo user id
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable("id")int id) {
@@ -286,5 +302,72 @@ UserRepository userRepository;
             likeResponse.setIs_Liked(false);
             return likeResponse;
         }
+    }
+    //them ingredient ua thich dua theo user_id ,ingredient_id
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("/ingredients/preferences")
+    public ResponseEntity<?>addPreferences(@RequestParam("userID")int userID,@RequestParam("ingredientID")int ingredientID){
+            User user=new User();
+            user.setUserID(userID);
+            Ingredient ingredient=new Ingredient();
+            ingredient.setIngredientID(ingredientID);
+            UserPreference userPreference=new UserPreference();
+            userPreference.setUser(user);
+            userPreference.setIngredient(ingredient);
+            userPreferencesRepository.save(userPreference);
+            return ResponseEntity.ok(new MessageResponse("Add preferences successfully!!!"));
+    }
+    //them ingredient di ung dua theo user_id ,ingredient_id
+    @PreAuthorize("hasAuthority('user')")
+    @PostMapping("/ingredients/allergies")
+    public ResponseEntity<?>addAllergies(@RequestParam("userID")int userID,@RequestParam("ingredientID")int ingredientID){
+        User user=new User();
+        user.setUserID(userID);
+        Ingredient ingredient=new Ingredient();
+        ingredient.setIngredientID(ingredientID);
+        UserAllergies userAllergies=new UserAllergies();
+        userAllergies.setUser(user);
+        userAllergies.setIngredient(ingredient);
+        userAllergiesRepository.save(userAllergies);
+        return ResponseEntity.ok(new MessageResponse("Add allergies successfully!!!"));
+    }
+    //tinh nutrion can thiet cho cơ thể dựa theo (height,age,weight,workout_type,gender)
+    @GetMapping("/calculate/nutrition")
+    public NutritionDTO calculateNutrition(@RequestParam("height")int height,@RequestParam("weight")float weight,@RequestParam("type_workout")int typeWorkout,@RequestParam("age")int age,@RequestParam("gender")String gender){
+        double caloNeed=0;
+        double protein=0;
+        double fat=0;
+        double carb=0;
+        float r=0;
+        if(typeWorkout==1){
+            r=Float.parseFloat("1.2");
+        }
+        else if(typeWorkout==2){
+            r=Float.parseFloat("1.375");
+        }
+        else if(typeWorkout==3){
+            r=Float.parseFloat("1.55");
+        }
+        else if(typeWorkout==4){
+            r=Float.parseFloat("1.725");
+        }
+        if(gender.equals("male")){
+            caloNeed=((weight*13.997)+(4.779*height)-(5.677*age)+88.362)*r;
+            protein=(caloNeed*0.2)/4;
+            fat=(caloNeed*0.25)/9;
+            carb=(caloNeed*0.6)/4;
+        }
+        else if(gender.equals("female")){
+            caloNeed=((weight*9.247)+(3.098*height)-(4.330*age)+447.593)*r;
+            protein=(caloNeed*0.2)/4;
+            fat=(caloNeed*0.25)/9;
+            carb=(caloNeed*0.6)/4;
+        }
+        NutritionDTO dto=new NutritionDTO();
+        dto.setCalories((float)caloNeed);
+        dto.setCarb((float)carb);
+        dto.setProtein((float)protein);
+        dto.setFat((float)fat);
+        return  dto;
     }
 }

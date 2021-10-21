@@ -1,5 +1,7 @@
 package com.example.hiepphat.dtos;
 
+import java.util.Date;
+
 public class TenRecipeDTO {
     private String recipe_title;
     private String recipe_thumbnail;
@@ -7,6 +9,7 @@ public class TenRecipeDTO {
     private String last_name;
     private long recipe_id;
     private int totalLike;
+    private Date time_created;
     public int getTotalLike() {
         return totalLike;
     }
@@ -53,5 +56,13 @@ public class TenRecipeDTO {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    public Date getTime_created() {
+        return time_created;
+    }
+
+    public void setTime_created(Date time_created) {
+        this.time_created = time_created;
     }
 }

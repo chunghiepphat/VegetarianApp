@@ -11,6 +11,7 @@ public class TenBlogDTO {
     private String blog_subtitle;
     private int blog_id;
     private int totalLike;
+    private Date time_created;
     public int getTotalLike() {
         return totalLike;
     }
@@ -19,7 +20,7 @@ public class TenBlogDTO {
         this.totalLike = totalLike;
     }
 
-    private java.util.Date time;
+
 
     public String getBlog_subtitle() {
         return blog_subtitle;
@@ -37,13 +38,6 @@ public class TenBlogDTO {
         return blog_id;
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
 
     public void setBlog_id(int blog_id) {
         this.blog_id = blog_id;
@@ -83,5 +77,13 @@ public class TenBlogDTO {
 
     public void setLast_name(String last_name) {
         this.last_name = last_name;
+    }
+
+    public Date getTime_created() {
+        return time_created;
+    }
+
+    public void setTime_created(Date time_created) {
+        this.time_created = time_created;
     }
 }

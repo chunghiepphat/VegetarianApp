@@ -23,7 +23,7 @@ public class CommentBlogServiceImpl implements CommentBlogService {
     @Override
     public List<CommentBlogDTO> findByBlog_BlogID(int id) {
         List<CommentBlogDTO>result=new ArrayList<>();
-        List<CommentBlog>entities=commentBlogRepository.findByBlog_BlogID(id);
+        List<CommentBlog>entities=commentBlogRepository.findByBlog_BlogIDOrderByTimeDesc(id);
         for(CommentBlog item:entities){
             CommentBlogDTO dto=new CommentBlogDTO();
             dto.setFirst_name(item.getUser().getFirstName());

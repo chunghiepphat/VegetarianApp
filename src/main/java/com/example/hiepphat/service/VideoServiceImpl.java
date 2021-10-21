@@ -28,6 +28,9 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_category_id(item.getVideoCategory().getId());
             dto.setVideo_title(item.getTitle());
             dto.setVideo_description(item.getDescription());
+            dto.setTime_created(item.getTimeCreated());
+            dto.setFirst_name(item.getUser().getFirstName());
+            dto.setLast_name(item.getUser().getLastName());
             result.add(dto);
         }
         return result;
