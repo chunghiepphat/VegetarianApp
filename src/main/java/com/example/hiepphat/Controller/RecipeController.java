@@ -50,6 +50,14 @@ public class RecipeController {
     private RecipeIngredientRepository recipeIngredientRepository;
     @Autowired
     private UserTendencyRepository userTendencyRepository;
+    @Autowired
+    private UserPreferencesRepository userPreferencesRepository;
+    @Autowired
+    private UserBehaviorRepository userBehaviorRepository;
+    @Autowired
+    private UserAllergiesRepository userAllergiesRepository;
+    @Autowired
+    private UserRepository userRepository;
     //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
@@ -57,7 +65,7 @@ public class RecipeController {
         result.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
         result.setListResult(recipeService.findAll(pageable));
-        result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit ));
+        result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit));
         return result;
     }
     // chức năng get 10 recipe mới nhất theo time
@@ -356,6 +364,221 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(new MessageResponse("Nout found recipe ID "+id));
         }
     }
+    @GetMapping("/suggestion/{id}")
+    public List<TenRecipeDTO> suggestRecipe(@PathVariable("id")int userID) throws InterruptedException {
+            List<UserPreference>listPreference=userPreferencesRepository.findByUser_UserID(userID);
+            List<List<TenRecipeDTO>>listRecipeSuggest=new ArrayList<>();
+            List<TenRecipeDTO>listPrf=new ArrayList<>();
+            List<TenRecipeDTO>listTenden=new ArrayList<>();
+            List<TenRecipeDTO>listBeha=new ArrayList<>();
+            List<TenRecipeDTO>listBody=new ArrayList<>();
+            List<TenRecipeDTO>listLiked=new ArrayList<>();
+            List<TenRecipeDTO>listmostLike=new ArrayList<>();
+            for(UserPreference itemPrefer:listPreference){
+                List<RecipeIngredient> recipePrefer=recipeIngredientRepository.findByIngredient_IngredientID(itemPrefer.getIngredient().getIngredientID());
+                for(RecipeIngredient itemIngredientPrefer:recipePrefer){
+                    TenRecipeDTO dto=new TenRecipeDTO();
+                    dto.setRecipe_id(itemIngredientPrefer.getRecipe().getRecipeID());
+                    dto.setRecipe_thumbnail(itemIngredientPrefer.getRecipe().getRecipe_thumbnail());
+                    dto.setRecipe_title(itemIngredientPrefer.getRecipe().getRecipeTitle());
+                    dto.setLast_name(itemIngredientPrefer.getRecipe().getUser().getLastName());
+                    dto.setFirst_name(itemIngredientPrefer.getRecipe().getUser().getFirstName());
+                    dto.setTime_created(itemIngredientPrefer.getRecipe().getTime());
+                    dto.setTotalLike(recipeRepository.totalLike(itemIngredientPrefer.getRecipe().getRecipeID()));
+                    listPrf.add(dto);
+                }
+            }
+            List<UserTendency>listTendency=userTendencyRepository.findByUser_UserIDAndFrequencyGreaterThanEqual(userID,5);
+            for(UserTendency itemTendency:listTendency){
+                List<RecipeIngredient>itemIngredientTendency=recipeIngredientRepository.findByIngredient_IngredientID(itemTendency.getIngredient().getIngredientID());
+                for(RecipeIngredient recipeTendency:itemIngredientTendency){
+                    TenRecipeDTO dto=new TenRecipeDTO();
+                    dto.setRecipe_id(recipeTendency.getRecipe().getRecipeID());
+                    dto.setRecipe_thumbnail(recipeTendency.getRecipe().getRecipe_thumbnail());
+                    dto.setRecipe_title(recipeTendency.getRecipe().getRecipeTitle());
+                    dto.setLast_name(recipeTendency.getRecipe().getUser().getLastName());
+                    dto.setFirst_name(recipeTendency.getRecipe().getUser().getFirstName());
+                    dto.setTime_created(recipeTendency.getRecipe().getTime());
+                    dto.setTotalLike(recipeRepository.totalLike(recipeTendency.getRecipe().getRecipeID()));
+                    listTenden.add(dto);
+                }
+            }
+        List<UserBehavior>listBehavior=userBehaviorRepository.findByUser_UserIDAndFrequencyGreaterThanEqual(userID,5);
+        for(UserBehavior itemBehavior:listBehavior){
+            List<Recipe>recipeBehavior=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+itemBehavior.getQuerry()+"%", "%"+itemBehavior.getQuerry()+"%","%"+ itemBehavior.getQuerry()+"%");
+            for(Recipe behavior:recipeBehavior){
+                TenRecipeDTO dto=new TenRecipeDTO();
+                dto.setRecipe_id(behavior.getRecipeID());
+                dto.setRecipe_thumbnail(behavior.getRecipe_thumbnail());
+                dto.setRecipe_title(behavior.getRecipeTitle());
+                dto.setLast_name(behavior.getUser().getLastName());
+                dto.setFirst_name(behavior.getUser().getFirstName());
+                dto.setTime_created(behavior.getTime());
+                dto.setTotalLike(recipeRepository.totalLike(behavior.getRecipeID()));
+                listBeha.add(dto);
+            }
+        }
+        List<TenRecipeDTO>listnoSuggested=new ArrayList<>();
+        List<UserAllergies>listAllergies=userAllergiesRepository.findByUser_UserID(userID);
+        for(UserAllergies allergies:listAllergies){
+            List<RecipeIngredient>recipeAllergies=recipeIngredientRepository.findByIngredient_IngredientID(allergies.getIngredient().getIngredientID());
+            for(RecipeIngredient itemAllergies:recipeAllergies){
+                TenRecipeDTO dto=new TenRecipeDTO();
+                dto.setRecipe_id(itemAllergies.getRecipe().getRecipeID());
+                dto.setRecipe_thumbnail(itemAllergies.getRecipe().getRecipe_thumbnail());
+                dto.setRecipe_title(itemAllergies.getRecipe().getRecipeTitle());
+                dto.setLast_name(itemAllergies.getRecipe().getUser().getLastName());
+                dto.setFirst_name(itemAllergies.getRecipe().getUser().getFirstName());
+                dto.setTime_created(itemAllergies.getRecipe().getTime());
+                dto.setTotalLike(recipeRepository.totalLike(itemAllergies.getRecipe().getRecipeID()));
+                listnoSuggested.add(dto);
+            }
+        }
+                for(int i=0;i< listnoSuggested.size()-1;i++){
+            for(int j=i+1;j<listnoSuggested.size();j++){
+                if(listnoSuggested.get(i).getRecipe_id()==listnoSuggested.get(j).getRecipe_id()){
+                    listnoSuggested.remove(j);
+                }
+            }
+        }
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date=new Date();
+        String spf=simpleDateFormat.format(date);
+        User existUser=userRepository.findByUserID(userID);
+        double caloNeed=0;
+        if(existUser!=null){
+            float r=0;
+            if(existUser.getTypeWorkout()==1){
+                r=Float.parseFloat("1.2");
+            }
+            else if(existUser.getTypeWorkout()==2){
+                r=Float.parseFloat("1.375");
+            }
+            else if(existUser.getTypeWorkout()==3){
+                r=Float.parseFloat("1.55");
+            }
+            else if(existUser.getTypeWorkout()==4){
+                r=Float.parseFloat("1.725");
+            }
+            int currentDay=date.getYear()+1900;
+            int yearUser=existUser.getBirth_date().getYear()+1900;
+            int age=currentDay-yearUser;
+            if(existUser.getGender().trim().equals("male")){
+                caloNeed=((existUser.getWeight()*13.997)+(4.779*existUser.getHeight())-(5.677*age)+88.362)*r;
+            }
+            else if(existUser.getGender().trim().equals("female")){
+                caloNeed=((existUser.getWeight()*9.247)+(3.098*existUser.getHeight())-(4.330*age)+447.593)*r;
+            }
+            System.out.println((int)caloNeed);
+            double calo=caloNeed/3;
+            System.out.println((int)calo);
+            List<Recipe>listBodymatch=recipeRepository.findByTotalCaloLessThanEqualAndTotalCaloGreaterThan((int)calo,(int)calo-20);
+            for(Recipe itemBodyMatch:listBodymatch){
+                TenRecipeDTO dto=new TenRecipeDTO();
+                dto.setRecipe_id(itemBodyMatch.getRecipeID());
+                dto.setRecipe_thumbnail(itemBodyMatch.getRecipe_thumbnail());
+                dto.setRecipe_title(itemBodyMatch.getRecipeTitle());
+                dto.setLast_name(itemBodyMatch.getUser().getLastName());
+                dto.setFirst_name(itemBodyMatch.getUser().getFirstName());
+                dto.setTime_created(itemBodyMatch.getTime());
+                dto.setTotalLike(recipeRepository.totalLike(itemBodyMatch.getRecipeID()));
+                listBody.add(dto);
+            }
+        }
+        List<Recipe>listMost=recipeRepository.findLikeGreater2();
+        for(Recipe itemMost:listMost){
+            TenRecipeDTO dto=new TenRecipeDTO();
+            dto.setRecipe_id(itemMost.getRecipeID());
+            dto.setRecipe_thumbnail(itemMost.getRecipe_thumbnail());
+            dto.setRecipe_title(itemMost.getRecipeTitle());
+            dto.setLast_name(itemMost.getUser().getLastName());
+            dto.setFirst_name(itemMost.getUser().getFirstName());
+            dto.setTime_created(itemMost.getTime());
+            dto.setTotalLike(recipeRepository.totalLike(itemMost.getRecipeID()));
+            listmostLike.add(dto);
+        }
+        List<LikeRecipe>listLike=likeRecipeRepository.findByUser_UserID(userID);
+        for(LikeRecipe itemLiked:listLike){
+            TenRecipeDTO dto=new TenRecipeDTO();
+            dto.setRecipe_id(itemLiked.getRecipe().getRecipeID());
+            dto.setRecipe_thumbnail(itemLiked.getRecipe().getRecipe_thumbnail());
+            dto.setRecipe_title(itemLiked.getRecipe().getRecipeTitle());
+            dto.setLast_name(itemLiked.getUser().getLastName());
+            dto.setFirst_name(itemLiked.getUser().getFirstName());
+            dto.setTime_created(itemLiked.getRecipe().getTime());
+            dto.setTotalLike(recipeRepository.totalLike(itemLiked.getRecipe().getRecipeID()));
+            listLiked.add(dto);
+        }
+        listRecipeSuggest.add(listPrf);
+        listRecipeSuggest.add(listTenden);
+        listRecipeSuggest.add(listBeha);
+        listRecipeSuggest.add(listBody);
+        listRecipeSuggest.add(listmostLike);
+        List<TenRecipeDTO>perfectList=new ArrayList<>();
+
+            while(perfectList.size()<5){
+                Random rand=new Random();
+                int freq[]={0,0,0,0,100};
+                List<TenRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
+                int index2=rand.nextInt(ranNew.size());
+                TenRecipeDTO ranObject=ranNew.get(index2);
+                perfectList.add(ranObject);
+                for(int a=0;a<listnoSuggested.size();a++){
+                    if(ranObject.getRecipe_id()==listnoSuggested.get(a).getRecipe_id()){
+                        perfectList.remove(ranObject);
+                    }
+                }
+                for(int c=0;c<listLiked.size();c++){
+                    if(ranObject.getRecipe_id()==listLiked.get(c).getRecipe_id()){
+                        perfectList.remove(ranObject);
+                    }
+                }
+                for(int i=0;i<perfectList.size()-1;i++){
+                    for(int j=i+1;j<perfectList.size();j++){
+                        if(perfectList.get(i).getRecipe_id()==perfectList.get(j).getRecipe_id()){
+                            perfectList.remove(j);
+                        }
+                    }
+                }
+            }
+            return perfectList;
+    }
+    static int findCeil(int arr[], int r, int l, int h)
+    {
+        int mid;
+        while (l < h)
+        {
+            mid = l + ((h - l) >> 1); // Same as mid = (l+h)/2
+            if(r > arr[mid])
+                l = mid + 1;
+            else
+                h = mid;
+        }
+        return (arr[l] >= r) ? l : -1;
+    }
+
+    // The main function that returns a random number
+// from arr[] according to distribution array
+// defined by freq[]. n is size of arrays.
+    static List<TenRecipeDTO> myRand(List<List<TenRecipeDTO>>list, int freq[], int n)
+    {
+        // Create and fill prefix array
+        int prefix[] = new int[n], i;
+        prefix[0] = freq[0];
+        for (i = 1; i < n; ++i)
+            prefix[i] = prefix[i - 1] + freq[i];
+
+        // prefix[n-1] is sum of all frequencies.
+        // Generate a random number with
+        // value from 1 to this sum
+        int r = ((int)(Math.random()*(323567)) % prefix[n - 1]) + 1;
+
+        // Find index of ceiling of r in prefix array
+        int indexc = findCeil(prefix, r, 0, n - 1);
+        return list.get(indexc);
+    }
+
+
     }
 
 

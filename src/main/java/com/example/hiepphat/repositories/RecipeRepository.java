@@ -31,5 +31,8 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     List<Recipe>findLikedRecipe(int id);
     @Query(value = "SELECT COUNT(user_id) from Likes_Recipe where recipe_id=?",nativeQuery = true)
     int totalLike(long id);
-
+    List<Recipe>findByTotalCaloLessThanEqualAndTotalCaloGreaterThan(int less,int greater);
+    @Query(value = "Select * from Recipes where recipe_id in (select recipe_id from Likes_Recipe GROUP BY recipe_id HAVING  COUNT(user_id)>2)"
+            ,nativeQuery = true)
+    List<Recipe>findLikeGreater2();
 }

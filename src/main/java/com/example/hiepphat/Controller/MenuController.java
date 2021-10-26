@@ -32,7 +32,7 @@ public class MenuController {
     RecipeRepository recipeRepository;
 @Autowired
     MenuRecipeRepository menuRecipeRepository;
-    @PreAuthorize("hasAuthority('user')")
+   // @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
     public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -75,35 +75,39 @@ public class MenuController {
                             listRe.add(listRecipe.get(j));
                             listRe.add(listRecipe.get(k));
                         Collections.sort(listRe);
-                        if(listRe.get(0).getTotalCalo()<=800&&listRe.get(1).getTotalCalo()<=800&&listRe.get(2).getTotalCalo()<=800){
+                        if(listRe.get(0).getTotalCalo()<=900&&listRe.get(1).getTotalCalo()<=900&&listRe.get(2).getTotalCalo()<=900){
                             listParent.add(listRe);
                         }
                     }
                 }
             }
         }
-        List<ListMenuDTO>listMenu=new ArrayList<>();
+        Set<ListMenuDTO>set=new LinkedHashSet<>();
         String dayofWeek[]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
-        for(int l=0;l<dayofWeek.length;l++){
-            ListMenuDTO listMenuDTO=new ListMenuDTO();
-            Random rand=new Random();
-            int randomIndex=rand.nextInt(listParent.size());
-            List<Recipe> randomRecipe=listParent.get(randomIndex);
-            listMenuDTO.setDay_of_week(dayofWeek[l]);
-            String mealofDay[]={"Breakfast","Lunch","Dinner"};
-            List<MenuDTO>result=new ArrayList<>();
-            for(int b=0;b<mealofDay.length;b++) {
-                MenuDTO dto = new MenuDTO();
-                dto.setCalo(randomRecipe.get(b).getTotalCalo());
-                dto.setRecipe_thumbnail(randomRecipe.get(b).getRecipe_thumbnail());
-                dto.setRecipe_id(randomRecipe.get(b).getRecipeID());
-                dto.setMeal_of_day(mealofDay[b]);
-                dto.setRecipe_title(randomRecipe.get(b).getRecipeTitle());
-                result.add(dto);
+        while(set.size()<7){
+            for(int l=0;l<dayofWeek.length;l++){
+                ListMenuDTO listMenuDTO=new ListMenuDTO();
+                Random rand=new Random();
+                int randomIndex=rand.nextInt(listParent.size());
+                List<Recipe> randomRecipe=listParent.get(randomIndex);
+                listMenuDTO.setDay_of_week(dayofWeek[l]);
+                String mealofDay[]={"Breakfast","Lunch","Dinner"};
+                List<MenuDTO>result=new ArrayList<>();
+                for(int b=0;b<mealofDay.length;b++) {
+                    MenuDTO dto = new MenuDTO();
+                    dto.setCalo(randomRecipe.get(b).getTotalCalo());
+                    dto.setRecipe_thumbnail(randomRecipe.get(b).getRecipe_thumbnail());
+                    dto.setRecipe_id(randomRecipe.get(b).getRecipeID());
+                    dto.setMeal_of_day(mealofDay[b]);
+                    dto.setRecipe_title(randomRecipe.get(b).getRecipeTitle());
+                    result.add(dto);
+                }
+                listMenuDTO.setListRecipe(result);
+                set.add(listMenuDTO);
+                System.out.println(randomIndex);
             }
-            listMenuDTO.setListRecipe(result);
-            listMenu.add(listMenuDTO);
         }
+        List<ListMenuDTO>listMenu=new ArrayList<>(set);
         ListMenuResponse listMenuResponse=new ListMenuResponse();
         listMenuResponse.setMenu(listMenu);
         return listMenuResponse;

@@ -12,4 +12,5 @@ public interface LikeRecipeRepository extends JpaRepository<LikeRecipe,Long> {
     List<Integer> findbestRecipe();
     List<LikeRecipe>findByRecipe_RecipeID(long id);
     LikeRecipe findByRecipe_RecipeIDAndUser_UserID(long recipeID,int userID);
+    List<LikeRecipe>findByUser_UserID(int userID);
 }
