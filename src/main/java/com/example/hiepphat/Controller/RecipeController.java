@@ -63,7 +63,7 @@ public class RecipeController {
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
         RecipeResponse result=new RecipeResponse();
         result.setPage(page);
-        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("timeUpdated").descending().and(Sort.by("time")).descending());
         result.setListResult(recipeService.findAll(pageable));
         result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit));
         return result;
@@ -518,7 +518,7 @@ public class RecipeController {
 
             while(perfectList.size()<5){
                 Random rand=new Random();
-                int freq[]={0,0,0,0,100};
+                int freq[]={60,10,10,10,40};
                 List<TenRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
                 int index2=rand.nextInt(ranNew.size());
                 TenRecipeDTO ranObject=ranNew.get(index2);

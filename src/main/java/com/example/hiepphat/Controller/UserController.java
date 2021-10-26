@@ -10,6 +10,9 @@ import com.example.hiepphat.request.UpdateUserRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,7 +69,13 @@ UserRepository userRepository;
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        boolean checkActive=jwtUtils.getStatusUser(jwt);
+        if(checkActive==false){
+            return ResponseEntity.badRequest().body(new MessageResponse("Account is inactive!!!"));
+        }
+        else{
+            return ResponseEntity.ok(new JwtResponse(jwt));
+        }
     }
 
 //signup
@@ -87,7 +96,7 @@ UserRepository userRepository;
             user.setProvider("local");
             userService.save(user);
             String jwt=jwtUtils.generateJwtTokenSignup(signUpRequest);
-            return ResponseEntity.ok(new SignupResponse("Register Successfully",jwt));
+            return ResponseEntity.ok(new SignupResponse(jwt));
         }
     }
 //update user password
@@ -169,6 +178,11 @@ UserRepository userRepository;
         dto.setInstagram_link(user.getInstagram_link());
         dto.setPhone_number(user.getPhone_number());
         dto.setProfile_image(user.getProfile_image());
+        dto.setRole(user.getRole().getRole_name());
+        dto.setIs_active(user.isIs_active());
+        dto.setWeight(user.getWeight());
+        dto.setHeight(user.getHeight());
+        dto.setWorkout_routine(user.getTypeWorkout());
         return dto;
     }
 //chức năng comment trên blog
@@ -369,5 +383,30 @@ UserRepository userRepository;
         dto.setProtein((float)protein);
         dto.setFat((float)fat);
         return  dto;
+    }
+    //chuc nang view all user
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("/viewall")
+    public ListUserResponse viewAllUser(@RequestParam("page")int page,@RequestParam("limit")int limit){
+        ListUserResponse listUserResponse=new ListUserResponse();
+        listUserResponse.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit, Sort.by("firstName"));
+        listUserResponse.setListUser(userService.findAll(pageable));
+        listUserResponse.setTotalPage((int)Math.ceil((double)userService.totalItem()/limit));
+        return listUserResponse;
+    }
+    //chuc nang change status cua user
+    @PreAuthorize("hasAuthority('admin')")
+    @PutMapping("/changestatus/{id}")
+    public ResponseEntity<?>changeStatus(@PathVariable("id")int id,@RequestParam("is_active")boolean is_active){
+        User newUser=userRepository.findByUserID(id);
+        if(newUser!=null){
+            newUser.setIs_active(is_active);
+            userService.save(newUser);
+            return ResponseEntity.ok(new MessageResponse("Change status successully!!!"));
+        }
+        else{
+           return ResponseEntity.badRequest().body(new MessageResponse("Not found user id "+id));
+        }
     }
 }

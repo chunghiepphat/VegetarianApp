@@ -1,24 +1,10 @@
 package com.example.hiepphat.response;
 
 public class SignupResponse {
-	private String message;
 	private String access_token;
 
-	public SignupResponse(String message, String access_token) {
-		this.message = message;
+	public SignupResponse( String access_token) {
 		this.access_token = access_token;
-	}
-
-	public SignupResponse(String message) {
-		this.message = message;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public String getAccess_token() {

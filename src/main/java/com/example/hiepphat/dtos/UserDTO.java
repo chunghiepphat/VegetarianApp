@@ -23,6 +23,18 @@ public class UserDTO
     private String instagram_link;
     private Date birth_date;
     private String gender;
+    private String role;
+    private boolean is_active;
+    private int height;
+    private float weight;
+    private int workout_routine;
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public int getId() {
         return id;
@@ -116,5 +128,37 @@ public class UserDTO
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public boolean isIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(boolean is_active) {
+        this.is_active = is_active;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public int getWorkout_routine() {
+        return workout_routine;
+    }
+
+    public void setWorkout_routine(int workout_routine) {
+        this.workout_routine = workout_routine;
     }
 }

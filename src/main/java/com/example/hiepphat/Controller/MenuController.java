@@ -12,6 +12,8 @@ import com.example.hiepphat.repositories.RecipeRepository;
 import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.response.ListMenuResponse;
 import com.example.hiepphat.response.MessageResponse;
+import com.example.hiepphat.response.UserMenuResponse;
+import com.example.hiepphat.service.MenuRecipeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +34,8 @@ public class MenuController {
     RecipeRepository recipeRepository;
 @Autowired
     MenuRecipeRepository menuRecipeRepository;
+@Autowired
+    MenuRecipeServiceImpl menuRecipeService;
    // @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
     public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
@@ -138,5 +142,11 @@ public class MenuController {
             }
         }
         return ResponseEntity.ok(new MessageResponse("Add menu successfully!!!"));
+    }
+    @GetMapping("/details/{id}")
+    public ListMenuResponse getMenubyID(@PathVariable("id")int id){
+        ListMenuResponse listMenuResponse=new ListMenuResponse();
+        listMenuResponse.setMenu(menuRecipeService.findById(id));
+        return listMenuResponse;
     }
 }

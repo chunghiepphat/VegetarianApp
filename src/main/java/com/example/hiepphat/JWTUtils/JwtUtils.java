@@ -35,7 +35,7 @@ public class JwtUtils {
 				.claim("profile_image",userPrincipal.getProfile_image()).claim("country",userPrincipal.getCountry())
 				.claim("facebook_link",userPrincipal.getFacebook_link()).claim("instagram_link",userPrincipal.getInstagram_link())
 				.claim("birth_date",userPrincipal.getBirth_date())
-				.claim("gender",userPrincipal.getGender())
+				.claim("gender",userPrincipal.getGender()).claim("is_active",userPrincipal.isIs_active())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -59,6 +59,9 @@ public class JwtUtils {
 
 	public String getClaimFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("email",String.class);
+	}
+	public boolean getStatusUser(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("is_active",Boolean.class);
 	}
 	public boolean validateJwtToken(String authToken) {
 		try {
