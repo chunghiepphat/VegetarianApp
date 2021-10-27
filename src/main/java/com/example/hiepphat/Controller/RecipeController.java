@@ -366,7 +366,7 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(new MessageResponse("Nout found recipe ID "+id));
         }
     }
-   // @PreAuthorize("hasAuthority('user')")
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/suggestion/{id}")
     public List<SuggestionRecipeDTO> suggestRecipe(@PathVariable("id")int userID) throws InterruptedException {
             List<UserPreference>listPreference=userPreferencesRepository.findByUser_UserID(userID);
