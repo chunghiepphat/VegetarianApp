@@ -60,10 +60,10 @@ public class MenuController {
             int currentDay=date.getYear()+1900;
             int yearUser=existUser.getBirth_date().getYear()+1900;
             int age=currentDay-yearUser;
-            if(existUser.getGender().trim().equals("male")){
+            if(existUser.getGender().trim().equalsIgnoreCase("male")){
                 caloNeed=((existUser.getWeight()*13.997)+(4.779*existUser.getHeight())-(5.677*age)+88.362)*r;
             }
-            else if(existUser.getGender().trim().equals("female")){
+            else if(existUser.getGender().trim().equalsIgnoreCase("female")){
                 caloNeed=((existUser.getWeight()*9.247)+(3.098*existUser.getHeight())-(4.330*age)+447.593)*r;
             }
         }
@@ -86,13 +86,19 @@ public class MenuController {
             }
         }
         List<ListMenuDTO>listMenu=new ArrayList<>();
+        List<Integer>listInt=new ArrayList<>();
         String dayofWeek[]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
-        while(listMenu.size()<7){
+        while(listInt.size()<7){
+            Random rand=new Random();
+            int randomIndex=rand.nextInt(listParent.size());
+            if(!listInt.contains(randomIndex)){
+                    listInt.add(randomIndex);
+                }
+            System.out.println(randomIndex);
+        }
             for(int l=0;l<dayofWeek.length;l++){
                 ListMenuDTO listMenuDTO=new ListMenuDTO();
-                Random rand=new Random();
-                int randomIndex=rand.nextInt(listParent.size());
-                List<Recipe> randomRecipe=listParent.get(randomIndex);
+                List<Recipe> randomRecipe=listParent.get(listInt.get(l));
                 listMenuDTO.setDay_of_week(dayofWeek[l]);
                 String mealofDay[]={"Breakfast","Lunch","Dinner"};
                 List<MenuDTO>result=new ArrayList<>();
@@ -107,9 +113,8 @@ public class MenuController {
                 }
                 listMenuDTO.setListRecipe(result);
                 listMenu.add(listMenuDTO);
-                System.out.println(randomIndex);
             }
-        }
+        System.out.println(listInt);
         ListMenuResponse listMenuResponse=new ListMenuResponse();
         listMenuResponse.setMenu(listMenu);
         return listMenuResponse;

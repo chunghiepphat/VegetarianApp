@@ -366,7 +366,7 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(new MessageResponse("Nout found recipe ID "+id));
         }
     }
-    @PreAuthorize("hasAuthority('user')")
+   // @PreAuthorize("hasAuthority('user')")
     @GetMapping("/suggestion/{id}")
     public List<SuggestionRecipeDTO> suggestRecipe(@PathVariable("id")int userID) throws InterruptedException {
             List<UserPreference>listPreference=userPreferencesRepository.findByUser_UserID(userID);
@@ -379,19 +379,25 @@ public class RecipeController {
             List<SuggestionRecipeDTO>listmostLike=new ArrayList<>();
             for(UserPreference itemPrefer:listPreference){
                 Ingredient recipePrefer=ingredientRepository.findByIngredientName(itemPrefer.getIngredientName());
-                List<RecipeIngredient>listRecipePrefer=recipeIngredientRepository.findByIngredient_IngredientID(recipePrefer.getIngredientID());
-                for(RecipeIngredient itemIngredientPrefer:listRecipePrefer){
-                    SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
-                    dto.setRecipe_id(itemIngredientPrefer.getRecipe().getRecipeID());
-                    dto.setRecipe_thumbnail(itemIngredientPrefer.getRecipe().getRecipe_thumbnail());
-                    dto.setRecipe_title(itemIngredientPrefer.getRecipe().getRecipeTitle());
-                    dto.setLast_name(itemIngredientPrefer.getRecipe().getUser().getLastName());
-                    dto.setFirst_name(itemIngredientPrefer.getRecipe().getUser().getFirstName());
-                    dto.setTime_created(itemIngredientPrefer.getRecipe().getTime());
-                    dto.setTotalLike(recipeRepository.totalLike(itemIngredientPrefer.getRecipe().getRecipeID()));
-                    dto.setCriteria("Preference");
-                    listPrf.add(dto);
+                if(recipePrefer==null){
+                    System.out.println("Nout found ingredientName:"+recipePrefer.getIngredientName());
                 }
+                else{
+                    List<RecipeIngredient>listRecipePrefer=recipeIngredientRepository.findByIngredient_IngredientID(recipePrefer.getIngredientID());
+                    for(RecipeIngredient itemIngredientPrefer:listRecipePrefer){
+                        SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
+                        dto.setRecipe_id(itemIngredientPrefer.getRecipe().getRecipeID());
+                        dto.setRecipe_thumbnail(itemIngredientPrefer.getRecipe().getRecipe_thumbnail());
+                        dto.setRecipe_title(itemIngredientPrefer.getRecipe().getRecipeTitle());
+                        dto.setLast_name(itemIngredientPrefer.getRecipe().getUser().getLastName());
+                        dto.setFirst_name(itemIngredientPrefer.getRecipe().getUser().getFirstName());
+                        dto.setTime_created(itemIngredientPrefer.getRecipe().getTime());
+                        dto.setTotalLike(recipeRepository.totalLike(itemIngredientPrefer.getRecipe().getRecipeID()));
+                        dto.setCriteria("Preference");
+                        listPrf.add(dto);
+                    }
+                }
+
             }
         for(int i=0;i< listPrf.size()-1;i++){
             for(int j=i+1;j<listPrf.size();j++){
@@ -436,17 +442,22 @@ public class RecipeController {
         List<UserAllergies>listAllergies=userAllergiesRepository.findByUser_UserID(userID);
         for(UserAllergies allergies:listAllergies){
             Ingredient ingreAllergies=ingredientRepository.findByIngredientName(allergies.getIngredientName());
-            List<RecipeIngredient>listRecipeAllergies=recipeIngredientRepository.findByIngredient_IngredientID(ingreAllergies.getIngredientID());
-            for(RecipeIngredient itemAllergies:listRecipeAllergies){
-                TenRecipeDTO dto=new TenRecipeDTO();
-                dto.setRecipe_id(itemAllergies.getRecipe().getRecipeID());
-                dto.setRecipe_thumbnail(itemAllergies.getRecipe().getRecipe_thumbnail());
-                dto.setRecipe_title(itemAllergies.getRecipe().getRecipeTitle());
-                dto.setLast_name(itemAllergies.getRecipe().getUser().getLastName());
-                dto.setFirst_name(itemAllergies.getRecipe().getUser().getFirstName());
-                dto.setTime_created(itemAllergies.getRecipe().getTime());
-                dto.setTotalLike(recipeRepository.totalLike(itemAllergies.getRecipe().getRecipeID()));
-                listnoSuggested.add(dto);
+            if(ingreAllergies==null){
+                System.out.println("Nout found ingredientName:"+allergies.getIngredientName());
+            }
+           else{
+                List<RecipeIngredient>listRecipeAllergies=recipeIngredientRepository.findByIngredient_IngredientID(ingreAllergies.getIngredientID());
+                for(RecipeIngredient itemAllergies:listRecipeAllergies){
+                    TenRecipeDTO dto=new TenRecipeDTO();
+                    dto.setRecipe_id(itemAllergies.getRecipe().getRecipeID());
+                    dto.setRecipe_thumbnail(itemAllergies.getRecipe().getRecipe_thumbnail());
+                    dto.setRecipe_title(itemAllergies.getRecipe().getRecipeTitle());
+                    dto.setLast_name(itemAllergies.getRecipe().getUser().getLastName());
+                    dto.setFirst_name(itemAllergies.getRecipe().getUser().getFirstName());
+                    dto.setTime_created(itemAllergies.getRecipe().getTime());
+                    dto.setTotalLike(recipeRepository.totalLike(itemAllergies.getRecipe().getRecipeID()));
+                    listnoSuggested.add(dto);
+                }
             }
         }
                 for(int i=0;i< listnoSuggested.size()-1;i++){
@@ -478,10 +489,10 @@ public class RecipeController {
             int currentDay=date.getYear()+1900;
             int yearUser=existUser.getBirth_date().getYear()+1900;
             int age=currentDay-yearUser;
-            if(existUser.getGender().trim().equals("male")){
+            if(existUser.getGender().trim().equalsIgnoreCase("male")){
                 caloNeed=((existUser.getWeight()*13.997)+(4.779*existUser.getHeight())-(5.677*age)+88.362)*r;
             }
-            else if(existUser.getGender().trim().equals("female")){
+            else if(existUser.getGender().trim().equalsIgnoreCase("female")){
                 caloNeed=((existUser.getWeight()*9.247)+(3.098*existUser.getHeight())-(4.330*age)+447.593)*r;
             }
             System.out.println((int)caloNeed);
