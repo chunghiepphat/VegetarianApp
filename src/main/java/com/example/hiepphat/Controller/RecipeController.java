@@ -546,6 +546,10 @@ public class RecipeController {
             while(perfectList.size()<5){
                 Random rand=new Random();
                 int freq[]={60,10,10,10,40};
+                if(listPrf.size()==0&&listBeha.size()==0&&listTenden.size()==0){
+                    int a[]={0,0,0,50,50};
+                    freq=a.clone();
+                }
                 List<SuggestionRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
                 int index2=rand.nextInt(ranNew.size());
                 SuggestionRecipeDTO ranObject=ranNew.get(index2);
