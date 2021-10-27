@@ -122,7 +122,7 @@ public class MenuController {
     //add menu vao database
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add/{id}")
-    public ResponseEntity<?>addMenu(@PathVariable("id")int userID,@RequestBody List<ListMenuDTO> list) throws ParseException {
+    public ResponseEntity<?>addMenu(@PathVariable("id")int userID,@RequestBody ListMenuResponse list) throws ParseException {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
@@ -132,7 +132,7 @@ public class MenuController {
         menu.setUser(user);
         menu.setTime(simpleDateFormat.parse(spf));
         menuRespository.save(menu);
-        for(ListMenuDTO item:list){
+        for(ListMenuDTO item:list.getMenu()){
             for(MenuDTO item2:item.getListRecipe()){
                 MenuRecipe menuRecipe=new MenuRecipe();
                 menuRecipe.setMenu(menu);
@@ -146,6 +146,7 @@ public class MenuController {
         }
         return ResponseEntity.ok(new MessageResponse("Add menu successfully!!!"));
     }
+    //get menu by userID
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/details/{id}")
     public ListMenuResponse getMenubyID(@PathVariable("id")int id){
