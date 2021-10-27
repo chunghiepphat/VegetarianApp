@@ -11,9 +11,8 @@ public class UserPreference {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @ManyToOne
-    @JoinColumn(name = "ingredient_id")
-    private Ingredient ingredient;
+    @Column(name = "ingredient_name")
+    private String ingredientName;
 
     public int getId() {
         return id;
@@ -31,11 +30,11 @@ public class UserPreference {
         this.user = user;
     }
 
-    public Ingredient getIngredient() {
-        return ingredient;
+    public String getIngredientName() {
+        return ingredientName;
     }
 
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
+    public void setIngredientName(String ingredientName) {
+        this.ingredientName = ingredientName;
     }
 }

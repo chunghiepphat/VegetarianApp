@@ -12,7 +12,6 @@ import com.example.hiepphat.repositories.RecipeRepository;
 import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.response.ListMenuResponse;
 import com.example.hiepphat.response.MessageResponse;
-import com.example.hiepphat.response.UserMenuResponse;
 import com.example.hiepphat.service.MenuRecipeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,7 @@ public class MenuController {
     MenuRecipeRepository menuRecipeRepository;
 @Autowired
     MenuRecipeServiceImpl menuRecipeService;
-   // @PreAuthorize("hasAuthority('user')")
+   @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
     public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -86,9 +85,9 @@ public class MenuController {
                 }
             }
         }
-        Set<ListMenuDTO>set=new LinkedHashSet<>();
+        List<ListMenuDTO>listMenu=new ArrayList<>();
         String dayofWeek[]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
-        while(set.size()<7){
+        while(listMenu.size()<7){
             for(int l=0;l<dayofWeek.length;l++){
                 ListMenuDTO listMenuDTO=new ListMenuDTO();
                 Random rand=new Random();
@@ -107,11 +106,10 @@ public class MenuController {
                     result.add(dto);
                 }
                 listMenuDTO.setListRecipe(result);
-                set.add(listMenuDTO);
+                listMenu.add(listMenuDTO);
                 System.out.println(randomIndex);
             }
         }
-        List<ListMenuDTO>listMenu=new ArrayList<>(set);
         ListMenuResponse listMenuResponse=new ListMenuResponse();
         listMenuResponse.setMenu(listMenu);
         return listMenuResponse;
@@ -143,10 +141,12 @@ public class MenuController {
         }
         return ResponseEntity.ok(new MessageResponse("Add menu successfully!!!"));
     }
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/details/{id}")
     public ListMenuResponse getMenubyID(@PathVariable("id")int id){
         ListMenuResponse listMenuResponse=new ListMenuResponse();
         listMenuResponse.setMenu(menuRecipeService.findById(id));
         return listMenuResponse;
     }
+
 }

@@ -15,4 +15,5 @@ public interface IngredientRepository extends JpaRepository<Ingredient,Long> {
     @Query(value = "Select amount_in_g from Recipes_Ingredients where recipe_id=?",nativeQuery = true)
     List<Integer> getAmount(long recipeID);
     Ingredient findByIngredientName(String name);
+
 }

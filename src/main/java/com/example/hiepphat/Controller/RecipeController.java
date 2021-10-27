@@ -58,6 +58,8 @@ public class RecipeController {
     private UserAllergiesRepository userAllergiesRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
     //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
     public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
@@ -364,20 +366,22 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(new MessageResponse("Nout found recipe ID "+id));
         }
     }
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/suggestion/{id}")
-    public List<TenRecipeDTO> suggestRecipe(@PathVariable("id")int userID) throws InterruptedException {
+    public List<SuggestionRecipeDTO> suggestRecipe(@PathVariable("id")int userID) throws InterruptedException {
             List<UserPreference>listPreference=userPreferencesRepository.findByUser_UserID(userID);
-            List<List<TenRecipeDTO>>listRecipeSuggest=new ArrayList<>();
-            List<TenRecipeDTO>listPrf=new ArrayList<>();
-            List<TenRecipeDTO>listTenden=new ArrayList<>();
-            List<TenRecipeDTO>listBeha=new ArrayList<>();
-            List<TenRecipeDTO>listBody=new ArrayList<>();
+            List<List<SuggestionRecipeDTO>>listRecipeSuggest=new ArrayList<>();
+            List<SuggestionRecipeDTO>listPrf=new ArrayList<>();
+            List<SuggestionRecipeDTO>listTenden=new ArrayList<>();
+            List<SuggestionRecipeDTO>listBeha=new ArrayList<>();
+            List<SuggestionRecipeDTO>listBody=new ArrayList<>();
             List<TenRecipeDTO>listLiked=new ArrayList<>();
-            List<TenRecipeDTO>listmostLike=new ArrayList<>();
+            List<SuggestionRecipeDTO>listmostLike=new ArrayList<>();
             for(UserPreference itemPrefer:listPreference){
-                List<RecipeIngredient> recipePrefer=recipeIngredientRepository.findByIngredient_IngredientID(itemPrefer.getIngredient().getIngredientID());
-                for(RecipeIngredient itemIngredientPrefer:recipePrefer){
-                    TenRecipeDTO dto=new TenRecipeDTO();
+                Ingredient recipePrefer=ingredientRepository.findByIngredientName(itemPrefer.getIngredientName());
+                List<RecipeIngredient>listRecipePrefer=recipeIngredientRepository.findByIngredient_IngredientID(recipePrefer.getIngredientID());
+                for(RecipeIngredient itemIngredientPrefer:listRecipePrefer){
+                    SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
                     dto.setRecipe_id(itemIngredientPrefer.getRecipe().getRecipeID());
                     dto.setRecipe_thumbnail(itemIngredientPrefer.getRecipe().getRecipe_thumbnail());
                     dto.setRecipe_title(itemIngredientPrefer.getRecipe().getRecipeTitle());
@@ -385,14 +389,22 @@ public class RecipeController {
                     dto.setFirst_name(itemIngredientPrefer.getRecipe().getUser().getFirstName());
                     dto.setTime_created(itemIngredientPrefer.getRecipe().getTime());
                     dto.setTotalLike(recipeRepository.totalLike(itemIngredientPrefer.getRecipe().getRecipeID()));
+                    dto.setCriteria("Preference");
                     listPrf.add(dto);
                 }
             }
+        for(int i=0;i< listPrf.size()-1;i++){
+            for(int j=i+1;j<listPrf.size();j++){
+                if(listPrf.get(i).getRecipe_id()==listPrf.get(j).getRecipe_id()){
+                    listPrf.remove(j);
+                }
+            }
+        }
             List<UserTendency>listTendency=userTendencyRepository.findByUser_UserIDAndFrequencyGreaterThanEqual(userID,5);
             for(UserTendency itemTendency:listTendency){
                 List<RecipeIngredient>itemIngredientTendency=recipeIngredientRepository.findByIngredient_IngredientID(itemTendency.getIngredient().getIngredientID());
                 for(RecipeIngredient recipeTendency:itemIngredientTendency){
-                    TenRecipeDTO dto=new TenRecipeDTO();
+                    SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
                     dto.setRecipe_id(recipeTendency.getRecipe().getRecipeID());
                     dto.setRecipe_thumbnail(recipeTendency.getRecipe().getRecipe_thumbnail());
                     dto.setRecipe_title(recipeTendency.getRecipe().getRecipeTitle());
@@ -400,6 +412,7 @@ public class RecipeController {
                     dto.setFirst_name(recipeTendency.getRecipe().getUser().getFirstName());
                     dto.setTime_created(recipeTendency.getRecipe().getTime());
                     dto.setTotalLike(recipeRepository.totalLike(recipeTendency.getRecipe().getRecipeID()));
+                    dto.setCriteria("Tendency");
                     listTenden.add(dto);
                 }
             }
@@ -407,7 +420,7 @@ public class RecipeController {
         for(UserBehavior itemBehavior:listBehavior){
             List<Recipe>recipeBehavior=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+itemBehavior.getQuerry()+"%", "%"+itemBehavior.getQuerry()+"%","%"+ itemBehavior.getQuerry()+"%");
             for(Recipe behavior:recipeBehavior){
-                TenRecipeDTO dto=new TenRecipeDTO();
+                SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
                 dto.setRecipe_id(behavior.getRecipeID());
                 dto.setRecipe_thumbnail(behavior.getRecipe_thumbnail());
                 dto.setRecipe_title(behavior.getRecipeTitle());
@@ -415,14 +428,16 @@ public class RecipeController {
                 dto.setFirst_name(behavior.getUser().getFirstName());
                 dto.setTime_created(behavior.getTime());
                 dto.setTotalLike(recipeRepository.totalLike(behavior.getRecipeID()));
+                dto.setCriteria("Behavior");
                 listBeha.add(dto);
             }
         }
         List<TenRecipeDTO>listnoSuggested=new ArrayList<>();
         List<UserAllergies>listAllergies=userAllergiesRepository.findByUser_UserID(userID);
         for(UserAllergies allergies:listAllergies){
-            List<RecipeIngredient>recipeAllergies=recipeIngredientRepository.findByIngredient_IngredientID(allergies.getIngredient().getIngredientID());
-            for(RecipeIngredient itemAllergies:recipeAllergies){
+            Ingredient ingreAllergies=ingredientRepository.findByIngredientName(allergies.getIngredientName());
+            List<RecipeIngredient>listRecipeAllergies=recipeIngredientRepository.findByIngredient_IngredientID(ingreAllergies.getIngredientID());
+            for(RecipeIngredient itemAllergies:listRecipeAllergies){
                 TenRecipeDTO dto=new TenRecipeDTO();
                 dto.setRecipe_id(itemAllergies.getRecipe().getRecipeID());
                 dto.setRecipe_thumbnail(itemAllergies.getRecipe().getRecipe_thumbnail());
@@ -474,7 +489,7 @@ public class RecipeController {
             System.out.println((int)calo);
             List<Recipe>listBodymatch=recipeRepository.findByTotalCaloLessThanEqualAndTotalCaloGreaterThan((int)calo,(int)calo-20);
             for(Recipe itemBodyMatch:listBodymatch){
-                TenRecipeDTO dto=new TenRecipeDTO();
+                SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
                 dto.setRecipe_id(itemBodyMatch.getRecipeID());
                 dto.setRecipe_thumbnail(itemBodyMatch.getRecipe_thumbnail());
                 dto.setRecipe_title(itemBodyMatch.getRecipeTitle());
@@ -482,12 +497,13 @@ public class RecipeController {
                 dto.setFirst_name(itemBodyMatch.getUser().getFirstName());
                 dto.setTime_created(itemBodyMatch.getTime());
                 dto.setTotalLike(recipeRepository.totalLike(itemBodyMatch.getRecipeID()));
+                dto.setCriteria("Body Match");
                 listBody.add(dto);
             }
         }
         List<Recipe>listMost=recipeRepository.findLikeGreater2();
         for(Recipe itemMost:listMost){
-            TenRecipeDTO dto=new TenRecipeDTO();
+            SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
             dto.setRecipe_id(itemMost.getRecipeID());
             dto.setRecipe_thumbnail(itemMost.getRecipe_thumbnail());
             dto.setRecipe_title(itemMost.getRecipeTitle());
@@ -495,6 +511,7 @@ public class RecipeController {
             dto.setFirst_name(itemMost.getUser().getFirstName());
             dto.setTime_created(itemMost.getTime());
             dto.setTotalLike(recipeRepository.totalLike(itemMost.getRecipeID()));
+            dto.setCriteria("Most people like");
             listmostLike.add(dto);
         }
         List<LikeRecipe>listLike=likeRecipeRepository.findByUser_UserID(userID);
@@ -514,14 +531,13 @@ public class RecipeController {
         listRecipeSuggest.add(listBeha);
         listRecipeSuggest.add(listBody);
         listRecipeSuggest.add(listmostLike);
-        List<TenRecipeDTO>perfectList=new ArrayList<>();
-
+        List<SuggestionRecipeDTO>perfectList=new ArrayList<>();
             while(perfectList.size()<5){
                 Random rand=new Random();
                 int freq[]={60,10,10,10,40};
-                List<TenRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
+                List<SuggestionRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
                 int index2=rand.nextInt(ranNew.size());
-                TenRecipeDTO ranObject=ranNew.get(index2);
+                SuggestionRecipeDTO ranObject=ranNew.get(index2);
                 perfectList.add(ranObject);
                 for(int a=0;a<listnoSuggested.size();a++){
                     if(ranObject.getRecipe_id()==listnoSuggested.get(a).getRecipe_id()){
@@ -560,7 +576,7 @@ public class RecipeController {
     // The main function that returns a random number
 // from arr[] according to distribution array
 // defined by freq[]. n is size of arrays.
-    static List<TenRecipeDTO> myRand(List<List<TenRecipeDTO>>list, int freq[], int n)
+    static List<SuggestionRecipeDTO> myRand(List<List<SuggestionRecipeDTO>>list, int freq[], int n)
     {
         // Create and fill prefix array
         int prefix[] = new int[n], i;

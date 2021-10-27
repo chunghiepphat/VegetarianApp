@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -317,33 +319,42 @@ UserRepository userRepository;
             return likeResponse;
         }
     }
-    //them ingredient ua thich dua theo user_id ,ingredient_id
+    //update ingredient ua thich dua theo user_id ,ingredient_id
     @PreAuthorize("hasAuthority('user')")
-    @PostMapping("/ingredients/preferences")
-    public ResponseEntity<?>addPreferences(@RequestParam("userID")int userID,@RequestParam("ingredientID")int ingredientID){
+    @PutMapping("/preferences/{id}")
+    public ResponseEntity<?>updatePreferences(@PathVariable("id")int userID, @RequestBody ListIngredientCriteria listIngredient){
+
+            List<UserPreference>listPrefer=userPreferencesRepository.findByUser_UserID(userID);
+            for(UserPreference item:listPrefer){
+                userPreferencesRepository.delete(item);
+            }
+            for(IngredientCriteria item2:listIngredient.getListIngredient()){
+                User user=new User();
+                user.setUserID(userID);
+                UserPreference userPreference=new UserPreference();
+                userPreference.setUser(user);
+                userPreference.setIngredientName(item2.getIngredient_name());
+                userPreferencesRepository.save(userPreference);
+            }
+            return ResponseEntity.ok(new MessageResponse("Update preferences successfully!!!"));
+    }
+    //update ingredient di ung dua theo user_id ,ingredient_id
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/allergies/{id}")
+    public ResponseEntity<?>updateAllergies(@PathVariable("id")int userID,@RequestBody ListIngredientCriteria listIngredient){
+        List<UserAllergies>allergiesList=userAllergiesRepository.findByUser_UserID(userID);
+        for(UserAllergies item:allergiesList){
+            userAllergiesRepository.delete(item);
+        }
+        for(IngredientCriteria item2:listIngredient.getListIngredient()){
             User user=new User();
             user.setUserID(userID);
-            Ingredient ingredient=new Ingredient();
-            ingredient.setIngredientID(ingredientID);
-            UserPreference userPreference=new UserPreference();
-            userPreference.setUser(user);
-            userPreference.setIngredient(ingredient);
-            userPreferencesRepository.save(userPreference);
-            return ResponseEntity.ok(new MessageResponse("Add preferences successfully!!!"));
-    }
-    //them ingredient di ung dua theo user_id ,ingredient_id
-    @PreAuthorize("hasAuthority('user')")
-    @PostMapping("/ingredients/allergies")
-    public ResponseEntity<?>addAllergies(@RequestParam("userID")int userID,@RequestParam("ingredientID")int ingredientID){
-        User user=new User();
-        user.setUserID(userID);
-        Ingredient ingredient=new Ingredient();
-        ingredient.setIngredientID(ingredientID);
-        UserAllergies userAllergies=new UserAllergies();
-        userAllergies.setUser(user);
-        userAllergies.setIngredient(ingredient);
-        userAllergiesRepository.save(userAllergies);
-        return ResponseEntity.ok(new MessageResponse("Add allergies successfully!!!"));
+            UserAllergies userAllergies=new UserAllergies();
+            userAllergies.setUser(user);
+            userAllergies.setIngredientName(item2.getIngredient_name());
+            userAllergiesRepository.save(userAllergies);
+        }
+        return ResponseEntity.ok(new MessageResponse("Update allergies successfully!!!"));
     }
     //tinh nutrion can thiet cho cơ thể dựa theo (height,age,weight,workout_type,gender)
     @GetMapping("/calculate/nutrition")
@@ -408,5 +419,31 @@ UserRepository userRepository;
         else{
            return ResponseEntity.badRequest().body(new MessageResponse("Not found user id "+id));
         }
+    }
+    @GetMapping("/getpreferences/{id}")
+    public ListIngredientCriteria getPreference(@PathVariable("id")int userID){
+        List<UserPreference>entity=userPreferencesRepository.findByUser_UserID(userID);
+        List<IngredientCriteria>result=new ArrayList<>();
+        for(UserPreference item:entity){
+            IngredientCriteria ingredientCriteria=new IngredientCriteria();
+            ingredientCriteria.setIngredient_name(item.getIngredientName());
+            result.add(ingredientCriteria);
+        }
+        ListIngredientCriteria listIngredientCriteria=new ListIngredientCriteria();
+        listIngredientCriteria.setListIngredient(result);
+        return listIngredientCriteria;
+    }
+    @GetMapping("/getallergies/{id}")
+    public ListIngredientCriteria getAllergies(@PathVariable("id")int userID){
+        List<UserAllergies>entity=userAllergiesRepository.findByUser_UserID(userID);
+        List<IngredientCriteria>result=new ArrayList<>();
+        for(UserAllergies item:entity){
+            IngredientCriteria ingredientCriteria=new IngredientCriteria();
+            ingredientCriteria.setIngredient_name(item.getIngredientName());
+            result.add(ingredientCriteria);
+        }
+        ListIngredientCriteria listIngredientCriteria=new ListIngredientCriteria();
+        listIngredientCriteria.setListIngredient(result);
+        return listIngredientCriteria;
     }
 }
