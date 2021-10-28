@@ -146,5 +146,34 @@ private BlogRepository blogRepository;
         return blogRepository.totalLike(id);
     }
 
+    @Override
+    public List<TenBlogDTO> findTop10ByUser_UserIDOrderByTimeDescOtherSide(int userID) {
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entities=blogRepository.findTop10ByUser_UserIDOrderByTimeDesc(userID);
+        for (Blog item: entities){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
+            if(item.isPrivate()==false&&item.getStatus()==2){
+                results.add(blogDTO);
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public List<TenBlogDTO> findAllByUser_UserIDOtherSide(Pageable pageable, int userID) {
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entites=blogRepository.findAllByUser_UserID(pageable,userID);
+        for(Blog item:entites){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
+            if(item.getStatus()==2&&item.isPrivate()==false){
+                results.add(blogDTO);
+            }
+        }
+
+        return results;
+    }
+
 
 }

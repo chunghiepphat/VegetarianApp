@@ -67,6 +67,7 @@ public class BlogController {
         return result;
     }
     // chức năng get 10 blog mới nhất của 1 user theo user id
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/get10blogbyuser/{id}")
     public TenBlogResponse show10BlogsbyUserID(@PathVariable int id) throws Exception {
         TenBlogResponse result=new TenBlogResponse();
@@ -74,6 +75,7 @@ public class BlogController {
         return result;
     }
     //chức năng get all blog của 1 user theo user id
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/getallbyuserID/{id}")
     public BlogResponse showBlogByID(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id){
         BlogResponse result2=new BlogResponse();
@@ -176,5 +178,20 @@ public class BlogController {
         else{
            return ResponseEntity.badRequest().body(new MessageResponse("Nout found blog id"));
         }
+    }
+    @GetMapping("/get10blogbyuserdifferent/{id}")
+    public TenBlogResponse show10BlogsbyUserIDOtherside(@PathVariable int id) throws Exception {
+        TenBlogResponse result=new TenBlogResponse();
+        result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
+        return result;
+    }
+    @GetMapping("/getallbyuserIDdifferent/{id}")
+    public BlogResponse showBlogByIDOtherSide(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id){
+        BlogResponse result2=new BlogResponse();
+        result2.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        result2.setListResult(blogService.findAllByUser_UserIDOtherSide(pageable,id));
+        result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
+        return result2;
     }
 }

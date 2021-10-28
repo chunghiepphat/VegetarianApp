@@ -24,4 +24,6 @@ public interface BlogService {
     List<TenBlogDTO>findBestBlog();
     List<TenBlogDTO>findLikedBlog(int id);
     int totalLike(int id);
+    List<TenBlogDTO> findTop10ByUser_UserIDOrderByTimeDescOtherSide(int userID);
+    List<TenBlogDTO> findAllByUser_UserIDOtherSide(Pageable pageable, int userID);
 }

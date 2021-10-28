@@ -90,14 +90,16 @@ public class RecipeController {
         }
         return result;
     }
-    // chức năng get 10 recipe mới nhất của 1 user dựa theo user id
+    // chức năng get 10 recipe mới nhất của 1 user dựa theo user id( góc nhìn user id chủ profile)
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/get10recipebyuser/{id}")
     public TenRecipesResponse show10RecipesbyUserID(@PathVariable int id) throws Exception {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10ByUserOrderByTimeDesc(id));
         return result;
     }
-    // chức năng get tất cả recipe của 1 user dựa theo user id ( có phân trang  )
+    // chức năng get tất cả recipe của 1 user dựa theo user id ( có phân trang,góc nhìn user id chủ profile)  )
+    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/getallbyuserID/{id}")
     public RecipeResponse showRecipebyID(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
         RecipeResponse result2=new RecipeResponse();
@@ -623,6 +625,23 @@ public class RecipeController {
         else{
              return ResponseEntity.badRequest().body(new MessageResponse("Not found recipe id "+id));
          }
+    }
+    //chuc nang hien 10 bai viet cua user ( góc nhìn 1 user khác)
+    @GetMapping("/get10recipebyuserdifferent/{id}")
+    public TenRecipesResponse show10RecipesbyUserIDOtherside(@PathVariable int id) throws Exception {
+        TenRecipesResponse result=new TenRecipesResponse();
+        result.setListResult(recipeService.findTop10ByUserOrderByTimeDescOtherside(id));
+        return result;
+    }
+    //chuc nang hien tatca bai viet cua user có phân trang ( góc nhìn 1 user khác)
+    @GetMapping("/getallbyuserIDdifferent/{id}")
+    public RecipeResponse showRecipebyIDOtherside(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
+        RecipeResponse result2=new RecipeResponse();
+        result2.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        result2.setListResult(recipeService.findAllByUser_UserID(pageable,id));
+        result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
+        return result2;
     }
     }
 

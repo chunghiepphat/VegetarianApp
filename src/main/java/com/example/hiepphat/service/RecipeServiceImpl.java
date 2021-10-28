@@ -175,7 +175,34 @@ RecipeRepository recipeRepository;
         return recipeRepository.totalLike(id);
     }
 
+    @Override
+    public List<TenRecipeDTO> findTop10ByUserOrderByTimeDescOtherside(int userID) {
+        List<TenRecipeDTO> results=new ArrayList<>();
+        List<Recipe> entities=recipeRepository.findTop10ByUser_UserIDOrderByTimeDesc(userID);
+        for (Recipe item: entities){
+            TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2){
+                results.add(recipeDTO);
+            }
+        }
+        return results;
+    }
 
+    @Override
+    public List<TenRecipeDTO> findAllByUser_UserIDOtherside(Pageable pageable, int userID) {
+        List<TenRecipeDTO> results=new ArrayList<>();
+        List<Recipe> entites=recipeRepository.findAllByUser_UserID(pageable,userID);
+        for(Recipe item:entites){
+            TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2){
+                results.add(recipeDTO);
+            }
+        }
+
+        return results;
+    }
 
 
 }

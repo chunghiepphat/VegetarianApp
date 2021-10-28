@@ -30,5 +30,7 @@ public interface RecipeService {
     void deleteByRecipeID(long id);
     void deleteLike(long recipeID);
     int totalLike(long id);
+    List<TenRecipeDTO> findTop10ByUserOrderByTimeDescOtherside(int userID);
+    List<TenRecipeDTO> findAllByUser_UserIDOtherside(Pageable pageable, int userID);
 
 }
