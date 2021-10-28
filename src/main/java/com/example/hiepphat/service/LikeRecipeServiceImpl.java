@@ -22,13 +22,6 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
         List<TenRecipeDTO> results=new ArrayList<>();
         List<Integer> listInt=likeRecipeRepository.findbestRecipe();
         for(Integer item:listInt){
-//            TenRecipeDTO dto=new TenRecipeDTO();
-//            dto.setFirst_name(item.getRecipe().getUser().getFirst_name());
-//            dto.setLast_name(item.getRecipe().getUser().getLast_name());
-//            dto.setRecipe_id(item.getRecipe().getRecipeID());
-//            dto.setRecipe_title(item.getRecipe().getRecipe_title());
-//            dto.setRecipe_thumbnail(item.getRecipe().getRecipe_thumbnail());
-//            results.add(dto);
              Recipe enties=recipeRepository.findByRecipeID(item);
              TenRecipeDTO dto=new TenRecipeDTO();
              dto.setRecipe_id(enties.getRecipeID());
@@ -37,9 +30,11 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
              dto.setFirst_name(enties.getUser().getFirstName());
              dto.setLast_name(enties.getUser().getLastName());
              dto.setTotalLike(recipeRepository.totalLike(enties.getRecipeID()));
-             results.add(dto);
+             dto.setTime_created(enties.getTime());
+             if(enties.isPrivate()==false&&enties.getStatus()==2){
+                 results.add(dto);
+             }
         }
-
         return results;
     }
 
@@ -55,7 +50,9 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
         for(LikeRecipe item:entity){
             ListLikeDTO dto=new ListLikeDTO();
             dto.setUser_id(item.getUser().getUserID());
-            result.add(dto);
+            if(item.getRecipe().isPrivate()==false&&item.getRecipe().getStatus()==2){
+                result.add(dto);
+            }
         }
         return result;
     }

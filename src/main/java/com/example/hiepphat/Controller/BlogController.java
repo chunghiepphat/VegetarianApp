@@ -51,11 +51,13 @@ public class BlogController {
     @GetMapping("/getblogby/{id}")
     public BlogDTO showBlogbyID(@PathVariable int id) throws Exception {
         BlogDTO result=blogService.findblogbyID(id);
-        result.setTotalLike(blogRepository.totalLike(id));
-        if(result==null){
-            throw new Exception("Nout found blog id:"+ id);
+        if(result!=null){
+            result.setTotalLike(blogRepository.totalLike(id));
+            return result;
         }
-        return result;
+        else{
+            return null;
+        }
     }
     // chức năng get 10 blogs mới nhất dựa theo thời gian
     @GetMapping("/get10blogs")
@@ -96,6 +98,8 @@ public class BlogController {
         blog.setIs_active(true);
         java.sql.Date date=new java.sql.Date(new java.util.Date().getTime());
         blog.setTime(date);
+        blog.setStatus(1);
+        blog.setPrivate(blogRequest.isIs_private());
         blogService.save(blog);
         return ResponseEntity.ok(new MessageResponse("Post blog successfully!!!"));
     }
@@ -165,6 +169,7 @@ public class BlogController {
             Date date=new Date();
             String spf=simpleDateFormat.format(date);
             blog.setTimeUpdated(simpleDateFormat.parse(spf));
+            blog.setPrivate(dto.isIs_private());
             blogRepository.save(blog);
             return ResponseEntity.ok(new MessageResponse("Update blog successfully"));
         }

@@ -22,6 +22,25 @@ public class Blog {
     private java.util.Date time;
     @Column(name = "time_updated")
     private Date timeUpdated;
+    @Column(name = "is_private")
+    private boolean isPrivate;
+    private int status;
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public Date getTimeUpdated() {
         return timeUpdated;

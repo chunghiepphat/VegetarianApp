@@ -39,8 +39,11 @@ public class VideoController {
         videoCategory.setId(dto.getVideo_category_id());
         video.setUser(user);
         video.setVideoCategory(videoCategory);
+        video.setThumbnail(dto.getVideo_thumbnail());
         video.setTitle(dto.getVideo_title());
         video.setVideoLink(dto.getVideo_link());
+        video.setStatus(1);
+        video.setPrivate(dto.isIs_private());
         video.setDescription(dto.getVideo_description());
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
@@ -95,6 +98,7 @@ public class VideoController {
             Date date=new Date();
             String spf=simpleDateFormat.format(date);
              video.setTimeUpdated(simpleDateFormat.parse(spf));
+             video.setPrivate(dto.isIs_private());
              videoRepository.save(video);
             return ResponseEntity.ok(new MessageResponse("Update video successfully!!!"));
         }

@@ -81,11 +81,13 @@ public class RecipeController {
     @GetMapping("/getrecipeby/{id}")
     public RecipeDTO showRecipesbyID(@PathVariable long id) throws Exception {
         RecipeDTO result=recipeService.findrecipebyID(id);
-        NutritionDTO nutrition=ingredientService.getIngredientByRecipe(id);
-        result.setIngredients(recipeIngredientService.findByRecipe_RecipeID(id));
-        result.setNutrition(nutrition);
-        result.setTotalLike(recipeService.totalLike(id));
-        result.setSteps(recipeStepService.findByRecipe_RecipeID(id));
+        if(result!=null){
+            NutritionDTO nutrition=ingredientService.getIngredientByRecipe(id);
+            result.setIngredients(recipeIngredientService.findByRecipe_RecipeID(id));
+            result.setNutrition(nutrition);
+            result.setTotalLike(recipeService.totalLike(id));
+            result.setSteps(recipeStepService.findByRecipe_RecipeID(id));
+        }
         return result;
     }
     // chức năng get 10 recipe mới nhất của 1 user dựa theo user id
@@ -123,6 +125,8 @@ public class RecipeController {
                             List<StepRecipeDTO>listStep=recipeRequest.getSteps();
                             recipe.setRecipeTitle(recipeRequest.getRecipe_title());
                             recipe.setRecipe_thumbnail(recipeRequest.getRecipe_thumbnail());
+                            recipe.setStatus(1);
+                            recipe.setPrivate(recipeRequest.isIs_private());
                          RecipeCategories recipeCategories=new RecipeCategories();
                           recipeCategories.setRecipeCategoryID(recipeRequest.getRecipe_categories_id());
                             recipe.setRecipeCategories(recipeCategories);
@@ -303,6 +307,7 @@ public class RecipeController {
             recipe.setRecipe_thumbnail(dto.getRecipe_thumbnail());
             recipe.setRecipe_difficulty(dto.getRecipe_difficulty());
             recipe.setPortion_type(dto.getPortion_type());
+            recipe.setPrivate(dto.isIs_private());
             recipe.setPortion_size(dto.getPortion_size());
             recipe.setPrep_time_minutes(dto.getPrep_time_minutes());
             recipe.setBaking_time_minutes(dto.getBaking_time_minutes());
@@ -379,10 +384,7 @@ public class RecipeController {
             List<SuggestionRecipeDTO>listmostLike=new ArrayList<>();
             for(UserPreference itemPrefer:listPreference){
                 Ingredient recipePrefer=ingredientRepository.findByIngredientName(itemPrefer.getIngredientName());
-                if(recipePrefer==null){
-                    System.out.println("Nout found ingredientName:"+recipePrefer.getIngredientName());
-                }
-                else{
+                if(recipePrefer!=null){
                     List<RecipeIngredient>listRecipePrefer=recipeIngredientRepository.findByIngredient_IngredientID(recipePrefer.getIngredientID());
                     for(RecipeIngredient itemIngredientPrefer:listRecipePrefer){
                         SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
@@ -397,7 +399,6 @@ public class RecipeController {
                         listPrf.add(dto);
                     }
                 }
-
             }
         for(int i=0;i< listPrf.size()-1;i++){
             for(int j=i+1;j<listPrf.size();j++){
@@ -442,10 +443,7 @@ public class RecipeController {
         List<UserAllergies>listAllergies=userAllergiesRepository.findByUser_UserID(userID);
         for(UserAllergies allergies:listAllergies){
             Ingredient ingreAllergies=ingredientRepository.findByIngredientName(allergies.getIngredientName());
-            if(ingreAllergies==null){
-                System.out.println("Nout found ingredientName:"+allergies.getIngredientName());
-            }
-           else{
+            if(ingreAllergies!=null){
                 List<RecipeIngredient>listRecipeAllergies=recipeIngredientRepository.findByIngredient_IngredientID(ingreAllergies.getIngredientID());
                 for(RecipeIngredient itemAllergies:listRecipeAllergies){
                     TenRecipeDTO dto=new TenRecipeDTO();
@@ -545,10 +543,14 @@ public class RecipeController {
         List<SuggestionRecipeDTO>perfectList=new ArrayList<>();
             while(perfectList.size()<5){
                 Random rand=new Random();
-                int freq[]={60,10,10,10,40};
+                int freq[]={40,15,15,10,20};
                 if(listPrf.size()==0&&listBeha.size()==0&&listTenden.size()==0){
                     int a[]={0,0,0,50,50};
                     freq=a.clone();
+                }
+                if(listPrf.size()==0&&listBeha.size()==0&&listTenden.size()==0&&listBody.size()==0){
+                    int b[]={0,0,0,0,100};
+                    freq=b.clone();
                 }
                 List<SuggestionRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
                 int index2=rand.nextInt(ranNew.size());
@@ -608,8 +610,20 @@ public class RecipeController {
         int indexc = findCeil(prefix, r, 0, n - 1);
         return list.get(indexc);
     }
-
-
+    //duyet bai
+    @PreAuthorize("hasAuthority('admin')")
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<?>approveRecipe(@PathVariable("id")long id,@RequestBody RecipeDTO dto){
+        Recipe recipe=recipeRepository.findByRecipeID(id);
+         if(recipe!=null){
+             recipe.setStatus(dto.getStatus());
+             recipeRepository.save(recipe);
+             return ResponseEntity.ok(new MessageResponse("Status recipe change successfully!!!"));
+         }
+        else{
+             return ResponseEntity.badRequest().body(new MessageResponse("Not found recipe id "+id));
+         }
+    }
     }
 
 

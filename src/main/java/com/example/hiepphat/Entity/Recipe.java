@@ -41,6 +41,9 @@ public class Recipe implements Comparable<Recipe> {
     private Set<Ingredient>ingredients=new HashSet<>();
     @Column(name = "time_updated")
     private java.util.Date timeUpdated;
+    @Column(name = "is_private")
+    private boolean isPrivate;
+    private int status;
     public String getRecipeTitle() {
         return recipeTitle;
     }
@@ -173,6 +176,22 @@ public class Recipe implements Comparable<Recipe> {
 
     public void setTimeUpdated(java.util.Date timeUpdated) {
         this.timeUpdated = timeUpdated;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

@@ -20,7 +20,7 @@ public class BlogDTO {
     private String blog_thumbnail;
     private int totalLike;
     private Date time_updated;
-
+    private boolean is_private;
     public Date getTime_updated() {
         return time_updated;
     }
@@ -108,5 +108,13 @@ public class BlogDTO {
 
     public void setBlog_thumbnail(String blog_thumbnail) {
         this.blog_thumbnail = blog_thumbnail;
+    }
+
+    public boolean isIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(boolean is_private) {
+        this.is_private = is_private;
     }
 }

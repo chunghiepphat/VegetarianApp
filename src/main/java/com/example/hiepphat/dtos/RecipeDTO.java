@@ -27,6 +27,8 @@ public class RecipeDTO {
     private NutritionDTO nutrition;
     private List<IngredientDTO> ingredients=new ArrayList<>();
     private int totalLike;
+    private boolean is_private;
+    private int status;
     public int getTotalLike() {
         return totalLike;
     }
@@ -179,5 +181,21 @@ public class RecipeDTO {
 
     public void setTime_updated(java.util.Date time_updated) {
         this.time_updated = time_updated;
+    }
+
+    public boolean isIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(boolean is_private) {
+        this.is_private = is_private;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

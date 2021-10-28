@@ -19,6 +19,7 @@ public class RecipeRequest {
     private int prep_time_minutes;
     private int baking_time_minutes;
     private int resting_time_minutes;
+    private boolean is_private;
     private List<IngredientRecipeDTO>ingredients=new ArrayList<>();
 
     public List<IngredientRecipeDTO> getIngredients() {
@@ -116,5 +117,11 @@ public class RecipeRequest {
         this.resting_time_minutes = resting_time_minutes;
     }
 
+    public boolean isIs_private() {
+        return is_private;
+    }
 
+    public void setIs_private(boolean is_private) {
+        this.is_private = is_private;
+    }
 }

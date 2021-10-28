@@ -7,11 +7,20 @@ public class VideoDTO {
     private int user_id;
     private int video_category_id;
     private String video_title;
+    private String video_thumbnail;
     private String video_link;
     private String video_description;
     private String first_name;
     private String last_name;
     private Date time_created;
+    private boolean is_private;
+    public String getVideo_thumbnail() {
+        return video_thumbnail;
+    }
+
+    public void setVideo_thumbnail(String video_thumbnail) {
+        this.video_thumbnail = video_thumbnail;
+    }
 
     public Date getTime_created() {
         return time_created;
@@ -83,5 +92,13 @@ public class VideoDTO {
 
     public void setVideo_link(String video_link) {
         this.video_link = video_link;
+    }
+
+    public boolean isIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(boolean is_private) {
+        this.is_private = is_private;
     }
 }

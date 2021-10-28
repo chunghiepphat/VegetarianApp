@@ -79,7 +79,6 @@ UserRepository userRepository;
             return ResponseEntity.ok(new JwtResponse(jwt));
         }
     }
-
 //signup
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
@@ -167,25 +166,30 @@ UserRepository userRepository;
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable("id")int id) {
         User user=userRepository.findByUserID(id);
-        UserDTO dto=new UserDTO();
-        dto.setId(user.getUserID());
-        dto.setFirst_name(user.getFirstName());
-        dto.setLast_name(user.getLastName());
-        dto.setEmail(user.getEmail());
-        dto.setCountry(user.getCountry());
-        dto.setBirth_date(user.getBirth_date());
-        dto.setGender(user.getGender());
-        dto.setAbout_me(user.getAbout_me());
-        dto.setFacebook_link(user.getFacebook_link());
-        dto.setInstagram_link(user.getInstagram_link());
-        dto.setPhone_number(user.getPhone_number());
-        dto.setProfile_image(user.getProfile_image());
-        dto.setRole(user.getRole().getRole_name());
-        dto.setIs_active(user.isIs_active());
-        dto.setWeight(user.getWeight());
-        dto.setHeight(user.getHeight());
-        dto.setWorkout_routine(user.getTypeWorkout());
-        return dto;
+            if(user.isIs_active()==true){
+                UserDTO dto=new UserDTO();
+                dto.setId(user.getUserID());
+                dto.setFirst_name(user.getFirstName());
+                dto.setLast_name(user.getLastName());
+                dto.setEmail(user.getEmail());
+                dto.setCountry(user.getCountry());
+                dto.setBirth_date(user.getBirth_date());
+                dto.setGender(user.getGender());
+                dto.setAbout_me(user.getAbout_me());
+                dto.setFacebook_link(user.getFacebook_link());
+                dto.setInstagram_link(user.getInstagram_link());
+                dto.setPhone_number(user.getPhone_number());
+                dto.setProfile_image(user.getProfile_image());
+                dto.setRole(user.getRole().getRole_name());
+                dto.setIs_active(user.isIs_active());
+                dto.setWeight(user.getWeight());
+                dto.setHeight(user.getHeight());
+                dto.setWorkout_routine(user.getTypeWorkout());
+                return dto;
+            }
+            else{
+                return null;
+            }
     }
 //chức năng comment trên blog
     @PreAuthorize("hasAuthority('user')")
@@ -409,10 +413,10 @@ UserRepository userRepository;
     //chuc nang change status cua user
     @PreAuthorize("hasAuthority('admin')")
     @PutMapping("/changestatus/{id}")
-    public ResponseEntity<?>changeStatus(@PathVariable("id")int id,@RequestParam("is_active")boolean is_active){
+    public ResponseEntity<?>changeStatus(@PathVariable("id")int id,@RequestBody UserDTO dto){
         User newUser=userRepository.findByUserID(id);
         if(newUser!=null){
-            newUser.setIs_active(is_active);
+            newUser.setIs_active(dto.isIs_active());
             userService.save(newUser);
             return ResponseEntity.ok(new MessageResponse("Change status successully!!!"));
         }

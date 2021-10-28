@@ -26,6 +26,27 @@ public class Video {
     private Date timeCreated;
     @Column(name = "time_updated")
     private Date timeUpdated;
+    @Column(name = "video_thumbnail")
+    private String thumbnail;
+    @Column(name = "is_private")
+    private boolean isPrivate;
+    private int status;
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public Date getTimeUpdated() {
         return timeUpdated;
@@ -89,5 +110,13 @@ public class Video {
 
     public void setVideoLink(String videoLink) {
         this.videoLink = videoLink;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }

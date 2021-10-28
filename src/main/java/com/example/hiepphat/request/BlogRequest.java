@@ -6,6 +6,15 @@ public class BlogRequest {
     private String blog_subtitle;
     private String blog_thumbnail;
     private String blog_content;
+    private boolean is_private;
+
+    public boolean isIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(boolean is_private) {
+        this.is_private = is_private;
+    }
 
     public int getUser_id() {
         return user_id;
