@@ -29,6 +29,8 @@ public class Converter {
         dto.setLast_name(entity.getUser().getLastName());
         dto.setFirst_name(entity.getUser().getFirstName());
         dto.setTime_updated(entity.getTimeUpdated());
+        dto.setIs_private(entity.isPrivate());
+        dto.setStatus(entity.getStatus());
         return dto;
     }
     public TenRecipeDTO toDTO10(Recipe entity) {
@@ -39,6 +41,8 @@ public class Converter {
         dto.setFirst_name(entity.getUser().getFirstName());
         dto.setRecipe_id(entity.getRecipeID());
         dto.setTime_created((entity.getTime()));
+        dto.setIs_private(entity.isPrivate());
+        dto.setStatus(entity.getStatus());
         return dto;
     }
     public TenBlogDTO toDTO10BLOG(Blog entity){
@@ -51,6 +55,8 @@ public class Converter {
         dto.setBlog_id(entity.getBlogID());
         dto.setTime_created(entity.getTime());
         dto.setBlog_subtitle(entity.getBlog_subtitle());
+        dto.setStatus(entity.getStatus());
+        dto.setIs_private(entity.isPrivate());
         return dto;
     }
     public BlogDTO toDTOBLOG(Blog entity) {
@@ -65,6 +71,8 @@ public class Converter {
         dto.setBlog_thumbnail(entity.getBlog_thumbnail());
         dto.setUser_id(entity.getUser().getUserID());
         dto.setTime_updated(entity.getTimeUpdated());
+        dto.setIs_private(entity.isPrivate());
+        dto.setStatus(entity.getStatus());
         return dto;
     }
 }

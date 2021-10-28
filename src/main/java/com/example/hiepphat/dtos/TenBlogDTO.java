@@ -12,6 +12,8 @@ public class TenBlogDTO {
     private int blog_id;
     private int totalLike;
     private Date time_created;
+    private int status;
+    private boolean is_private;
     public int getTotalLike() {
         return totalLike;
     }
@@ -85,5 +87,21 @@ public class TenBlogDTO {
 
     public void setTime_created(Date time_created) {
         this.time_created = time_created;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public boolean isIs_private() {
+        return is_private;
+    }
+
+    public void setIs_private(boolean is_private) {
+        this.is_private = is_private;
     }
 }

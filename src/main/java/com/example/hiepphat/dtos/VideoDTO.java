@@ -14,6 +14,16 @@ public class VideoDTO {
     private String last_name;
     private Date time_created;
     private boolean is_private;
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
     public String getVideo_thumbnail() {
         return video_thumbnail;
     }

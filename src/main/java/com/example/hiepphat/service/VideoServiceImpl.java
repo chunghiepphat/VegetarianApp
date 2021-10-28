@@ -32,6 +32,8 @@ public class VideoServiceImpl implements VideoService {
             dto.setFirst_name(item.getUser().getFirstName());
             dto.setLast_name(item.getUser().getLastName());
             dto.setVideo_thumbnail(item.getThumbnail());
+            dto.setIs_private(item.isPrivate());
+            dto.setStatus(item.getStatus());
             if(item.isPrivate()==false&&item.getStatus()==2){
                 result.add(dto);
             }
@@ -55,6 +57,8 @@ public class VideoServiceImpl implements VideoService {
             dto.setLast_name(item.getUser().getLastName());
             dto.setTime_created(item.getTimeCreated());
             dto.setVideo_thumbnail(item.getThumbnail());
+            dto.setStatus(item.getStatus());
+            dto.setIs_private(item.isPrivate());
             if(item.isPrivate()==false&&item.getStatus()==2){
                 result.add(dto);
             }
@@ -84,6 +88,8 @@ public class VideoServiceImpl implements VideoService {
             dto.setLast_name(item.getUser().getLastName());
             dto.setTime_created(item.getTimeCreated());
             dto.setVideo_thumbnail(item.getThumbnail());
+            dto.setStatus(item.getStatus());
+            dto.setIs_private(item.isPrivate());
             if(item.isPrivate()==false&&item.getStatus()==2){
                 result.add(dto);
             }
@@ -106,6 +112,8 @@ public class VideoServiceImpl implements VideoService {
             dto.setFirst_name(video.getUser().getFirstName());
             dto.setTime_created(video.getTimeCreated());
             dto.setVideo_thumbnail(video.getThumbnail());
+            dto.setStatus(video.getStatus());
+            dto.setIs_private(video.isPrivate());
         }
         return dto;
     }

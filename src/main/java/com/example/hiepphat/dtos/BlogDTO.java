@@ -21,8 +21,17 @@ public class BlogDTO {
     private int totalLike;
     private Date time_updated;
     private boolean is_private;
+    private int status;
     public Date getTime_updated() {
         return time_updated;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void setTime_updated(Date time_updated) {
