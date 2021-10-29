@@ -179,12 +179,14 @@ public class BlogController {
            return ResponseEntity.badRequest().body(new MessageResponse("Nout found blog id"));
         }
     }
+    //chuc nang hien 10 bai viet cua user ( góc nhìn 1 user khác)
     @GetMapping("/get10blogbyuserdifferent/{id}")
     public TenBlogResponse show10BlogsbyUserIDOtherside(@PathVariable int id) throws Exception {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
         return result;
     }
+    //chuc nang hien tatca bai viet cua user có phân trang ( góc nhìn 1 user khác)
     @GetMapping("/getallbyuserIDdifferent/{id}")
     public BlogResponse showBlogByIDOtherSide(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id){
         BlogResponse result2=new BlogResponse();
