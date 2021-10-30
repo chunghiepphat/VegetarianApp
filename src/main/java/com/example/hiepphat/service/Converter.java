@@ -43,6 +43,7 @@ public class Converter {
         dto.setTime_created((entity.getTime()));
         dto.setIs_private(entity.isPrivate());
         dto.setStatus(entity.getStatus());
+        dto.setUser_id(entity.getUser().getUserID());
         return dto;
     }
     public TenBlogDTO toDTO10BLOG(Blog entity){
@@ -57,6 +58,7 @@ public class Converter {
         dto.setBlog_subtitle(entity.getBlog_subtitle());
         dto.setStatus(entity.getStatus());
         dto.setIs_private(entity.isPrivate());
+        dto.setUser_id(entity.getUser().getUserID());
         return dto;
     }
     public BlogDTO toDTOBLOG(Blog entity) {
