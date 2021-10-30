@@ -27,16 +27,13 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         List<MenuDTO>listMenu3=new ArrayList<>();
         List<MenuDTO>listMenu4=new ArrayList<>();
         List<MenuDTO>listMenu5=new ArrayList<>();
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        List<String>calcuDate=new ArrayList<>();
-        for(int i=0;i<7;i++){
-            Calendar calendar=Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_YEAR,i);
-            Date DATE=calendar.getTime();
-            String spf1=simpleDateFormat.format(DATE);
-            calcuDate.add(spf1);
+        List<String>dateMenu=new ArrayList<>();
+        for(int a=0;a<entity.size();a++){
+            if(!dateMenu.contains(entity.get(a).getDate())){
+                dateMenu.add(entity.get(a).getDate());
+            }
         }
-        dto.setDate(calcuDate.get(0));
+        dto.setDate(dateMenu.get(0));
         for(int i=0;i<3;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -49,7 +46,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto);
         ListMenuDTO dto1=new ListMenuDTO();
-        dto1.setDate(calcuDate.get(1));
+        dto1.setDate(dateMenu.get(1));
         for(int i=3;i<6;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -62,7 +59,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto1);
         ListMenuDTO dto2=new ListMenuDTO();
-        dto2.setDate(calcuDate.get(2));
+        dto2.setDate(dateMenu.get(2));
         for(int i=6;i<9;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -75,7 +72,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto2);
         ListMenuDTO dto3=new ListMenuDTO();
-        dto3.setDate(calcuDate.get(3));
+        dto3.setDate(dateMenu.get(3));
         for(int i=9;i<12;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -88,7 +85,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto3);
         ListMenuDTO dto4=new ListMenuDTO();
-        dto4.setDate(calcuDate.get(4));
+        dto4.setDate(dateMenu.get(4));
         for(int i=12;i<15;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -101,7 +98,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto4);
         ListMenuDTO dto5=new ListMenuDTO();
-        dto5.setDate(calcuDate.get(5));
+        dto5.setDate(dateMenu.get(5));
         for(int i=15;i<18;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -115,7 +112,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         result.add(dto5);
         ListMenuDTO dto7=new ListMenuDTO();
         List<MenuDTO>listMenu7=new ArrayList<>();
-        dto7.setDate(calcuDate.get(6));
+        dto7.setDate(dateMenu.get(6));
         for(int i=18;i<21;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
