@@ -397,6 +397,7 @@ public class RecipeController {
                         dto.setFirst_name(itemIngredientPrefer.getRecipe().getUser().getFirstName());
                         dto.setTime_created(itemIngredientPrefer.getRecipe().getTime());
                         dto.setTotalLike(recipeRepository.totalLike(itemIngredientPrefer.getRecipe().getRecipeID()));
+                        dto.setUser_id(itemIngredientPrefer.getRecipe().getUser().getUserID());
                         dto.setCriteria("Preference");
                         listPrf.add(dto);
                     }
@@ -421,6 +422,7 @@ public class RecipeController {
                     dto.setFirst_name(recipeTendency.getRecipe().getUser().getFirstName());
                     dto.setTime_created(recipeTendency.getRecipe().getTime());
                     dto.setTotalLike(recipeRepository.totalLike(recipeTendency.getRecipe().getRecipeID()));
+                    dto.setUser_id(recipeTendency.getRecipe().getUser().getUserID());
                     dto.setCriteria("Tendency");
                     listTenden.add(dto);
                 }
@@ -437,6 +439,7 @@ public class RecipeController {
                 dto.setFirst_name(behavior.getUser().getFirstName());
                 dto.setTime_created(behavior.getTime());
                 dto.setTotalLike(recipeRepository.totalLike(behavior.getRecipeID()));
+                dto.setUser_id(behavior.getUser().getUserID());
                 dto.setCriteria("Behavior");
                 listBeha.add(dto);
             }
@@ -508,6 +511,7 @@ public class RecipeController {
                 dto.setFirst_name(itemBodyMatch.getUser().getFirstName());
                 dto.setTime_created(itemBodyMatch.getTime());
                 dto.setTotalLike(recipeRepository.totalLike(itemBodyMatch.getRecipeID()));
+                dto.setUser_id(itemBodyMatch.getUser().getUserID());
                 dto.setCriteria("Body Match");
                 listBody.add(dto);
             }
@@ -522,6 +526,7 @@ public class RecipeController {
             dto.setFirst_name(itemMost.getUser().getFirstName());
             dto.setTime_created(itemMost.getTime());
             dto.setTotalLike(recipeRepository.totalLike(itemMost.getRecipeID()));
+            dto.setUser_id(itemMost.getUser().getUserID());
             dto.setCriteria("Most people like");
             listmostLike.add(dto);
         }

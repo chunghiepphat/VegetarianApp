@@ -3,6 +3,7 @@ package com.example.hiepphat.dtos;
 import java.util.Date;
 
 public class SuggestionRecipeDTO {
+    private int user_id;
     private String recipe_title;
     private String recipe_thumbnail;
     private String first_name;
@@ -11,6 +12,15 @@ public class SuggestionRecipeDTO {
     private int totalLike;
     private Date time_created;
     private String criteria;
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
+    }
+
     public int getTotalLike() {
         return totalLike;
     }
