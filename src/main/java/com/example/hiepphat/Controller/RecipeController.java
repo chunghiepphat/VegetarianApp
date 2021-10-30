@@ -643,6 +643,18 @@ public class RecipeController {
         result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
         return result2;
     }
+    //chuc nang get all recipe cho admin
+
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("/admin/getall")
+    public RecipeResponse showallAdminRecipe(@RequestParam("page") int page,@RequestParam("limit") int limit){
+        RecipeResponse result=new RecipeResponse();
+        result.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("timeUpdated").descending().and(Sort.by("time")).descending());
+        result.setListResult(recipeService.findAllAdmin(pageable));
+        result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit));
+        return result;
+    }
     }
 
 

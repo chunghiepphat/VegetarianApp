@@ -117,4 +117,30 @@ public class VideoServiceImpl implements VideoService {
         }
         return dto;
     }
+
+    @Override
+    public List<VideoDTO> findAllAdmin(Pageable pageable) {
+        List<VideoDTO> result = new ArrayList<>();
+        List<Video> entity = videoRepository.findAll(pageable).getContent();
+        for (Video item : entity) {
+            VideoDTO dto = new VideoDTO();
+            dto.setId(item.getId());
+            dto.setVideo_title(item.getTitle());
+            dto.setVideo_description(item.getDescription());
+            dto.setVideo_link(item.getVideoLink());
+            dto.setUser_id(item.getUser().getUserID());
+            dto.setVideo_category_id(item.getVideoCategory().getId());
+            dto.setFirst_name(item.getUser().getFirstName());
+            dto.setLast_name(item.getUser().getLastName());
+            dto.setTime_created(item.getTimeCreated());
+            dto.setVideo_thumbnail(item.getThumbnail());
+            dto.setStatus(item.getStatus());
+            dto.setIs_private(item.isPrivate());
+            if (item.isPrivate() == false) {
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
 }

@@ -196,4 +196,15 @@ public class BlogController {
         result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
         return result2;
     }
+    //chuc nang get all blog cho admin
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("/admin/getall")
+    public BlogResponse showBlogAllAdmin(@RequestParam("page") int page, @RequestParam("limit") int limit){
+        BlogResponse result2=new BlogResponse();
+        result2.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        result2.setListResult(blogService.findAllAdmin(pageable));
+        result2.setTotalPage((int)Math.ceil((double)blogService.totalItem()/limit ));
+        return result2;
+    }
 }

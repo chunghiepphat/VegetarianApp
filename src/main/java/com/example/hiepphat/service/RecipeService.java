@@ -32,5 +32,6 @@ public interface RecipeService {
     int totalLike(long id);
     List<TenRecipeDTO> findTop10ByUserOrderByTimeDescOtherside(int userID);
     List<TenRecipeDTO> findAllByUser_UserIDOtherside(Pageable pageable, int userID);
+    List<TenRecipeDTO>findAllAdmin(Pageable pageable);
 
 }

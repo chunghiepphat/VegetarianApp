@@ -115,4 +115,15 @@ public class VideoController {
         }
         return result;
     }
+    //chuc nang get all video cho admin
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("/admin/getall")
+    public VideoResponse showVideoAllAdmin(@RequestParam("page") int page, @RequestParam("limit") int limit){
+        VideoResponse videoResponse=new VideoResponse();
+        videoResponse.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit, Sort.by("timeCreated").descending());
+        videoResponse.setListVideo(videoService.findAllAdmin(pageable));
+        videoResponse.setTotalPage((int)Math.ceil((double)videoService.totalItem()/limit ));
+        return videoResponse;
+    }
 }

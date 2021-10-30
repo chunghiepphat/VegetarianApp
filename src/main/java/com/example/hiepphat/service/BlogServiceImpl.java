@@ -175,5 +175,19 @@ private BlogRepository blogRepository;
         return results;
     }
 
+    @Override
+    public List<TenBlogDTO> findAllAdmin(Pageable pageable) {
+        List<TenBlogDTO> results=new ArrayList<>();
+        List<Blog> entites=blogRepository.findAll(pageable).getContent();
+        for(Blog item:entites){
+            TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
+            blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
+            if(item.isPrivate()==false){
+                results.add(blogDTO);
+            }
+        }
+        return results;
+    }
+
 
 }

@@ -102,19 +102,6 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
             dto5.setListRecipe(listMenu5);
         }
         result.add(dto5);
-        ListMenuDTO dto6=new ListMenuDTO();
-        dto6.setDay_of_week("Saturday");
-        for(int i=15;i<18;i++){
-            MenuDTO menu=new MenuDTO();
-            menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
-            menu.setRecipe_id(entity.get(i).getRecipe().getRecipeID());
-            menu.setRecipe_title(entity.get(i).getRecipe().getRecipeTitle());
-            menu.setCalo(entity.get(i).getRecipe().getTotalCalo());
-            menu.setMeal_of_day(entity.get(i).getMealOfday());
-            listMenu6.add(menu);
-            dto6.setListRecipe(listMenu6);
-        }
-        result.add(dto6);
         ListMenuDTO dto7=new ListMenuDTO();
         List<MenuDTO>listMenu7=new ArrayList<>();
         dto7.setDay_of_week("Sunday");
