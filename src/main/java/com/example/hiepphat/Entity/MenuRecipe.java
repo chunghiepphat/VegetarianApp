@@ -13,8 +13,8 @@ public class MenuRecipe {
     @ManyToOne
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
-    @Column(name = "day_of_week")
-    private String dayOfweek;
+    @Column(name = "date_menu")
+    private String date;
     @Column(name = "meal_of_day")
     private String mealOfday;
 
@@ -41,12 +41,12 @@ public class MenuRecipe {
         this.recipe = recipe;
     }
 
-    public String getDayOfweek() {
-        return dayOfweek;
+    public String getDate() {
+        return date;
     }
 
-    public void setDayOfweek(String dayOfweek) {
-        this.dayOfweek = dayOfweek;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getMealOfday() {

@@ -38,9 +38,17 @@ public class MenuController {
    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
     public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
+        List<String>calcuDate=new ArrayList<>();
+        for(int i=0;i<7;i++){
+            Calendar calendar=Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR,i);
+            Date DATE=calendar.getTime();
+            String spf1=simpleDateFormat.format(DATE);
+            calcuDate.add(spf1);
+        }
         User existUser=userRepository.findByUserID(userID);
         double caloNeed=0;
         if(existUser!=null){
@@ -87,7 +95,6 @@ public class MenuController {
         }
         List<ListMenuDTO>listMenu=new ArrayList<>();
         List<Integer>listInt=new ArrayList<>();
-        String dayofWeek[]={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
         while(listInt.size()<7){
             Random rand=new Random();
             int randomIndex=rand.nextInt(listParent.size());
@@ -96,10 +103,10 @@ public class MenuController {
                 }
             System.out.println(randomIndex);
         }
-            for(int l=0;l<dayofWeek.length;l++){
+            for(int l=0;l<calcuDate.size();l++){
                 ListMenuDTO listMenuDTO=new ListMenuDTO();
                 List<Recipe> randomRecipe=listParent.get(listInt.get(l));
-                listMenuDTO.setDay_of_week(dayofWeek[l]);
+                listMenuDTO.setDate(calcuDate.get(l));
                 String mealofDay[]={"Breakfast","Lunch","Dinner"};
                 List<MenuDTO>result=new ArrayList<>();
                 for(int b=0;b<mealofDay.length;b++) {
@@ -139,7 +146,7 @@ public class MenuController {
                 Recipe recipe=new Recipe();
                 recipe.setRecipeID(item2.getRecipe_id());
                 menuRecipe.setRecipe(recipe);
-                menuRecipe.setDayOfweek(item.getDay_of_week());
+                menuRecipe.setDate(item.getDate());
                 menuRecipe.setMealOfday(item2.getMeal_of_day());
                 menuRecipeRepository.save(menuRecipe);
             }

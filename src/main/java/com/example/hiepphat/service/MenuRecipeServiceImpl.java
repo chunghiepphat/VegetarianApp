@@ -7,7 +7,10 @@ import com.example.hiepphat.repositories.MenuRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 @Service
 public class MenuRecipeServiceImpl implements MenuRecipeService{
@@ -24,8 +27,16 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         List<MenuDTO>listMenu3=new ArrayList<>();
         List<MenuDTO>listMenu4=new ArrayList<>();
         List<MenuDTO>listMenu5=new ArrayList<>();
-        List<MenuDTO>listMenu6=new ArrayList<>();
-        dto.setDay_of_week("Monday");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        List<String>calcuDate=new ArrayList<>();
+        for(int i=0;i<7;i++){
+            Calendar calendar=Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR,i);
+            Date DATE=calendar.getTime();
+            String spf1=simpleDateFormat.format(DATE);
+            calcuDate.add(spf1);
+        }
+        dto.setDate(calcuDate.get(0));
         for(int i=0;i<3;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -38,7 +49,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto);
         ListMenuDTO dto1=new ListMenuDTO();
-        dto1.setDay_of_week("Tuesday");
+        dto1.setDate(calcuDate.get(1));
         for(int i=3;i<6;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -51,7 +62,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto1);
         ListMenuDTO dto2=new ListMenuDTO();
-        dto2.setDay_of_week("Wednesday");
+        dto2.setDate(calcuDate.get(2));
         for(int i=6;i<9;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -64,7 +75,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto2);
         ListMenuDTO dto3=new ListMenuDTO();
-        dto3.setDay_of_week("Thursday");
+        dto3.setDate(calcuDate.get(3));
         for(int i=9;i<12;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -77,7 +88,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto3);
         ListMenuDTO dto4=new ListMenuDTO();
-        dto4.setDay_of_week("Friday");
+        dto4.setDate(calcuDate.get(4));
         for(int i=12;i<15;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -90,7 +101,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         }
         result.add(dto4);
         ListMenuDTO dto5=new ListMenuDTO();
-        dto5.setDay_of_week("Saturday");
+        dto5.setDate(calcuDate.get(5));
         for(int i=15;i<18;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
@@ -104,7 +115,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         result.add(dto5);
         ListMenuDTO dto7=new ListMenuDTO();
         List<MenuDTO>listMenu7=new ArrayList<>();
-        dto7.setDay_of_week("Sunday");
+        dto7.setDate(calcuDate.get(6));
         for(int i=18;i<21;i++){
             MenuDTO menu=new MenuDTO();
             menu.setRecipe_thumbnail(entity.get(i).getRecipe().getRecipe_thumbnail());
