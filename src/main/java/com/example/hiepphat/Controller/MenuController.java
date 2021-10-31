@@ -130,27 +130,58 @@ public class MenuController {
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add/{id}")
     public ResponseEntity<?>addMenu(@PathVariable("id")int userID,@RequestBody ListMenuResponse list) throws ParseException {
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date=new Date();
-        String spf=simpleDateFormat.format(date);
-        Menu menu=new Menu();
-        User user=new User();
-        user.setUserID(userID);
-        menu.setUser(user);
-        menu.setTime(simpleDateFormat.parse(spf));
-        menuRespository.save(menu);
-        for(ListMenuDTO item:list.getMenu()){
-            for(MenuDTO item2:item.getListRecipe()){
-                MenuRecipe menuRecipe=new MenuRecipe();
-                menuRecipe.setMenu(menu);
-                Recipe recipe=new Recipe();
-                recipe.setRecipeID(item2.getRecipe_id());
-                menuRecipe.setRecipe(recipe);
-                menuRecipe.setDate(item.getDate());
-                menuRecipe.setMealOfday(item2.getMeal_of_day());
-                menuRecipeRepository.save(menuRecipe);
-            }
-        }
+       Menu menuOld=menuRespository.findByUser_UserID(userID);
+       if(menuOld!=null){
+           List<MenuRecipe>menuRecipesOld=menuRecipeRepository.findByMenu_User_UserID(userID);
+           for(MenuRecipe item:menuRecipesOld){
+               menuRecipeRepository.delete(item);
+           }
+           menuRespository.delete(menuOld);
+           SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+           Date date=new Date();
+           String spf=simpleDateFormat.format(date);
+           Menu menu=new Menu();
+           User user=new User();
+           user.setUserID(userID);
+           menu.setUser(user);
+           menu.setTime(simpleDateFormat.parse(spf));
+           menuRespository.save(menu);
+           for(ListMenuDTO item:list.getMenu()){
+               for(MenuDTO item2:item.getListRecipe()){
+                   MenuRecipe menuRecipe=new MenuRecipe();
+                   menuRecipe.setMenu(menu);
+                   Recipe recipe=new Recipe();
+                   recipe.setRecipeID(item2.getRecipe_id());
+                   menuRecipe.setRecipe(recipe);
+                   menuRecipe.setDate(item.getDate());
+                   menuRecipe.setMealOfday(item2.getMeal_of_day());
+                   menuRecipeRepository.save(menuRecipe);
+               }
+           }
+       }
+       else {
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+           Date date = new Date();
+           String spf = simpleDateFormat.format(date);
+           Menu menu = new Menu();
+           User user = new User();
+           user.setUserID(userID);
+           menu.setUser(user);
+           menu.setTime(simpleDateFormat.parse(spf));
+           menuRespository.save(menu);
+           for (ListMenuDTO item : list.getMenu()) {
+               for (MenuDTO item2 : item.getListRecipe()) {
+                   MenuRecipe menuRecipe = new MenuRecipe();
+                   menuRecipe.setMenu(menu);
+                   Recipe recipe = new Recipe();
+                   recipe.setRecipeID(item2.getRecipe_id());
+                   menuRecipe.setRecipe(recipe);
+                   menuRecipe.setDate(item.getDate());
+                   menuRecipe.setMealOfday(item2.getMeal_of_day());
+                   menuRecipeRepository.save(menuRecipe);
+               }
+           }
+       }
         return ResponseEntity.ok(new MessageResponse("Add menu successfully!!!"));
     }
     //get menu by userID
