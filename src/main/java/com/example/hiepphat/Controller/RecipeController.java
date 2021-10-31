@@ -366,6 +366,7 @@ public class RecipeController {
             Date date=new Date();
             String spf=simpleDateFormat.format(date);
             recipe.setTimeUpdated(simpleDateFormat.parse(spf));
+            recipe.setStatus(1);
             recipeRepository.save(recipe);
             return ResponseEntity.ok(new MessageResponse("Update recipe successfully!!!"));
         }
