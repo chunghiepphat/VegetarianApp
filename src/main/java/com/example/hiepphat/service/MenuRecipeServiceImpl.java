@@ -27,7 +27,7 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         List<MenuDTO>listMenu3=new ArrayList<>();
         List<MenuDTO>listMenu4=new ArrayList<>();
         List<MenuDTO>listMenu5=new ArrayList<>();
-        List<String>dateMenu=new ArrayList<>();
+        List<Date>dateMenu=new ArrayList<>();
         for(int a=0;a<entity.size();a++){
             if(!dateMenu.contains(entity.get(a).getDate())){
                 dateMenu.add(entity.get(a).getDate());

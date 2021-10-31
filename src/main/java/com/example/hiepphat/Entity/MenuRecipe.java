@@ -1,6 +1,8 @@
 package com.example.hiepphat.Entity;
 
 import javax.persistence.*;
+import java.util.Date;
+
 @Entity
 @Table(name = "Menus_Recipes")
 public class MenuRecipe {
@@ -14,7 +16,7 @@ public class MenuRecipe {
     @JoinColumn(name = "recipe_id")
     private Recipe recipe;
     @Column(name = "date_menu")
-    private String date;
+    private Date date;
     @Column(name = "meal_of_day")
     private String mealOfday;
 
@@ -41,11 +43,11 @@ public class MenuRecipe {
         this.recipe = recipe;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

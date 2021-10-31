@@ -1,10 +1,11 @@
 package com.example.hiepphat.dtos;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ListMenuDTO {
-    private String date;
+    private Date date;
     private List<MenuDTO> listRecipe=new ArrayList<>();
 
     public List<MenuDTO> getListRecipe() {
@@ -15,11 +16,11 @@ public class ListMenuDTO {
         this.listRecipe = listRecipe;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

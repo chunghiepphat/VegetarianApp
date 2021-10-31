@@ -38,16 +38,15 @@ public class MenuController {
    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
     public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
         String spf=simpleDateFormat.format(date);
-        List<String>calcuDate=new ArrayList<>();
+        List<Date>calcuDate=new ArrayList<>();
         for(int i=0;i<7;i++){
             Calendar calendar=Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR,i);
             Date DATE=calendar.getTime();
-            String spf1=simpleDateFormat.format(DATE);
-            calcuDate.add(spf1);
+            calcuDate.add(DATE);
         }
         User existUser=userRepository.findByUserID(userID);
         double caloNeed=0;
@@ -127,7 +126,7 @@ public class MenuController {
         return listMenuResponse;
     }
     //add menu vao database
-    @PreAuthorize("hasAuthority('user')")
+   @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add/{id}")
     public ResponseEntity<?>addMenu(@PathVariable("id")int userID,@RequestBody ListMenuResponse list) throws ParseException {
        Menu menuOld=menuRespository.findByUser_UserID(userID);
@@ -185,7 +184,7 @@ public class MenuController {
         return ResponseEntity.ok(new MessageResponse("Add menu successfully!!!"));
     }
     //get menu by userID
-    @PreAuthorize("hasAuthority('user')")
+   @PreAuthorize("hasAuthority('user')")
     @GetMapping("/details/{id}")
     public ListMenuResponse getMenubyID(@PathVariable("id")int id){
         ListMenuResponse listMenuResponse=new ListMenuResponse();
