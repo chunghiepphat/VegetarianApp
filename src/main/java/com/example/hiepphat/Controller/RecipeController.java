@@ -618,7 +618,7 @@ public class RecipeController {
         int indexc = findCeil(prefix, r, 0, n - 1);
         return list.get(indexc);
     }
-    //duyet bai
+    //duyet recipe
     @PreAuthorize("hasAuthority('admin')")
     @PutMapping("/approve/{id}")
     public ResponseEntity<?>approveRecipe(@PathVariable("id")long id,@RequestBody RecipeDTO dto){

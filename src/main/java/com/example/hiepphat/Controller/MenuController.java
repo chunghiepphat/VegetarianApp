@@ -122,6 +122,8 @@ public class MenuController {
             }
         System.out.println(listInt);
         ListMenuResponse listMenuResponse=new ListMenuResponse();
+        listMenuResponse.setStartDate(calcuDate.get(0));
+        listMenuResponse.setEndDate(calcuDate.get(6));
         listMenuResponse.setMenu(listMenu);
         return listMenuResponse;
     }
