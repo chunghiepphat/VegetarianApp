@@ -400,7 +400,7 @@ public class RecipeController {
                         dto.setTime_created(itemIngredientPrefer.getRecipe().getTime());
                         dto.setTotalLike(recipeRepository.totalLike(itemIngredientPrefer.getRecipe().getRecipeID()));
                         dto.setUser_id(itemIngredientPrefer.getRecipe().getUser().getUserID());
-                        dto.setCriteria("Preference");
+                        dto.setCriteria(1);
                         listPrf.add(dto);
                     }
                 }
@@ -425,7 +425,7 @@ public class RecipeController {
                     dto.setTime_created(recipeTendency.getRecipe().getTime());
                     dto.setTotalLike(recipeRepository.totalLike(recipeTendency.getRecipe().getRecipeID()));
                     dto.setUser_id(recipeTendency.getRecipe().getUser().getUserID());
-                    dto.setCriteria("Tendency");
+                    dto.setCriteria(2);
                     listTenden.add(dto);
                 }
             }
@@ -442,7 +442,7 @@ public class RecipeController {
                 dto.setTime_created(behavior.getTime());
                 dto.setTotalLike(recipeRepository.totalLike(behavior.getRecipeID()));
                 dto.setUser_id(behavior.getUser().getUserID());
-                dto.setCriteria("Behavior");
+                dto.setCriteria(3);
                 listBeha.add(dto);
             }
         }
@@ -514,7 +514,7 @@ public class RecipeController {
                 dto.setTime_created(itemBodyMatch.getTime());
                 dto.setTotalLike(recipeRepository.totalLike(itemBodyMatch.getRecipeID()));
                 dto.setUser_id(itemBodyMatch.getUser().getUserID());
-                dto.setCriteria("Body Match");
+                dto.setCriteria(4);
                 listBody.add(dto);
             }
         }
@@ -529,7 +529,7 @@ public class RecipeController {
             dto.setTime_created(itemMost.getTime());
             dto.setTotalLike(recipeRepository.totalLike(itemMost.getRecipeID()));
             dto.setUser_id(itemMost.getUser().getUserID());
-            dto.setCriteria("Most people like");
+            dto.setCriteria(5);
             listmostLike.add(dto);
         }
         List<LikeRecipe>listLike=likeRecipeRepository.findByUser_UserID(userID);

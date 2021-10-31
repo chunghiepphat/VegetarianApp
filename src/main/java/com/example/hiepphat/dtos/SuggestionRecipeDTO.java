@@ -11,7 +11,7 @@ public class SuggestionRecipeDTO {
     private long recipe_id;
     private int totalLike;
     private Date time_created;
-    private String criteria;
+    private int criteria;
 
     public int getUser_id() {
         return user_id;
@@ -77,11 +77,11 @@ public class SuggestionRecipeDTO {
         this.time_created = time_created;
     }
 
-    public String getCriteria() {
+    public int getCriteria() {
         return criteria;
     }
 
-    public void setCriteria(String criteria) {
+    public void setCriteria(int criteria) {
         this.criteria = criteria;
     }
 }

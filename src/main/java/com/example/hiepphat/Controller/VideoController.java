@@ -101,6 +101,7 @@ public class VideoController {
             String spf=simpleDateFormat.format(date);
              video.setTimeUpdated(simpleDateFormat.parse(spf));
              video.setPrivate(dto.isIs_private());
+             video.setStatus(1);
              videoRepository.save(video);
             return ResponseEntity.ok(new MessageResponse("Update video successfully!!!"));
         }

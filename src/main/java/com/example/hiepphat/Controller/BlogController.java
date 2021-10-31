@@ -173,6 +173,7 @@ public class BlogController {
             String spf=simpleDateFormat.format(date);
             blog.setTimeUpdated(simpleDateFormat.parse(spf));
             blog.setPrivate(dto.isIs_private());
+            blog.setStatus(1);
             blogRepository.save(blog);
             return ResponseEntity.ok(new MessageResponse("Update blog successfully"));
         }
