@@ -128,6 +128,7 @@ public class VideoController {
         videoResponse.setTotalPage((int)Math.ceil((double)videoService.totalItem()/limit ));
         return videoResponse;
     }
+    //duyet video
     @PreAuthorize("hasAuthority('admin')")
     @PutMapping("/approve/{id}")
     public ResponseEntity<?>approveVideo(@PathVariable("id")int id,@RequestBody VideoDTO dto){
