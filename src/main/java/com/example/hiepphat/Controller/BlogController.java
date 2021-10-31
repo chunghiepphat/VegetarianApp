@@ -3,6 +3,7 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.LikeBlogDTO;
+import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.repositories.BlogRepository;
 import com.example.hiepphat.repositories.LikeBlogRepository;
 import com.example.hiepphat.request.BlogRequest;
@@ -206,5 +207,19 @@ public class BlogController {
         result2.setListResult(blogService.findAllAdmin(pageable));
         result2.setTotalPage((int)Math.ceil((double)blogService.totalItem()/limit ));
         return result2;
+    }
+    //chuc nang admin duyet blog
+    @PreAuthorize("hasAuthority('admin')")
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<?>approveBlog(@PathVariable("id")int id,@RequestBody BlogDTO dto){
+        Blog blog=blogRepository.findByBlogID(id);
+        if(blog!=null){
+            blog.setStatus(dto.getStatus());
+           blogRepository.save(blog);
+            return ResponseEntity.ok(new MessageResponse("Status blog change successfully!!!"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(new MessageResponse("Not found blog id "+id));
+        }
     }
 }

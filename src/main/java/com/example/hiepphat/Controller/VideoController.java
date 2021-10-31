@@ -1,9 +1,11 @@
 package com.example.hiepphat.Controller;
 
+import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.Entity.Video;
 import com.example.hiepphat.Entity.VideoCategory;
 import com.example.hiepphat.dtos.BlogDTO;
+import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.dtos.VideoDTO;
 import com.example.hiepphat.repositories.VideoRepository;
 import com.example.hiepphat.response.*;
@@ -125,5 +127,18 @@ public class VideoController {
         videoResponse.setListVideo(videoService.findAllAdmin(pageable));
         videoResponse.setTotalPage((int)Math.ceil((double)videoService.totalItem()/limit ));
         return videoResponse;
+    }
+    @PreAuthorize("hasAuthority('admin')")
+    @PutMapping("/approve/{id}")
+    public ResponseEntity<?>approveVideo(@PathVariable("id")int id,@RequestBody VideoDTO dto){
+        Video video=videoRepository.findById(id);
+        if(video!=null){
+            video.setStatus(dto.getStatus());
+            videoRepository.save(video);
+            return ResponseEntity.ok(new MessageResponse("Status video change successfully!!!"));
+        }
+        else{
+            return ResponseEntity.badRequest().body(new MessageResponse("Not found video id "+id));
+        }
     }
 }
