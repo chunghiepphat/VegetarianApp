@@ -22,9 +22,7 @@ public class LikeBlogServiceImpl implements LikeBlogService {
     @Override
     public void deleteLike(int id) {
         List<LikeBlog>entities=likeBlogRepository.findByBlog_BlogID(id);
-        for(LikeBlog item:entities){
-            likeBlogRepository.delete(item);
-        }
+        likeBlogRepository.deleteAll(entities);
     }
 
     @Override

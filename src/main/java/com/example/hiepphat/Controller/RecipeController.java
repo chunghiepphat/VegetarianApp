@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +26,11 @@ public class RecipeController {
     @Autowired
     private RecipeServiceImpl recipeService;
     @Autowired
-    private Converter converter;
-    @Autowired
     private LikeRecipeService likeRecipeService;
     @Autowired
     private IngredientServiceImpl ingredientService;
     @Autowired
     private RecipeIngredientServiceImpl recipeIngredientService;
-    @Autowired
-    private BlogServiceImpl blogService;
     @Autowired
     private CommentRecipeServiceImpl commentRecipeService;
     @Autowired
@@ -79,7 +74,7 @@ public class RecipeController {
     }
     // chức năng get chi tiết 1 recipe theo recipe id
     @GetMapping("/getrecipeby/{id}")
-    public RecipeDTO showRecipesbyID(@PathVariable long id) throws Exception {
+    public RecipeDTO showRecipesbyID(@PathVariable long id) {
         RecipeDTO result=recipeService.findrecipebyID(id);
         if(result!=null){
             NutritionDTO nutrition=ingredientService.getIngredientByRecipe(id);
@@ -93,7 +88,7 @@ public class RecipeController {
     // chức năng get 10 recipe mới nhất của 1 user dựa theo user id( góc nhìn user id chủ profile)
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/get10recipebyuser/{id}")
-    public TenRecipesResponse show10RecipesbyUserID(@PathVariable int id) throws Exception {
+    public TenRecipesResponse show10RecipesbyUserID(@PathVariable int id) {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10ByUserOrderByTimeDesc(id));
         return result;
@@ -315,9 +310,7 @@ public class RecipeController {
             recipe.setBaking_time_minutes(dto.getBaking_time_minutes());
             recipe.setResting_time_minutes(dto.getResting_time_minutes());
             List<RecipeStep>entity=recipeStepRepository.findByRecipe_RecipeID(id);
-            for(RecipeStep items:entity){
-                recipeStepRepository.delete(items);
-            }
+            recipeStepRepository.deleteAll(entity);
                 for(StepRecipeDTO step:dto.getSteps()){
                     RecipeStep recipeStep=new RecipeStep();
                     recipeStep.setRecipe(recipe);
@@ -326,9 +319,7 @@ public class RecipeController {
                     recipeStepRepository.save(recipeStep);
                 }
             List<RecipeIngredient>oldIngredient=recipeIngredientRepository.findByRecipe_RecipeID(id);
-            for(RecipeIngredient item2:oldIngredient){
-                recipeIngredientRepository.delete(item2);
-            }
+            recipeIngredientRepository.deleteAll(oldIngredient);
             for(IngredientRecipeDTO newIngre:dto.getIngredients()){
                 Ingredient ingredient=new Ingredient();
                 if(!ingredientService.existsByIngredient_name(newIngre.getIngredient_name())){
@@ -407,9 +398,7 @@ public class RecipeController {
             }
         for(int i=0;i< listPrf.size()-1;i++){
             for(int j=i+1;j<listPrf.size();j++){
-                if(listPrf.get(i).getRecipe_id()==listPrf.get(j).getRecipe_id()){
-                    listPrf.remove(j);
-                }
+                if(listPrf.get(i).getRecipe_id()==listPrf.get(j).getRecipe_id()) listPrf.remove(j);
             }
         }
             List<UserTendency>listTendency=userTendencyRepository.findByUser_UserIDAndFrequencyGreaterThanEqual(userID,5);
@@ -467,14 +456,11 @@ public class RecipeController {
         }
                 for(int i=0;i< listnoSuggested.size()-1;i++){
             for(int j=i+1;j<listnoSuggested.size();j++){
-                if(listnoSuggested.get(i).getRecipe_id()==listnoSuggested.get(j).getRecipe_id()){
+                if(listnoSuggested.get(i).getRecipe_id()==listnoSuggested.get(j).getRecipe_id())
                     listnoSuggested.remove(j);
-                }
             }
         }
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=new Date();
-        String spf=simpleDateFormat.format(date);
         User existUser=userRepository.findByUserID(userID);
         double caloNeed=0;
         if(existUser!=null){
@@ -555,22 +541,22 @@ public class RecipeController {
         List<SuggestionRecipeDTO>perfectList=new ArrayList<>();
             for(int b=0;b< listPrf.size()+listTenden.size()+listBeha.size()+ listBody.size()+ listmostLike.size();b++){
                 Random rand=new Random();
-                int freq[]={60,15,15,10,20};
-                 if(listBeha.size()<2||listTenden.size()<2||listBeha.size()<2||listBody.size()<2) {
-                    int c[] = {0, 0, 0, 0, 100};
+                int[] freq ={60,15,15,10,20};
+                 if(listPrf.size()==0||listTenden.size()==0||listBeha.size()==0||listBody.size()==0) {
+                    int[] c = {0, 0, 0, 0, 100};
                     freq = c.clone();
                 }
                 List<SuggestionRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
                 int index2=rand.nextInt(ranNew.size());
                 SuggestionRecipeDTO ranObject=ranNew.get(index2);
                 perfectList.add(ranObject);
-                for(int a=0;a<listnoSuggested.size();a++){
-                    if(ranObject.getRecipe_id()==listnoSuggested.get(a).getRecipe_id()){
+                for (TenRecipeDTO tenRecipeDTO : listnoSuggested) {
+                    if (ranObject.getRecipe_id() == tenRecipeDTO.getRecipe_id()) {
                         perfectList.remove(ranObject);
                     }
                 }
-                for(int c=0;c<listLiked.size();c++){
-                    if(ranObject.getRecipe_id()==listLiked.get(c).getRecipe_id()){
+                for (TenRecipeDTO tenRecipeDTO : listLiked) {
+                    if (ranObject.getRecipe_id() == tenRecipeDTO.getRecipe_id()) {
                         perfectList.remove(ranObject);
                     }
                 }
@@ -593,7 +579,7 @@ public class RecipeController {
                 return perfectList;
             }
     }
-    static int findCeil(int arr[], int r, int l, int h)
+    static int findCeil(int[] arr, int r, int l, int h)
     {
         int mid;
         while (l < h)
@@ -610,10 +596,11 @@ public class RecipeController {
     // The main function that returns a random number
 // from arr[] according to distribution array
 // defined by freq[]. n is size of arrays.
-    static List<SuggestionRecipeDTO> myRand(List<List<SuggestionRecipeDTO>>list, int freq[], int n)
+    static List<SuggestionRecipeDTO> myRand(List<List<SuggestionRecipeDTO>>list, int[] freq, int n)
     {
         // Create and fill prefix array
-        int prefix[] = new int[n], i;
+        int[] prefix = new int[n];
+        int i;
         prefix[0] = freq[0];
         for (i = 1; i < n; ++i)
             prefix[i] = prefix[i - 1] + freq[i];
@@ -643,7 +630,7 @@ public class RecipeController {
     }
     //chuc nang hien 10 bai viet cua user ( góc nhìn 1 user khác)
     @GetMapping("/get10recipebyuserdifferent/{id}")
-    public TenRecipesResponse show10RecipesbyUserIDOtherside(@PathVariable int id) throws Exception {
+    public TenRecipesResponse show10RecipesbyUserIDOtherside(@PathVariable int id) {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10ByUserOrderByTimeDescOtherside(id));
         return result;

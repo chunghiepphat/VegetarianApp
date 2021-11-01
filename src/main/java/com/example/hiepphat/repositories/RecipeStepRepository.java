@@ -1,7 +1,6 @@
 package com.example.hiepphat.repositories;
 
 import com.example.hiepphat.Entity.RecipeStep;
-import com.example.hiepphat.request.RecipeRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

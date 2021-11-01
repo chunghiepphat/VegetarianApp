@@ -37,10 +37,8 @@ public class MenuController {
     MenuRecipeServiceImpl menuRecipeService;
    @PreAuthorize("hasAuthority('user')")
     @GetMapping("/generate")
-    public ListMenuResponse generateMenu(@RequestParam("id")int userID) throws ParseException {
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public ListMenuResponse generateMenu(@RequestParam("id")int userID) {
         Date date=new Date();
-        String spf=simpleDateFormat.format(date);
         List<Date>calcuDate=new ArrayList<>();
         for(int i=0;i<7;i++){
             Calendar calendar=Calendar.getInstance();
@@ -106,7 +104,7 @@ public class MenuController {
                 ListMenuDTO listMenuDTO=new ListMenuDTO();
                 List<Recipe> randomRecipe=listParent.get(listInt.get(l));
                 listMenuDTO.setDate(calcuDate.get(l));
-                String mealofDay[]={"Breakfast","Lunch","Dinner"};
+                String[] mealofDay ={"Breakfast","Lunch","Dinner"};
                 List<MenuDTO>result=new ArrayList<>();
                 for(int b=0;b<mealofDay.length;b++) {
                     MenuDTO dto = new MenuDTO();
@@ -134,9 +132,7 @@ public class MenuController {
        Menu menuOld=menuRespository.findByUser_UserID(userID);
        if(menuOld!=null){
            List<MenuRecipe>menuRecipesOld=menuRecipeRepository.findByMenu_User_UserID(userID);
-           for(MenuRecipe item:menuRecipesOld){
-               menuRecipeRepository.delete(item);
-           }
+           menuRecipeRepository.deleteAll(menuRecipesOld);
            menuRespository.delete(menuOld);
            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
            Date date=new Date();

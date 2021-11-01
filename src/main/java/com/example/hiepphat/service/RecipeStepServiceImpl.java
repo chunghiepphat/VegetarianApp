@@ -29,8 +29,6 @@ public class RecipeStepServiceImpl implements RecipeStepService {
     @Override
     public void deleteRecipeStep(long id) {
         List<RecipeStep>entity=recipeStepRepository.findByRecipe_RecipeID(id);
-        for(RecipeStep item:entity){
-            recipeStepRepository.delete(item);
-        }
+        recipeStepRepository.deleteAll(entity);
     }
 }

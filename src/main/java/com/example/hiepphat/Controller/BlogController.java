@@ -3,7 +3,6 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.LikeBlogDTO;
-import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.repositories.BlogRepository;
 import com.example.hiepphat.repositories.LikeBlogRepository;
 import com.example.hiepphat.request.BlogRequest;
@@ -50,7 +49,7 @@ public class BlogController {
     }
     // chức năng get chi tiết 1 blog dựa theo blogID
     @GetMapping("/getblogby/{id}")
-    public BlogDTO showBlogbyID(@PathVariable int id) throws Exception {
+    public BlogDTO showBlogbyID(@PathVariable int id) {
         BlogDTO result=blogService.findblogbyID(id);
         if(result!=null){
             result.setTotalLike(blogRepository.totalLike(id));
@@ -70,7 +69,7 @@ public class BlogController {
     // chức năng get 10 blog mới nhất của 1 user theo user id
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/get10blogbyuser/{id}")
-    public TenBlogResponse show10BlogsbyUserID(@PathVariable int id) throws Exception {
+    public TenBlogResponse show10BlogsbyUserID(@PathVariable int id) {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
         return result;
@@ -89,7 +88,7 @@ public class BlogController {
     // chức năng tạo blog
     @PreAuthorize("hasAuthority('user')")
     @PostMapping("/add")
-    public ResponseEntity<?> addBlog(@Valid @RequestBody BlogRequest blogRequest) throws ParseException {
+    public ResponseEntity<?> addBlog(@Valid @RequestBody BlogRequest blogRequest)  {
         Blog blog=new Blog();
         User user=new User();
         user.setUserID(blogRequest.getUser_id());
@@ -98,7 +97,6 @@ public class BlogController {
         blog.setBlogTitle(blogRequest.getBlog_title());
         blog.setBlog_subtitle(blogRequest.getBlog_subtitle());
         blog.setBlog_thumbnail(blogRequest.getBlog_thumbnail());
-        blog.setIs_active(true);
         java.sql.Date date=new java.sql.Date(new java.util.Date().getTime());
         blog.setTime(date);
         blog.setStatus(1);
@@ -183,7 +181,7 @@ public class BlogController {
     }
     //chuc nang hien 10 bai viet cua user ( góc nhìn 1 user khác)
     @GetMapping("/get10blogbyuserdifferent/{id}")
-    public TenBlogResponse show10BlogsbyUserIDOtherside(@PathVariable int id) throws Exception {
+    public TenBlogResponse show10BlogsbyUserIDOtherside(@PathVariable int id)  {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
         return result;

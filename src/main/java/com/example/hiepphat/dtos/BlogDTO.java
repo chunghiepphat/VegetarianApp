@@ -1,11 +1,6 @@
 package com.example.hiepphat.dtos;
 
-import com.example.hiepphat.Entity.User;
 
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.Date;
 
 public class BlogDTO {

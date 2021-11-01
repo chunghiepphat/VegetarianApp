@@ -27,97 +27,91 @@ private UserBehaviorRepository userBehaviorRepository;
     @GetMapping("/find")
     public SearchResponse searchRecipe(@RequestParam("search") String search,@RequestParam("type")String type,@RequestParam("userID")String userID) {
         SearchResponse result=new SearchResponse();
-        if(type.equals("all")){
-            if(userID.trim()!=""){
-                result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                UserBehavior userBehaviorOld=userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID),search);
-                if(userBehaviorOld!=null){
-                    userBehaviorOld.setFrequency(userBehaviorOld.getFrequency()+1);
-                    userBehaviorRepository.save(userBehaviorOld);
+        switch (type) {
+            case "all":
+                if (!userID.trim().equals("")) {
+                    result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    UserBehavior userBehaviorOld = userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID), search);
+                    if (userBehaviorOld != null) {
+                        userBehaviorOld.setFrequency(userBehaviorOld.getFrequency() + 1);
+                        userBehaviorRepository.save(userBehaviorOld);
+                    } else {
+                        UserBehavior userBehavior = new UserBehavior();
+                        User user = new User();
+                        user.setUserID(Integer.parseInt(userID));
+                        userBehavior.setUser(user);
+                        userBehavior.setQuerry(search);
+                        userBehavior.setFrequency(1);
+                        userBehaviorRepository.save(userBehavior);
+                    }
+                } else {
+                    result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
                 }
-                else{
-                    UserBehavior userBehavior=new UserBehavior();
-                    User user=new User();
-                    user.setUserID(Integer.parseInt(userID));
-                    userBehavior.setUser(user);
-                    userBehavior.setQuerry(search);
-                    userBehavior.setFrequency(1);
-                    userBehaviorRepository.save(userBehavior);
+                break;
+            case "recipe":
+                if (!userID.trim().equals("")) {
+                    result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    UserBehavior userBehaviorOld = userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID), search);
+                    if (userBehaviorOld != null) {
+                        userBehaviorOld.setFrequency(userBehaviorOld.getFrequency() + 1);
+                        userBehaviorRepository.save(userBehaviorOld);
+                    } else {
+                        UserBehavior userBehavior = new UserBehavior();
+                        User user = new User();
+                        user.setUserID(Integer.parseInt(userID));
+                        userBehavior.setUser(user);
+                        userBehavior.setQuerry(search);
+                        userBehavior.setFrequency(1);
+                        userBehaviorRepository.save(userBehavior);
+                    }
+                } else {
+                    result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
                 }
-            }
-            else{
-                result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-            }
-        }
-        else if(type.equals("recipe")){
-            if(userID.trim()!=""){
-                result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                UserBehavior userBehaviorOld=userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID),search);
-                if(userBehaviorOld!=null){
-                    userBehaviorOld.setFrequency(userBehaviorOld.getFrequency()+1);
-                    userBehaviorRepository.save(userBehaviorOld);
+                break;
+            case "blog":
+                if (!userID.trim().equals("")) {
+                    result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    UserBehavior userBehaviorOld = userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID), search);
+                    if (userBehaviorOld != null) {
+                        userBehaviorOld.setFrequency(userBehaviorOld.getFrequency() + 1);
+                        userBehaviorRepository.save(userBehaviorOld);
+                    } else {
+                        UserBehavior userBehavior = new UserBehavior();
+                        User user = new User();
+                        user.setUserID(Integer.parseInt(userID));
+                        userBehavior.setUser(user);
+                        userBehavior.setQuerry(search);
+                        userBehavior.setFrequency(1);
+                        userBehaviorRepository.save(userBehavior);
+                    }
+                } else {
+                    result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
                 }
-                else{
-                    UserBehavior userBehavior=new UserBehavior();
-                    User user=new User();
-                    user.setUserID(Integer.parseInt(userID));
-                    userBehavior.setUser(user);
-                    userBehavior.setQuerry(search);
-                    userBehavior.setFrequency(1);
-                    userBehaviorRepository.save(userBehavior);
+                break;
+            case "video":
+                if (!userID.trim().equals("")) {
+                    result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
+                    UserBehavior userBehaviorOld = userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID), search);
+                    if (userBehaviorOld != null) {
+                        userBehaviorOld.setFrequency(userBehaviorOld.getFrequency() + 1);
+                        userBehaviorRepository.save(userBehaviorOld);
+                    } else {
+                        UserBehavior userBehavior = new UserBehavior();
+                        User user = new User();
+                        user.setUserID(Integer.parseInt(userID));
+                        userBehavior.setUser(user);
+                        userBehavior.setQuerry(search);
+                        userBehavior.setFrequency(1);
+                        userBehaviorRepository.save(userBehavior);
+                    }
+                } else {
+                    result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search, search, search));
                 }
-            }
-            else{
-                result.setListRecipe(recipeService.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-            }
-        }
-        else if(type.equals("blog")){
-            if(userID.trim()!=""){
-                result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                UserBehavior userBehaviorOld=userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID),search);
-                if(userBehaviorOld!=null){
-                    userBehaviorOld.setFrequency(userBehaviorOld.getFrequency()+1);
-                    userBehaviorRepository.save(userBehaviorOld);
-                }
-                else{
-                    UserBehavior userBehavior=new UserBehavior();
-                    User user=new User();
-                    user.setUserID(Integer.parseInt(userID));
-                    userBehavior.setUser(user);
-                    userBehavior.setQuerry(search);
-                    userBehavior.setFrequency(1);
-                    userBehaviorRepository.save(userBehavior);
-                }
-            }
-            else{
-                result.setListBlog(blogService.findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-            }
-        }
-        else if(type.equals("video")){
-            if(userID.trim()!=""){
-                result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-                UserBehavior userBehaviorOld=userBehaviorRepository.findByUser_UserIDAndQuerry(Integer.parseInt(userID),search);
-                if(userBehaviorOld!=null){
-                    userBehaviorOld.setFrequency(userBehaviorOld.getFrequency()+1);
-                    userBehaviorRepository.save(userBehaviorOld);
-                }
-                else{
-                    UserBehavior userBehavior=new UserBehavior();
-                    User user=new User();
-                    user.setUserID(Integer.parseInt(userID));
-                    userBehavior.setUser(user);
-                    userBehavior.setQuerry(search);
-                    userBehavior.setFrequency(1);
-                    userBehaviorRepository.save(userBehavior);
-                }
-            }
-            else{
-                result.setListVideo(videoService.findByTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(search,search,search));
-            }
+                break;
         }
         return result;
     }

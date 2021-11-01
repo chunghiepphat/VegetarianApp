@@ -1,10 +1,6 @@
 package com.example.hiepphat.repositories;
 
 import com.example.hiepphat.Entity.Blog;
-import com.example.hiepphat.Entity.LikeBlog;
-import com.example.hiepphat.Entity.Recipe;
-import com.example.hiepphat.dtos.TenBlogDTO;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +9,7 @@ import java.sql.Date;
 import java.util.List;
 
 public interface BlogRepository extends JpaRepository<Blog,Integer> {
-    public Blog findByBlogID(int id);
+   Blog findByBlogID(int id);
     @Query(value = "SELECT TOP 10 * from Blogs where time_created<=? and status=2 and is_private='false' order by time_created desc",nativeQuery = true)
     List<Blog> find10blog(Date date);
     List<Blog> findTop10ByUser_UserIDOrderByTimeDesc(int userID);

@@ -1,6 +1,6 @@
 package com.example.hiepphat.response;
 
-import java.util.List;
+
 
 public class JwtResponse {
 	private String token;

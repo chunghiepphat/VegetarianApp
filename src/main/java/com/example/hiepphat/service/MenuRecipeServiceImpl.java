@@ -7,9 +7,9 @@ import com.example.hiepphat.repositories.MenuRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.Date;
 import java.util.List;
 @Service
@@ -28,9 +28,9 @@ public class MenuRecipeServiceImpl implements MenuRecipeService{
         List<MenuDTO>listMenu4=new ArrayList<>();
         List<MenuDTO>listMenu5=new ArrayList<>();
         List<Date>dateMenu=new ArrayList<>();
-        for(int a=0;a<entity.size();a++){
-            if(!dateMenu.contains(entity.get(a).getDate())){
-                dateMenu.add(entity.get(a).getDate());
+        for (MenuRecipe menuRecipe : entity) {
+            if (!dateMenu.contains(menuRecipe.getDate())) {
+                dateMenu.add(menuRecipe.getDate());
             }
         }
         dto.setDate(dateMenu.get(0));

@@ -72,7 +72,7 @@ UserRepository userRepository;
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
         boolean checkActive=jwtUtils.getStatusUser(jwt);
-        if(checkActive==false){
+        if(!checkActive){
             return ResponseEntity.badRequest().body(new MessageResponse("Account is inactive!!!"));
         }
         else{
@@ -166,7 +166,7 @@ UserRepository userRepository;
     @GetMapping("/{id}")
     public UserDTO getUser(@PathVariable("id")int id) {
         User user=userRepository.findByUserID(id);
-            if(user.isIs_active()==true){
+            if(user.isIs_active()){
                 UserDTO dto=new UserDTO();
                 dto.setId(user.getUserID());
                 dto.setFirst_name(user.getFirstName());
@@ -268,7 +268,7 @@ UserRepository userRepository;
     //chức năng edit comment blog
     @PreAuthorize("hasAuthority('user')")
     @PutMapping("/edit/commentblog/{id}")
-    public ResponseEntity<?> editCommentBlog(@RequestBody CommentBlogDTO dto,@PathVariable("id")int id) throws ParseException {
+    public ResponseEntity<?> editCommentBlog(@RequestBody CommentBlogDTO dto,@PathVariable("id")int id) {
         CommentBlog commentBlog=commentBlogService.findById(id);
         if(commentBlog!=null){
             commentBlog.setContent(dto.getContent());
@@ -282,7 +282,7 @@ UserRepository userRepository;
     //chức năng edit comment recipe
     @PreAuthorize("hasAuthority('user')")
     @PutMapping("/edit/commentrecipe/{id}")
-    public ResponseEntity<?> editCommentRecipe(@RequestBody CommentRecipeDTO dto,@PathVariable("id")int id) throws ParseException {
+    public ResponseEntity<?> editCommentRecipe(@RequestBody CommentRecipeDTO dto,@PathVariable("id")int id) {
         CommentRecipe commentRecipe=commentRecipeService.findById(id);
         if(commentRecipe!=null){
             commentRecipe.setContent(dto.getContent());
@@ -301,12 +301,11 @@ UserRepository userRepository;
         LikeBlog likeBlog=likeBlogService.findByUser_UserIDAndBlog_BlogID(userID,blogID);
         if(likeBlog!=null){
             likeResponse.setIs_Liked(true);
-            return likeResponse;
         }
         else{
            likeResponse.setIs_Liked(false);
-            return likeResponse;
         }
+        return likeResponse;
     }
     //check like recipe
     @PreAuthorize("hasAuthority('user')")
@@ -329,9 +328,7 @@ UserRepository userRepository;
     public ResponseEntity<?>updatePreferences(@PathVariable("id")int userID, @RequestBody ListIngredientCriteria listIngredient){
 
             List<UserPreference>listPrefer=userPreferencesRepository.findByUser_UserID(userID);
-            for(UserPreference item:listPrefer){
-                userPreferencesRepository.delete(item);
-            }
+        userPreferencesRepository.deleteAll(listPrefer);
             for(IngredientCriteria item2:listIngredient.getListIngredient()){
                 User user=new User();
                 user.setUserID(userID);
@@ -347,9 +344,7 @@ UserRepository userRepository;
     @PutMapping("/allergies/{id}")
     public ResponseEntity<?>updateAllergies(@PathVariable("id")int userID,@RequestBody ListIngredientCriteria listIngredient){
         List<UserAllergies>allergiesList=userAllergiesRepository.findByUser_UserID(userID);
-        for(UserAllergies item:allergiesList){
-            userAllergiesRepository.delete(item);
-        }
+        userAllergiesRepository.deleteAll(allergiesList);
         for(IngredientCriteria item2:listIngredient.getListIngredient()){
             User user=new User();
             user.setUserID(userID);

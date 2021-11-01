@@ -1,16 +1,16 @@
 package com.example.hiepphat.security;
 
 
-import com.example.hiepphat.Entity.Role;
+
 import com.example.hiepphat.Entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+
 
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class UserDetailsImpl implements UserDetails {
 	private static final long serialVersionUID = 1L;

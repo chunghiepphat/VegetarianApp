@@ -33,7 +33,7 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
              dto.setTime_created(enties.getTime());
              dto.setIs_private(enties.isPrivate());
              dto.setStatus(enties.getStatus());
-             if(enties.isPrivate()==false&&enties.getStatus()==2){
+             if(!enties.isPrivate() &&enties.getStatus()==2){
                  results.add(dto);
              }
         }
@@ -52,7 +52,7 @@ public class LikeRecipeServiceImpl implements LikeRecipeService{
         for(LikeRecipe item:entity){
             ListLikeDTO dto=new ListLikeDTO();
             dto.setUser_id(item.getUser().getUserID());
-            if(item.getRecipe().isPrivate()==false&&item.getRecipe().getStatus()==2){
+            if(!item.getRecipe().isPrivate() &&item.getRecipe().getStatus()==2){
                 result.add(dto);
             }
         }

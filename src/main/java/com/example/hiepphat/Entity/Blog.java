@@ -17,7 +17,6 @@ public class Blog {
     private String blog_subtitle;
     private String blog_content;
     private String blog_thumbnail;
-    private boolean is_active;
     @Column(name = "time_created")
     private java.util.Date time;
     @Column(name = "time_updated")
@@ -98,13 +97,7 @@ public class Blog {
         this.blog_subtitle = blog_subtitle;
     }
 
-    public boolean isIs_active() {
-        return is_active;
-    }
 
-    public void setIs_active(boolean is_active) {
-        this.is_active = is_active;
-    }
 
     public Date getTime() {
         return time;

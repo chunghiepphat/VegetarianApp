@@ -34,7 +34,7 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_thumbnail(item.getThumbnail());
             dto.setIs_private(item.isPrivate());
             dto.setStatus(item.getStatus());
-            if(item.isPrivate()==false&&item.getStatus()==2){
+            if(!item.isPrivate() &&item.getStatus()==2){
                 result.add(dto);
             }
         }
@@ -59,7 +59,7 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_thumbnail(item.getThumbnail());
             dto.setStatus(item.getStatus());
             dto.setIs_private(item.isPrivate());
-            if(item.isPrivate()==false&&item.getStatus()==2){
+            if(!item.isPrivate() &&item.getStatus()==2){
                 result.add(dto);
             }
         }
@@ -90,7 +90,7 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_thumbnail(item.getThumbnail());
             dto.setStatus(item.getStatus());
             dto.setIs_private(item.isPrivate());
-            if(item.isPrivate()==false&&item.getStatus()==2){
+            if(!item.isPrivate() &&item.getStatus()==2){
                 result.add(dto);
             }
         }
@@ -136,7 +136,7 @@ public class VideoServiceImpl implements VideoService {
             dto.setVideo_thumbnail(item.getThumbnail());
             dto.setStatus(item.getStatus());
             dto.setIs_private(item.isPrivate());
-            if (item.isPrivate() == false) {
+            if (!item.isPrivate()) {
                 result.add(dto);
             }
         }

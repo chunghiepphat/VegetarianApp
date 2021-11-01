@@ -46,9 +46,7 @@ public class CommentBlogServiceImpl implements CommentBlogService {
     @Override
     public void deleteCommentBlog(int id) {
         List<CommentBlog>entites=commentBlogRepository.findByBlog_BlogID(id);
-        for(CommentBlog item:entites){
-            commentBlogRepository.delete(item);
-        }
+        commentBlogRepository.deleteAll(entites);
     }
 
     @Override

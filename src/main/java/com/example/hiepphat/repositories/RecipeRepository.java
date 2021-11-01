@@ -3,7 +3,7 @@ package com.example.hiepphat.repositories;
 
 import com.example.hiepphat.Entity.Recipe;
 
-import com.example.hiepphat.Entity.RecipeIngredient;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 

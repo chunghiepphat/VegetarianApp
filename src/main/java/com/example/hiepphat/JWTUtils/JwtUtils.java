@@ -1,7 +1,7 @@
 package com.example.hiepphat.JWTUtils;
 
 
-import com.example.hiepphat.dtos.UserDTO;
+
 import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.security.UserDetailsImpl;
 import io.jsonwebtoken.*;

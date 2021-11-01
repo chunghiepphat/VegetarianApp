@@ -8,7 +8,7 @@ import com.example.hiepphat.dtos.TenBlogDTO;
 
 import org.springframework.data.domain.Pageable;
 
-import java.util.Date;
+
 import java.util.List;
 
 public interface BlogService {
@@ -19,7 +19,7 @@ public interface BlogService {
     List<TenBlogDTO> findTop10ByUser_UserIDOrderByTimeDesc(int userID);
     List<TenBlogDTO> findAllByUser_UserID(Pageable pageable, int userID);
     int countByUser_UserID(int userID);
-    public Blog save(Blog blog);
+    Blog save(Blog blog);
     List<TenBlogDTO>findByBlogTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike(String title,String fn,String ln);
     List<TenBlogDTO>findBestBlog();
     List<TenBlogDTO>findLikedBlog(int id);

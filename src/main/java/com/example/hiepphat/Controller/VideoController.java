@@ -1,11 +1,8 @@
 package com.example.hiepphat.Controller;
 
-import com.example.hiepphat.Entity.Recipe;
 import com.example.hiepphat.Entity.User;
 import com.example.hiepphat.Entity.Video;
 import com.example.hiepphat.Entity.VideoCategory;
-import com.example.hiepphat.dtos.BlogDTO;
-import com.example.hiepphat.dtos.RecipeDTO;
 import com.example.hiepphat.dtos.VideoDTO;
 import com.example.hiepphat.repositories.VideoRepository;
 import com.example.hiepphat.response.*;
