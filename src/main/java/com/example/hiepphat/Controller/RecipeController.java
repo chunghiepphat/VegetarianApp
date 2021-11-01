@@ -550,12 +550,12 @@ public class RecipeController {
         listRecipeSuggest.add(listBody);
         listRecipeSuggest.add(listmostLike);
         List<SuggestionRecipeDTO>perfectList=new ArrayList<>();
-            while(perfectList.size()<5){
+            for(int b=0;b<listRecipeSuggest.size();b++){
                 Random rand=new Random();
                 int freq[]={40,15,15,10,20};
-                if(listPrf.size()<2&&listBeha.size()<2&&listTenden.size()<2&&listBody.size()<2){
-                    int a[]={0,0,0,0,100};
-                    freq=a.clone();
+                 if(listBeha.size()<2||listTenden.size()<2||listBeha.size()<2||listBody.size()<2) {
+                    int c[] = {0, 0, 0, 0, 100};
+                    freq = c.clone();
                 }
                 List<SuggestionRecipeDTO> ranNew=myRand(listRecipeSuggest,freq,listRecipeSuggest.size());
                 int index2=rand.nextInt(ranNew.size());
@@ -579,6 +579,7 @@ public class RecipeController {
                     }
                 }
             }
+
             return perfectList;
     }
     static int findCeil(int arr[], int r, int l, int h)
