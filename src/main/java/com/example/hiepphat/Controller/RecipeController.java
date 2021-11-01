@@ -478,31 +478,34 @@ public class RecipeController {
         User existUser=userRepository.findByUserID(userID);
         double caloNeed=0;
         if(existUser!=null){
-            float r=0;
-            if(existUser.getTypeWorkout()==1){
-                r=Float.parseFloat("1.2");
+            if(existUser.getGender()==null||existUser.getHeight()==0||existUser.getTypeWorkout()==0){
+                caloNeed=0;
             }
-            else if(existUser.getTypeWorkout()==2){
-                r=Float.parseFloat("1.375");
+            else{
+                float r=0;
+                if(existUser.getTypeWorkout()==1){
+                    r=Float.parseFloat("1.2");
+                }
+                else if(existUser.getTypeWorkout()==2){
+                    r=Float.parseFloat("1.375");
+                }
+                else if(existUser.getTypeWorkout()==3){
+                    r=Float.parseFloat("1.55");
+                }
+                else if(existUser.getTypeWorkout()==4){
+                    r=Float.parseFloat("1.725");
+                }
+                int currentDay=date.getYear()+1900;
+                int yearUser=existUser.getBirth_date().getYear()+1900;
+                int age=currentDay-yearUser;
+                if(existUser.getGender().trim().equalsIgnoreCase("male")){
+                    caloNeed=((existUser.getWeight()*13.997)+(4.779*existUser.getHeight())-(5.677*age)+88.362)*r;
+                }
+                else if(existUser.getGender().trim().equalsIgnoreCase("female")){
+                    caloNeed=((existUser.getWeight()*9.247)+(3.098*existUser.getHeight())-(4.330*age)+447.593)*r;
+                }
             }
-            else if(existUser.getTypeWorkout()==3){
-                r=Float.parseFloat("1.55");
-            }
-            else if(existUser.getTypeWorkout()==4){
-                r=Float.parseFloat("1.725");
-            }
-            int currentDay=date.getYear()+1900;
-            int yearUser=existUser.getBirth_date().getYear()+1900;
-            int age=currentDay-yearUser;
-            if(existUser.getGender().trim().equalsIgnoreCase("male")){
-                caloNeed=((existUser.getWeight()*13.997)+(4.779*existUser.getHeight())-(5.677*age)+88.362)*r;
-            }
-            else if(existUser.getGender().trim().equalsIgnoreCase("female")){
-                caloNeed=((existUser.getWeight()*9.247)+(3.098*existUser.getHeight())-(4.330*age)+447.593)*r;
-            }
-            System.out.println((int)caloNeed);
             double calo=caloNeed/3;
-            System.out.println((int)calo);
             List<Recipe>listBodymatch=recipeRepository.findByTotalCaloLessThanEqualAndTotalCaloGreaterThan((int)calo,(int)calo-20);
             for(Recipe itemBodyMatch:listBodymatch){
                 SuggestionRecipeDTO dto=new SuggestionRecipeDTO();
@@ -550,9 +553,9 @@ public class RecipeController {
         listRecipeSuggest.add(listBody);
         listRecipeSuggest.add(listmostLike);
         List<SuggestionRecipeDTO>perfectList=new ArrayList<>();
-            for(int b=0;b<listRecipeSuggest.size();b++){
+            for(int b=0;b< listPrf.size()+listTenden.size()+listBeha.size()+ listBody.size()+ listmostLike.size();b++){
                 Random rand=new Random();
-                int freq[]={40,15,15,10,20};
+                int freq[]={60,15,15,10,20};
                  if(listBeha.size()<2||listTenden.size()<2||listBeha.size()<2||listBody.size()<2) {
                     int c[] = {0, 0, 0, 0, 100};
                     freq = c.clone();
@@ -579,8 +582,16 @@ public class RecipeController {
                     }
                 }
             }
-
-            return perfectList;
+            List<SuggestionRecipeDTO>suggestList=new ArrayList<>();
+            if(perfectList.size()>5){
+                for(int g=0;g<5;g++){
+                    suggestList.add(perfectList.get(g));
+                }
+                return suggestList;
+            }
+            else{
+                return perfectList;
+            }
     }
     static int findCeil(int arr[], int r, int l, int h)
     {
