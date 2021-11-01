@@ -55,7 +55,7 @@ RecipeRepository recipeRepository;
     public List<TenRecipeDTO> findTop10Records() {
         Date date=new Date(new java.util.Date().getTime());
           List<TenRecipeDTO> results=new ArrayList<>();
-            List<Recipe> entities=recipeRepository.findTop10ByTimeLessThanEqualOrderByTimeDesc(date);
+            List<Recipe> entities=recipeRepository.find10recipes(date);
             for (Recipe item: entities){
                 TenRecipeDTO recipeDTO= converter.toDTO10(item);
                 recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));

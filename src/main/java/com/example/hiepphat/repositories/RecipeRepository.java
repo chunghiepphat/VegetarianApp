@@ -18,7 +18,8 @@ import java.util.List;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe,Long> {
-    List<Recipe> findTop10ByTimeLessThanEqualOrderByTimeDesc(Date date);
+    @Query(value = "SELECT TOP 10 * from Recipes where time_created<=? and status=2 and is_private='false' order by time_created desc",nativeQuery = true)
+    List<Recipe> find10recipes(Date date);
      public Recipe findByRecipeID(long id);
      List<Recipe> findTop10ByUser_UserIDOrderByTimeDesc(int userID);
     List<Recipe> findAllByUser_UserID(Pageable pageable, int userID);

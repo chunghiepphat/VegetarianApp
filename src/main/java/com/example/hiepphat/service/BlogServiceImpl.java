@@ -52,7 +52,7 @@ private BlogRepository blogRepository;
     public List<TenBlogDTO> findTop10Records() {
         Date date=new Date(new java.util.Date().getTime());
         List<TenBlogDTO> results=new ArrayList<>();
-        List<Blog> entities=blogRepository.findTop10ByTimeLessThanEqualOrderByTimeDesc(date);
+        List<Blog> entities=blogRepository.find10blog(date);
         for (Blog item: entities){
             TenBlogDTO blogDTO= converter.toDTO10BLOG(item);
             blogDTO.setTotalLike(blogRepository.totalLike(item.getBlogID()));
