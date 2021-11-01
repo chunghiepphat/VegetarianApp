@@ -136,12 +136,6 @@ RecipeRepository recipeRepository;
         }
         return result;
     }
-
-    @Override
-    public long findrecipeID(String title, int user_id, java.util.Date time) {
-        return  recipeRepository.findrecipeID(title,user_id,time);
-    }
-
     @Override
     public List<TenRecipeDTO> findLikedRecipe(int id) {
         List<TenRecipeDTO>result=new ArrayList<>();
