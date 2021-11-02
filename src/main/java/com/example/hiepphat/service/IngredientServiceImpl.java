@@ -70,13 +70,12 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public NutritionDTO findByIngredientName(String name) {
         NutritionDTO result=new NutritionDTO();
-        Ingredient entity=ingredientRepository.findByIngredientName(name);
+
         float protein1=0;
         float calo1=0;
         float fat1=0;
         float carb1=0;
-        String querry = entity.getIngredientName();
-        final String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=dIiAPHLfEenzJusaaqLPNvS4F3x9pjKxhteiR6ft&query=" + querry + "&pageSize=1&pageNumber=1";
+        final String uri = "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=dIiAPHLfEenzJusaaqLPNvS4F3x9pjKxhteiR6ft&query=" + name + "&pageSize=1&pageNumber=1";
         RestTemplate restTemplate = new RestTemplate();
         String resultJson = restTemplate.getForObject(uri, String.class);
         net.minidev.json.JSONArray protein = JsonPath.read(resultJson, "foods[0].foodNutrients[?(@.nutrientName == 'Protein')].value");

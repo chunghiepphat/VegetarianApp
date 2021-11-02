@@ -150,13 +150,11 @@ public class RecipeController {
                          Ingredient ingredient=new Ingredient();
                          if(!ingredientService.existsByIngredient_name(item.getIngredient_name())){
                              ingredient.setIngredientName(item.getIngredient_name());
-                             ingredientService.save(ingredient);
                              NutritionDTO dto=ingredientService.findByIngredientName(item.getIngredient_name());
-                             Ingredient ingredient1=ingredientService.findIngredientName(item.getIngredient_name());
-                             ingredient1.setFat(dto.getFat());
-                             ingredient1.setProtein(dto.getProtein());
-                             ingredient1.setCarb(dto.getCarb());
-                             ingredient1.setCalories(dto.getCalories());
+                             ingredient.setFat(dto.getFat());
+                             ingredient.setProtein(dto.getProtein());
+                             ingredient.setCarb(dto.getCarb());
+                             ingredient.setCalories(dto.getCalories());
                              ingredientService.save(ingredient);
                          }
                          else{
