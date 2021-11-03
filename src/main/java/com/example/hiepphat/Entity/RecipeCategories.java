@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "RecipeCategories")
+@Table(name = "Recipe_Categories")
 public class RecipeCategories {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +14,7 @@ public class RecipeCategories {
     private String recipeCategoryName;
     @Column(name = "recipe_category_thumbnail")
     private String recipeCategoryThumbnail;
-    @OneToMany(mappedBy = "recipeCategories", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "recipeCategories", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Recipe> recipes;
     public int getRecipeCategoryID() {
         return recipeCategoryID;

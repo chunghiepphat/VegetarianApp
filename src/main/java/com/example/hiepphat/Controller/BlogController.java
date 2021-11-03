@@ -183,7 +183,7 @@ public class BlogController {
     @GetMapping("/get10blogbyuserdifferent/{id}")
     public TenBlogResponse show10BlogsbyUserIDOtherside(@PathVariable int id)  {
         TenBlogResponse result=new TenBlogResponse();
-        result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
+        result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDescOtherSide(id));
         return result;
     }
     //chuc nang hien tatca bai viet cua user có phân trang ( góc nhìn 1 user khác)

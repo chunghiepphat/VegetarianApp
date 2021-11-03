@@ -11,7 +11,6 @@ public class SearchResponse {
     private List<TenRecipeDTO> listRecipe=new ArrayList<>();
     private List<TenBlogDTO> listBlog=new ArrayList<>();
     private List<VideoDTO> listVideo=new ArrayList<>();
-
     public List<VideoDTO> getListVideo() {
         return listVideo;
     }
@@ -35,4 +34,6 @@ public class SearchResponse {
     public void setListBlog(List<TenBlogDTO> listBlog) {
         this.listBlog = listBlog;
     }
+
+
 }

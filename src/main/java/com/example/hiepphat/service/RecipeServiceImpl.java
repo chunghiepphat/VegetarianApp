@@ -212,5 +212,103 @@ RecipeRepository recipeRepository;
         return results;
     }
 
+    @Override
+    public List<TenRecipeDTO> filterCategory(String search,String fn,String ln,String category) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entity=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
+        for(Recipe item:entity){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2&&item.getRecipeCategories().getRecipeCategoryName().equalsIgnoreCase(category)){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<TenRecipeDTO> filterPreptime(String search,String fn,String ln,int prepTime) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entity=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
+        for(Recipe item:entity){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2&&item.getPrepTime()<=prepTime){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<TenRecipeDTO> filterDifficulty(String search,String fn,String ln,int diff) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entity=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
+        for(Recipe item:entity){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2&&item.getRecipeDifficulty()==diff){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<TenRecipeDTO> filterPrep_Cate(String search, String fn, String ln, int prepTime, String category) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entity=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
+        for(Recipe item:entity){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2&&item.getPrepTime()<=prepTime&&item.getRecipeCategories().getRecipeCategoryName().equalsIgnoreCase(category)){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<TenRecipeDTO> filterPrep_Diff(String search, String fn, String ln, int prepTime, int diff) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entity=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
+        for(Recipe item:entity){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2&&item.getPrepTime()<=prepTime&&item.getRecipeDifficulty()==diff){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<TenRecipeDTO> filterCate_Diff(String search, String fn, String ln, String category, int diff) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entity=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
+        for(Recipe item:entity){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2&&item.getRecipeDifficulty()==diff&&item.getRecipeCategories().getRecipeCategoryName().equalsIgnoreCase(category)){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public List<TenRecipeDTO> filterALL(String search, String fn, String ln, String category, int diff, int prepTime) {
+        List<TenRecipeDTO>result=new ArrayList<>();
+        List<Recipe>entity=recipeRepository.findByRecipeTitleLikeOrUser_FirstNameLikeOrUser_LastNameLike("%"+search+"%","%"+fn+"%","%"+ln+"%");
+        for(Recipe item:entity){
+            TenRecipeDTO dto=converter.toDTO10(item);
+            dto.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false&&item.getStatus()==2&&item.getPrepTime()<=prepTime&&item.getRecipeCategories().getRecipeCategoryName().equalsIgnoreCase(category)&&item.getRecipeDifficulty()==diff){
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
 
 }

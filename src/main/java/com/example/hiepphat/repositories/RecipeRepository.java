@@ -36,4 +36,5 @@ public interface RecipeRepository extends JpaRepository<Recipe,Long> {
     @Query(value = "Select * from Recipes where recipe_id in (select recipe_id from Likes_Recipe GROUP BY recipe_id HAVING  COUNT(user_id)>2)"
             ,nativeQuery = true)
     List<Recipe>findLikeGreater2();
+
 }

@@ -16,12 +16,12 @@ public class Converter {
         RecipeDTO dto = new RecipeDTO();
         dto.setRecipe_id(entity.getRecipeID());
         dto.setRecipe_thumbnail(entity.getRecipe_thumbnail());
-        dto.setRecipe_difficulty(entity.getRecipe_difficulty());
+        dto.setRecipe_difficulty(entity.getRecipeDifficulty());
         dto.setPortion_size(entity.getPortion_size());
         dto.setBaking_time_minutes(entity.getBaking_time_minutes());
         dto.setPortion_type(entity.getPortion_type());
         dto.setRecipe_title(entity.getRecipeTitle());
-        dto.setPrep_time_minutes(entity.getPrep_time_minutes());
+        dto.setPrep_time_minutes(entity.getPrepTime());
         dto.setUser_id(entity.getUser().getUserID());
         dto.setRecipe_categories_id(entity.getRecipeCategories().getRecipeCategoryID());
         dto.setResting_time_minutes(entity.getResting_time_minutes());

@@ -130,11 +130,11 @@ public class RecipeController {
                             recipe.setBaking_time_minutes(recipeRequest.getBaking_time_minutes());
                             recipe.setPortion_size(recipeRequest.getPortion_size());
                             recipe.setPortion_type(recipeRequest.getPortion_type());
-                            recipe.setPrep_time_minutes(recipeRequest.getPrep_time_minutes());
+                            recipe.setPrepTime(recipeRequest.getPrep_time_minutes());
                             Calendar calendar = Calendar.getInstance();
                             java.util.Date currentTime = calendar.getTime();
                             recipe.setTime(currentTime);
-                            recipe.setRecipe_difficulty(recipeRequest.getRecipe_difficulty());
+                            recipe.setRecipeDifficulty(recipeRequest.getRecipe_difficulty());
                             recipe.setResting_time_minutes(recipeRequest.getResting_time_minutes());
                             recipe.setTotalCalo(0);
                             recipeService.save(recipe);
@@ -291,6 +291,19 @@ public class RecipeController {
         }
         return ResponseEntity.ok(new MessageResponse("Delete recipe category successfully!!!"));
     }
+    //chuc nang edit recipe category
+    @PreAuthorize("hasAuthority('admin')")
+    @PutMapping("/edit/category/{id}")
+    public ResponseEntity<?>editRecipeCategory(@PathVariable("id")int id,@RequestBody RecipeCategoriesDTO dto ){
+        RecipeCategories recipeCategories=recipeCategoriesRepository.getRecipeCategories(id);
+        if(recipeCategories!=null){
+            recipeCategories.setRecipeCategoryName(dto.getCategory_name());
+            recipeCategories.setRecipeCategoryThumbnail(dto.getThumbnail());
+            recipeCategoriesRepository.save(recipeCategories);
+            return ResponseEntity.ok(new MessageResponse("Edit recipe category succesfully!!!"));
+        }
+        else return ResponseEntity.badRequest().body(new MessageResponse("Not found category id" + id));
+    }
     @PreAuthorize("hasAuthority('user')")
     @PutMapping("/edit/{id}")
     public ResponseEntity<?>editRecipe(@RequestBody RecipeRequest dto,@PathVariable("id")long id) throws ParseException {
@@ -300,11 +313,11 @@ public class RecipeController {
             recipeCategories.setRecipeCategoryID(dto.getRecipe_categories_id());
             recipe.setRecipeCategories(recipeCategories);
             recipe.setRecipe_thumbnail(dto.getRecipe_thumbnail());
-            recipe.setRecipe_difficulty(dto.getRecipe_difficulty());
+            recipe.setRecipeDifficulty(dto.getRecipe_difficulty());
             recipe.setPortion_type(dto.getPortion_type());
             recipe.setPrivate(dto.isIs_private());
             recipe.setPortion_size(dto.getPortion_size());
-            recipe.setPrep_time_minutes(dto.getPrep_time_minutes());
+            recipe.setPrepTime(dto.getPrep_time_minutes());
             recipe.setBaking_time_minutes(dto.getBaking_time_minutes());
             recipe.setResting_time_minutes(dto.getResting_time_minutes());
             List<RecipeStep>entity=recipeStepRepository.findByRecipe_RecipeID(id);
@@ -639,7 +652,7 @@ public class RecipeController {
         RecipeResponse result2=new RecipeResponse();
         result2.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
-        result2.setListResult(recipeService.findAllByUser_UserID(pageable,id));
+        result2.setListResult(recipeService.findAllByUser_UserIDOtherside(pageable,id));
         result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
         return result2;
     }

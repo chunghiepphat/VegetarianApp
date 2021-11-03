@@ -32,5 +32,12 @@ public interface RecipeService {
     List<TenRecipeDTO> findTop10ByUserOrderByTimeDescOtherside(int userID);
     List<TenRecipeDTO> findAllByUser_UserIDOtherside(Pageable pageable, int userID);
     List<TenRecipeDTO>findAllAdmin(Pageable pageable);
+    List<TenRecipeDTO>filterPreptime(String search,String fn,String ln,int prepTime);
+    List<TenRecipeDTO>filterCategory(String search,String fn,String ln,String category);
+    List<TenRecipeDTO>filterDifficulty(String search,String fn,String ln,int diff);
+    List<TenRecipeDTO>filterPrep_Cate(String search,String fn,String ln,int prepTime,String category);
+    List<TenRecipeDTO>filterPrep_Diff(String search,String fn,String ln,int prepTime,int diff);
+    List<TenRecipeDTO>filterCate_Diff(String search,String fn,String ln,String category,int diff);
+    List<TenRecipeDTO>filterALL(String search,String fn,String ln,String category,int diff,int prepTime);
 
 }

@@ -24,10 +24,12 @@ public class Recipe implements Comparable<Recipe> {
     private String recipeTitle;
     private String recipe_thumbnail;
     private String recipe_content;
-    private int recipe_difficulty;
+    @Column(name = "recipe_difficulty")
+    private int recipeDifficulty;
     private int portion_size;
     private String portion_type;
-    private int prep_time_minutes;
+    @Column(name = "prep_time_minutes")
+    private int prepTime;
     private int baking_time_minutes;
     private int resting_time_minutes;
     @Column(name = "total_calo")
@@ -110,12 +112,20 @@ public class Recipe implements Comparable<Recipe> {
         this.recipe_content = recipe_content;
     }
 
-    public int getRecipe_difficulty() {
-        return recipe_difficulty;
+    public int getRecipeDifficulty() {
+        return recipeDifficulty;
     }
 
-    public void setRecipe_difficulty(int recipe_difficulty) {
-        this.recipe_difficulty = recipe_difficulty;
+    public void setRecipeDifficulty(int recipeDifficulty) {
+        this.recipeDifficulty = recipeDifficulty;
+    }
+
+    public int getPrepTime() {
+        return prepTime;
+    }
+
+    public void setPrepTime(int prepTime) {
+        this.prepTime = prepTime;
     }
 
     public int getPortion_size() {
@@ -134,13 +144,7 @@ public class Recipe implements Comparable<Recipe> {
         this.portion_type = portion_type;
     }
 
-    public int getPrep_time_minutes() {
-        return prep_time_minutes;
-    }
 
-    public void setPrep_time_minutes(int prep_time_minutes) {
-        this.prep_time_minutes = prep_time_minutes;
-    }
 
     public int getBaking_time_minutes() {
         return baking_time_minutes;
