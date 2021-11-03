@@ -42,6 +42,7 @@ public class JwtUtils {
 				.claim("facebook_link",userPrincipal.getFacebook_link()).claim("instagram_link",userPrincipal.getInstagram_link())
 				.claim("birth_date",userPrincipal.getBirth_date())
 				.claim("gender",userPrincipal.getGender()).claim("is_active",userPrincipal.isIs_active())
+				.claim("code_active",userPrincipal.getCode_active())
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -67,8 +68,20 @@ public class JwtUtils {
 	public String getClaimFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("email",String.class);
 	}
+	public String getCodeActive(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("code_active",String.class);
+	}
+	public String getFirstName(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("first_name",String.class);
+	}
+	public String getLastName(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("last_name",String.class);
+	}
 	public boolean getStatusUser(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("is_active",Boolean.class);
+	}
+	public int getUserID(String token) {
+		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("id",Integer.class);
 	}
 	public boolean validateJwtToken(String authToken) {
 		try {

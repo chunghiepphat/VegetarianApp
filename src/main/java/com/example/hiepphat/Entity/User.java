@@ -31,6 +31,10 @@ public class User {
     private String instagram_link;
     private float weight;
     private int height;
+    @Column(name = "code_activate")
+    private String codeActive;
+    @Column(name = "code_reset")
+    private String codeReset;
     @Column(name = "workout_routine")
     private int typeWorkout;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,
@@ -216,5 +220,19 @@ public class User {
         this.is_active = is_active;
     }
 
+    public String getCodeActive() {
+        return codeActive;
+    }
 
+    public void setCodeActive(String codeActive) {
+        this.codeActive = codeActive;
+    }
+
+    public String getCodeReset() {
+        return codeReset;
+    }
+
+    public void setCodeReset(String codeReset) {
+        this.codeReset = codeReset;
+    }
 }

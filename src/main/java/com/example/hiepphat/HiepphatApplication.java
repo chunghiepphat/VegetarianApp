@@ -28,6 +28,7 @@ public class HiepphatApplication extends SpringBootServletInitializer {
 
 		return builder.sources(HiepphatApplication.class);
 	}
+
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurerAdapter() {

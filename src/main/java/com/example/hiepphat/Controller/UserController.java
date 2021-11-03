@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -62,6 +64,8 @@ UserRepository userRepository;
     UserPreferencesRepository userPreferencesRepository;
     @Autowired
     UserAllergiesRepository userAllergiesRepository;
+    @Autowired
+    EmailServiceImpl emailService;
     //login
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -71,13 +75,29 @@ UserRepository userRepository;
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
-        boolean checkActive=jwtUtils.getStatusUser(jwt);
-        if(!checkActive){
-            return ResponseEntity.badRequest().body(new MessageResponse("Account is inactive!!!"));
+        String codeActive=jwtUtils.getCodeActive(jwt);
+        if(codeActive!=null){
+            String firstName=jwtUtils.getFirstName(jwt);
+            String lastname=jwtUtils.getLastName(jwt);
+            int userID= jwtUtils.getUserID(jwt);
+            SimpleMailMessage emailActive = new SimpleMailMessage();
+            emailActive.setTo(loginRequest.getEmail());
+            emailActive.setSubject("Vegetarian App Account Verification");
+            String code=emailService.random();
+            emailActive.setText("Hello,"+firstName+" "+lastname+". Your verification code is "+code+".");
+            User user=userRepository.findByUserID(userID);
+            user.setCodeActive(code);
+            userService.save(user);
+            emailService.sendEmail(emailActive);
+            return ResponseEntity.ok(new MessageResponse("Please verify your email to login app"));
         }
         else{
-            return ResponseEntity.ok(new JwtResponse(jwt));
+            boolean checkActive=jwtUtils.getStatusUser(jwt);
+            if(!checkActive){
+                return ResponseEntity.badRequest().body(new MessageResponse("Account is inactive!!!"));
+            }
         }
+        return ResponseEntity.ok(new JwtResponse(jwt));
     }
 //signup
     @PostMapping("/signup")
@@ -85,7 +105,7 @@ UserRepository userRepository;
         if (userService.existsByEmail(signUpRequest.getEmail())){
             return ResponseEntity
                     .badRequest()
-                    .body(new SignupResponse("Error: Email is already taken!"));
+                    .body(new MessageResponse("Error: Email is already taken!"));
         }
         else {
             Role roles = new Role();
@@ -93,12 +113,30 @@ UserRepository userRepository;
             // Create new user's account
             User user = new User(signUpRequest.getFirst_name(), signUpRequest.getLast_name(),
                     signUpRequest.getEmail(), passwordEncoder.encode(signUpRequest.getPassword())
-                    , true, roles);
+                    , false, roles);
             user.setProvider("local");
+            SimpleMailMessage emailActive = new SimpleMailMessage();
+            emailActive.setTo(signUpRequest.getEmail());
+            emailActive.setSubject("Vegetarian App Account Verification");
+            String code=emailService.random();
+            emailActive.setText("Hello,"+signUpRequest.getFirst_name()+" "+signUpRequest.getLast_name()+". Your verification code is "+code+".");
+            emailService.sendEmail(emailActive);
+            user.setCodeActive(code);
             userService.save(user);
             String jwt=jwtUtils.generateJwtTokenSignup(signUpRequest);
             return ResponseEntity.ok(new SignupResponse(jwt));
         }
+    }
+    //verify email account
+    @PutMapping("/verify")
+    public ResponseEntity<?>verifyEmail(@RequestParam("code")String code){
+        User user=userRepository.findByCodeActive(code);
+        if(user!=null){
+            user.setCodeActive(null);
+            user.setIs_active(true);
+            userRepository.save(user);
+        }
+        return ResponseEntity.ok(new MessageResponse("Your account was active!!!"));
     }
 //update user password
     @PreAuthorize("hasAuthority('user')")

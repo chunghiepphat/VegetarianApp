@@ -31,10 +31,11 @@ public class UserDetailsImpl implements UserDetails {
 	private java.sql.Date birth_date;
 	private String gender;
 	private boolean is_active;
+	private String code_active;
 	private Collection<? extends GrantedAuthority> authorities;
 
 	public UserDetailsImpl(int id, String first_name, String last_name, String email, String password, String about_me, String phone_number, String profile_image, String country,
-						   String facebook_link, String instagram_link, java.sql.Date birth_date, String gender,boolean is_active,
+						   String facebook_link, String instagram_link, java.sql.Date birth_date, String gender,boolean is_active,String code_active,
 						   Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.first_name=first_name;
@@ -51,6 +52,7 @@ public class UserDetailsImpl implements UserDetails {
 		this.birth_date=birth_date;
 		this.gender=gender;
 		this.is_active=is_active;
+		this.code_active=code_active;
 	}
 
 	public static UserDetailsImpl build(User user) {
@@ -71,6 +73,7 @@ public class UserDetailsImpl implements UserDetails {
 				user.getBirth_date(),
 				user.getGender(),
 				user.isIs_active(),
+				user.getCodeActive(),
 				authorities);
 	}
 
@@ -167,6 +170,10 @@ public class UserDetailsImpl implements UserDetails {
 
 	public boolean isIs_active() {
 		return is_active;
+	}
+
+	public String getCode_active() {
+		return code_active;
 	}
 
 	public void setIs_active(boolean is_active) {
