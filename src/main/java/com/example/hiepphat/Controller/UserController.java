@@ -9,6 +9,7 @@ import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.request.UpdateUserRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,16 +21,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -72,14 +71,13 @@ UserRepository userRepository;
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        String codeActive=jwtUtils.getCodeActive(jwt);
+        Optional<User>userExist=userRepository.findByEmail(loginRequest.getEmail());
+        String codeActive=userExist.get().getCodeActive();
         if(codeActive!=null){
-            String firstName=jwtUtils.getFirstName(jwt);
-            String lastname=jwtUtils.getLastName(jwt);
-            int userID= jwtUtils.getUserID(jwt);
+            String firstName=userExist.get().getFirstName();
+            String lastname=userExist.get().getFirstName();
+            int userID=userExist.get().getUserID();
             SimpleMailMessage emailActive = new SimpleMailMessage();
             emailActive.setTo(loginRequest.getEmail());
             emailActive.setSubject("Vegetarian App Account Verification");
@@ -92,11 +90,12 @@ UserRepository userRepository;
             return ResponseEntity.ok(new MessageResponse("Please verify your email to login app"));
         }
         else{
-            boolean checkActive=jwtUtils.getStatusUser(jwt);
+            boolean checkActive=userExist.get().isIs_active();
             if(!checkActive){
                 return ResponseEntity.badRequest().body(new MessageResponse("Account is inactive!!!"));
             }
         }
+        String jwt=jwtUtils.generateJwtToken(authentication);
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 //signup
@@ -120,23 +119,29 @@ UserRepository userRepository;
             emailActive.setSubject("Vegetarian App Account Verification");
             String code=emailService.random();
             emailActive.setText("Hello,"+signUpRequest.getFirst_name()+" "+signUpRequest.getLast_name()+". Your verification code is "+code+".");
-            emailService.sendEmail(emailActive);
             user.setCodeActive(code);
             userService.save(user);
-            String jwt=jwtUtils.generateJwtTokenSignup(signUpRequest);
-            return ResponseEntity.ok(new SignupResponse(jwt));
+            emailService.sendEmail(emailActive);
+            return ResponseEntity.ok(new MessageResponse("Please verify your email to login app"));
         }
     }
     //verify email account
-    @PutMapping("/verify")
-    public ResponseEntity<?>verifyEmail(@RequestParam("code")String code){
+    @PostMapping("/verify")
+    public ResponseEntity<?>verifyEmail(@RequestParam("code")String code,@RequestBody LoginRequest loginRequest){
         User user=userRepository.findByCodeActive(code);
         if(user!=null){
             user.setCodeActive(null);
             user.setIs_active(true);
             userRepository.save(user);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            return ResponseEntity.ok(new JwtResponse(jwt));
         }
-        return ResponseEntity.ok(new MessageResponse("Your account was active!!!"));
+        else{
+            return ResponseEntity.badRequest().body(new MessageResponse("Invalid Code"));
+        }
     }
 //update user password
     @PreAuthorize("hasAuthority('user')")
