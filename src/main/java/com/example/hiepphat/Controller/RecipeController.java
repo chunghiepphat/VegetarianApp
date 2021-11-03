@@ -315,7 +315,6 @@ public class RecipeController {
             recipe.setRecipe_thumbnail(dto.getRecipe_thumbnail());
             recipe.setRecipeDifficulty(dto.getRecipe_difficulty());
             recipe.setPortion_type(dto.getPortion_type());
-            recipe.setPrivate(dto.isIs_private());
             recipe.setPortion_size(dto.getPortion_size());
             recipe.setPrepTime(dto.getPrep_time_minutes());
             recipe.setBaking_time_minutes(dto.getBaking_time_minutes());
@@ -335,13 +334,11 @@ public class RecipeController {
                 Ingredient ingredient=new Ingredient();
                 if(!ingredientService.existsByIngredient_name(newIngre.getIngredient_name())){
                     ingredient.setIngredientName(newIngre.getIngredient_name());
-                    ingredientService.save(ingredient);
                     NutritionDTO nutriDTO=ingredientService.findByIngredientName(newIngre.getIngredient_name());
-                    Ingredient ingredient1=ingredientService.findIngredientName(newIngre.getIngredient_name());
-                    ingredient1.setFat(nutriDTO.getFat());
-                    ingredient1.setProtein(nutriDTO.getProtein());
-                    ingredient1.setCarb(nutriDTO.getCarb());
-                    ingredient1.setCalories(nutriDTO.getCalories());
+                    ingredient.setFat(nutriDTO.getFat());
+                    ingredient.setProtein(nutriDTO.getProtein());
+                    ingredient.setCarb(nutriDTO.getCarb());
+                    ingredient.setCalories(nutriDTO.getCalories());
                     ingredientService.save(ingredient);
                 }
                 else{

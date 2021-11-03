@@ -170,7 +170,6 @@ public class BlogController {
             Date date=new Date();
             String spf=simpleDateFormat.format(date);
             blog.setTimeUpdated(simpleDateFormat.parse(spf));
-            blog.setPrivate(dto.isIs_private());
             blog.setStatus(1);
             blogRepository.save(blog);
             return ResponseEntity.ok(new MessageResponse("Update blog successfully"));
@@ -221,6 +220,7 @@ public class BlogController {
             return ResponseEntity.badRequest().body(new MessageResponse("Not found blog id "+id));
         }
     }
+    // get blog của user by admin
     @PreAuthorize("hasAuthority('admin')")
     @GetMapping("admin/getallbyuser/{id}")
     public BlogResponse showALLRecipeUserbyAdmin(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
@@ -230,5 +230,21 @@ public class BlogController {
         result2.setListResult(blogService.showALLBlogUserbyAdmin(pageable,id));
         result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
         return result2;
+    }
+    // chức năng chỉnh blog public,private
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/edit/private/{id}")
+    public ResponseEntity editPrivate(@PathVariable("id")int blogID){
+        Blog blog=blogRepository.findByBlogID(blogID);
+        if(blog.isPrivate()==true){
+            blog.setPrivate(false);
+            blogRepository.save(blog);
+            return ResponseEntity.ok(new MessageResponse("Your blog was public"));
+        }
+        else{
+            blog.setPrivate(true);
+            blogRepository.save(blog);
+            return ResponseEntity.ok(new MessageResponse("Your blog was private"));
+        }
     }
 }

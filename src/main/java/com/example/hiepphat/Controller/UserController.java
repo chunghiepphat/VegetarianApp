@@ -419,6 +419,7 @@ UserRepository userRepository;
            return ResponseEntity.badRequest().body(new MessageResponse("Not found user id "+id));
         }
     }
+    //view danh sách nguyên lieu thuc an user thích
     @GetMapping("/getpreferences/{id}")
     public ListIngredientCriteria getPreference(@PathVariable("id")int userID){
         List<UserPreference>entity=userPreferencesRepository.findByUser_UserID(userID);
@@ -432,6 +433,7 @@ UserRepository userRepository;
         listIngredientCriteria.setListIngredient(result);
         return listIngredientCriteria;
     }
+    //view danh sách nguyên lieu thuc an user di ứng
     @GetMapping("/getallergies/{id}")
     public ListIngredientCriteria getAllergies(@PathVariable("id")int userID){
         List<UserAllergies>entity=userAllergiesRepository.findByUser_UserID(userID);
