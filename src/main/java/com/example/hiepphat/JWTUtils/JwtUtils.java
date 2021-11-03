@@ -2,16 +2,21 @@ package com.example.hiepphat.JWTUtils;
 
 
 
+import com.example.hiepphat.Entity.User;
+import com.example.hiepphat.repositories.UserRepository;
 import com.example.hiepphat.request.SignUpRequest;
 import com.example.hiepphat.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.swing.text.html.Option;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class JwtUtils {
@@ -22,7 +27,8 @@ public class JwtUtils {
 
 	@Value("${bezkoder.app.jwtExpirationMs}")
 	private int jwtExpirationMs;
-
+	@Autowired
+	UserRepository userRepository;
 	public String generateJwtToken(Authentication authentication) {
 
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
@@ -43,8 +49,9 @@ public class JwtUtils {
 	}
 
 	public String generateJwtTokenSignup(SignUpRequest signUpRequest) {
+		Optional<User> user=userRepository.findByEmail(signUpRequest.getEmail());
 		return Jwts.builder()
-				.claim("email",signUpRequest.getEmail())
+				.claim("email",signUpRequest.getEmail()).claim("id",user.get().getUserID())
 				.claim("first_name",signUpRequest.getFirst_name())
 				.claim("last_name",signUpRequest.getLast_name()).claim("roles",1)
 				.claim("about_me",null).claim("phone_number",null)
