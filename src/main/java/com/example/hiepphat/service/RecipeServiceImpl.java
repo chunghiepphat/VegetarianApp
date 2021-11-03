@@ -310,5 +310,19 @@ RecipeRepository recipeRepository;
         return result;
     }
 
+    @Override
+    public List<TenRecipeDTO> showALLRecipeUserbyAdmin(Pageable pageable,int userID) {
+        List<TenRecipeDTO> results=new ArrayList<>();
+        List<Recipe> entites=recipeRepository.findAllByUser_UserID(pageable,userID);
+        for(Recipe item:entites){
+            TenRecipeDTO recipeDTO= converter.toDTO10(item);
+            recipeDTO.setTotalLike(recipeRepository.totalLike(item.getRecipeID()));
+            if(item.isPrivate()==false){
+                results.add(recipeDTO);
+            }
+        }
+        return results;
+    }
+
 
 }

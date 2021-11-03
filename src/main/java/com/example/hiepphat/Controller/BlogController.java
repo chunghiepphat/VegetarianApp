@@ -221,4 +221,14 @@ public class BlogController {
             return ResponseEntity.badRequest().body(new MessageResponse("Not found blog id "+id));
         }
     }
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("admin/getallbyuser/{id}")
+    public BlogResponse showALLRecipeUserbyAdmin(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
+        BlogResponse result2=new BlogResponse();
+        result2.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        result2.setListResult(blogService.showALLBlogUserbyAdmin(pageable,id));
+        result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
+        return result2;
+    }
 }

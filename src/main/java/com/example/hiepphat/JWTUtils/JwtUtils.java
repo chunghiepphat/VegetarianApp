@@ -49,7 +49,7 @@ public class JwtUtils {
 				.claim("last_name",signUpRequest.getLast_name()).claim("roles",1)
 				.claim("about_me",null).claim("phone_number",null)
 				.claim("profile_image",null).claim("country",null).claim("facebook_link",null)
-				.claim("instagram_link",null).claim("birth_date",null).claim("gender",null)
+				.claim("instagram_link",null).claim("birth_date",null).claim("gender",null).claim("is_active",1)
 				.setIssuedAt(new Date())
 				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
 				.signWith(SignatureAlgorithm.HS512, jwtSecret)

@@ -27,4 +27,5 @@ public interface BlogService {
     List<TenBlogDTO> findTop10ByUser_UserIDOrderByTimeDescOtherSide(int userID);
     List<TenBlogDTO> findAllByUser_UserIDOtherSide(Pageable pageable, int userID);
     List<TenBlogDTO>findAllAdmin(Pageable pageable);
+    List<TenBlogDTO>showALLBlogUserbyAdmin(Pageable pageable,int userID);
 }

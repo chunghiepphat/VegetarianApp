@@ -657,7 +657,6 @@ public class RecipeController {
         return result2;
     }
     //chuc nang get all recipe cho admin
-
     @PreAuthorize("hasAuthority('admin')")
     @GetMapping("/admin/getall")
     public RecipeResponse showallAdminRecipe(@RequestParam("page") int page,@RequestParam("limit") int limit){
@@ -667,6 +666,33 @@ public class RecipeController {
         result.setListResult(recipeService.findAllAdmin(pageable));
         result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit));
         return result;
+    }
+    //chuc nang edit private , public recipe
+    @PreAuthorize("hasAuthority('user')")
+    @PutMapping("/edit/private/{id}")
+    public ResponseEntity editPrivate(@PathVariable("id")long recipeID){
+        Recipe recipe=recipeRepository.findByRecipeID(recipeID);
+        if(recipe.isPrivate()==true){
+            recipe.setPrivate(false);
+            recipeRepository.save(recipe);
+            return ResponseEntity.ok(new MessageResponse("Your recipe was public"));
+        }
+        else{
+            recipe.setPrivate(true);
+            recipeRepository.save(recipe);
+            return ResponseEntity.ok(new MessageResponse("Your recipe was private"));
+        }
+    }
+    //get recipe cua user by admin
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("admin/getallbyuser/{id}")
+     public RecipeResponse showALLRecipeUserbyAdmin(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
+        RecipeResponse result2=new RecipeResponse();
+        result2.setPage(page);
+        Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
+        result2.setListResult(recipeService.showALLRecipeUserbyAdmin(pageable,id));
+        result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
+        return result2;
     }
     }
 

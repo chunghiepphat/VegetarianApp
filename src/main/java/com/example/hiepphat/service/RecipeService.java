@@ -39,5 +39,5 @@ public interface RecipeService {
     List<TenRecipeDTO>filterPrep_Diff(String search,String fn,String ln,int prepTime,int diff);
     List<TenRecipeDTO>filterCate_Diff(String search,String fn,String ln,String category,int diff);
     List<TenRecipeDTO>filterALL(String search,String fn,String ln,String category,int diff,int prepTime);
-
+    List<TenRecipeDTO>showALLRecipeUserbyAdmin(Pageable pageable,int userID);
 }

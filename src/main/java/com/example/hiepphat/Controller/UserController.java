@@ -445,4 +445,28 @@ UserRepository userRepository;
         listIngredientCriteria.setListIngredient(result);
         return listIngredientCriteria;
     }
+    //view user information by admin
+    @GetMapping("/{id}/getbyadmin")
+    public UserDTO getUserbyIDforAdmin(@PathVariable("id")int id) {
+        User user=userRepository.findByUserID(id);
+            UserDTO dto=new UserDTO();
+            dto.setId(user.getUserID());
+            dto.setFirst_name(user.getFirstName());
+            dto.setLast_name(user.getLastName());
+            dto.setEmail(user.getEmail());
+            dto.setCountry(user.getCountry());
+            dto.setBirth_date(user.getBirth_date());
+            dto.setGender(user.getGender());
+            dto.setAbout_me(user.getAbout_me());
+            dto.setFacebook_link(user.getFacebook_link());
+            dto.setInstagram_link(user.getInstagram_link());
+            dto.setPhone_number(user.getPhone_number());
+            dto.setProfile_image(user.getProfile_image());
+            dto.setRole(user.getRole().getRole_name());
+            dto.setIs_active(user.isIs_active());
+            dto.setWeight(user.getWeight());
+            dto.setHeight(user.getHeight());
+            dto.setWorkout_routine(user.getTypeWorkout());
+            return dto;
+    }
 }
