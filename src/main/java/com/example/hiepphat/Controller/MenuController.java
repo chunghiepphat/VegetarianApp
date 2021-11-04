@@ -187,6 +187,8 @@ public class MenuController {
     public ListMenuResponse getMenubyID(@PathVariable("id")int id){
         ListMenuResponse listMenuResponse=new ListMenuResponse();
         listMenuResponse.setMenu(menuRecipeService.findById(id));
+        listMenuResponse.setStartDate(menuRecipeService.findById(id).get(0).getDate());
+        listMenuResponse.setEndDate(menuRecipeService.findById(id).get(6).getDate());
         return listMenuResponse;
     }
 
