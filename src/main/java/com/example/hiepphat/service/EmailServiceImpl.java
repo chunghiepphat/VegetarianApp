@@ -11,7 +11,7 @@ import java.util.Random;
 public class EmailServiceImpl implements EmailService{
     @Autowired
     private JavaMailSender mailSender;
-    @Async
+    @Override
     public void sendEmail(SimpleMailMessage email) {
             mailSender.send(email);
     }
