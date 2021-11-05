@@ -31,6 +31,7 @@ public class Converter {
         dto.setTime_updated(entity.getTimeUpdated());
         dto.setIs_private(entity.isPrivate());
         dto.setStatus(entity.getStatus());
+        dto.setIs_like(false);
         return dto;
     }
     public TenRecipeDTO toDTO10(Recipe entity) {
@@ -44,6 +45,7 @@ public class Converter {
         dto.setIs_private(entity.isPrivate());
         dto.setStatus(entity.getStatus());
         dto.setUser_id(entity.getUser().getUserID());
+        dto.setIs_like(false);
         return dto;
     }
     public TenBlogDTO toDTO10BLOG(Blog entity){
@@ -59,6 +61,7 @@ public class Converter {
         dto.setStatus(entity.getStatus());
         dto.setIs_private(entity.isPrivate());
         dto.setUser_id(entity.getUser().getUserID());
+        dto.setIs_like(false);
         return dto;
     }
     public BlogDTO toDTOBLOG(Blog entity) {
@@ -75,6 +78,7 @@ public class Converter {
         dto.setTime_updated(entity.getTimeUpdated());
         dto.setIs_private(entity.isPrivate());
         dto.setStatus(entity.getStatus());
+        dto.setIs_like(false);
         return dto;
     }
 }

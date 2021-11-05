@@ -17,6 +17,16 @@ public class BlogDTO {
     private Date time_updated;
     private boolean is_private;
     private int status;
+    private boolean is_like;
+
+    public boolean isIs_like() {
+        return is_like;
+    }
+
+    public void setIs_like(boolean is_like) {
+        this.is_like = is_like;
+    }
+
     public Date getTime_updated() {
         return time_updated;
     }

@@ -3,6 +3,7 @@ package com.example.hiepphat.Controller;
 import com.example.hiepphat.Entity.*;
 import com.example.hiepphat.dtos.BlogDTO;
 import com.example.hiepphat.dtos.LikeBlogDTO;
+import com.example.hiepphat.dtos.TenBlogDTO;
 import com.example.hiepphat.repositories.BlogRepository;
 import com.example.hiepphat.repositories.LikeBlogRepository;
 import com.example.hiepphat.request.BlogRequest;
@@ -39,20 +40,34 @@ public class BlogController {
     BlogRepository blogRepository;
     //chức năng get all các blog có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
-    public BlogResponse showBlog(@RequestParam("page") int page, @RequestParam("limit") int limit){
+    public BlogResponse showBlog(@RequestParam("page") int page, @RequestParam("limit") int limit,@RequestParam(value = "userID",required = false)String userID){
         BlogResponse result2=new BlogResponse();
         result2.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
         result2.setListResult(blogService.findAll(pageable));
         result2.setTotalPage((int)Math.ceil((double)blogService.totalItem()/limit ));
+        if(userID!=null){
+            for(TenBlogDTO item: result2.getListResult()){
+             LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),item.getBlog_id());
+             if(checkLike!=null){
+                 item.setIs_like(true);
+             }
+            }
+        }
         return result2;
     }
     // chức năng get chi tiết 1 blog dựa theo blogID
     @GetMapping("/getblogby/{id}")
-    public BlogDTO showBlogbyID(@PathVariable int id) {
+    public BlogDTO showBlogbyID(@PathVariable int id,@RequestParam(value = "userID",required = false)String userID) {
         BlogDTO result=blogService.findblogbyID(id);
         if(result!=null){
             result.setTotalLike(blogRepository.totalLike(id));
+            if(userID!=null){
+                LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),result.getBlog_id());
+                if(checkLike!=null){
+                    result.setIs_like(true);
+                }
+            }
             return result;
         }
         else{
@@ -61,28 +76,52 @@ public class BlogController {
     }
     // chức năng get 10 blogs mới nhất dựa theo thời gian
     @GetMapping("/get10blogs")
-    public TenBlogResponse show10Blogs(){
+    public TenBlogResponse show10Blogs(@RequestParam(value = "userID",required = false)String userID){
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10Records());
+        if(userID!=null){
+            for(TenBlogDTO item: result.getListResult()){
+                LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),item.getBlog_id());
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
     // chức năng get 10 blog mới nhất của 1 user theo user id
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/get10blogbyuser/{id}")
-    public TenBlogResponse show10BlogsbyUserID(@PathVariable int id) {
+    public TenBlogResponse show10BlogsbyUserID(@PathVariable int id,@RequestParam(value = "userID",required = false)String userID) {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDesc(id));
+        if(userID!=null){
+            for(TenBlogDTO item: result.getListResult()){
+                LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),item.getBlog_id());
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
     //chức năng get all blog của 1 user theo user id
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/getallbyuserID/{id}")
-    public BlogResponse showBlogByID(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id){
+    public BlogResponse showBlogByID(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id,@RequestParam(value = "userID",required = false)String userID){
         BlogResponse result2=new BlogResponse();
         result2.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
         result2.setListResult(blogService.findAllByUser_UserID(pageable,id));
         result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
+        if(userID!=null){
+            for(TenBlogDTO item: result2.getListResult()){
+                LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),item.getBlog_id());
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result2;
     }
     // chức năng tạo blog
@@ -106,9 +145,17 @@ public class BlogController {
     }
     //chức năng get 5 blog nhiều like nhết
     @GetMapping("/get5bestblog")
-    public TenBlogResponse getbestblog() {
+    public TenBlogResponse getbestblog(@RequestParam(value = "userID",required = false)String userID) {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findBestBlog());
+        if(userID!=null){
+            for(TenBlogDTO item: result.getListResult()){
+                LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),item.getBlog_id());
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
 // chức năng like blog
@@ -180,19 +227,35 @@ public class BlogController {
     }
     //chuc nang hien 10 bai viet cua user ( góc nhìn 1 user khác)
     @GetMapping("/get10blogbyuserdifferent/{id}")
-    public TenBlogResponse show10BlogsbyUserIDOtherside(@PathVariable int id)  {
+    public TenBlogResponse show10BlogsbyUserIDOtherside(@PathVariable int id,@RequestParam(value = "userID",required = false)String userID)  {
         TenBlogResponse result=new TenBlogResponse();
         result.setListResult(blogService.findTop10ByUser_UserIDOrderByTimeDescOtherSide(id));
+        if(userID!=null){
+            for(TenBlogDTO item: result.getListResult()){
+                LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),item.getBlog_id());
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
     //chuc nang hien tatca bai viet cua user có phân trang ( góc nhìn 1 user khác)
     @GetMapping("/getallbyuserIDdifferent/{id}")
-    public BlogResponse showBlogByIDOtherSide(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id){
+    public BlogResponse showBlogByIDOtherSide(@RequestParam("page") int page, @RequestParam("limit") int limit,@PathVariable int id,@RequestParam(value = "userID",required = false)String userID){
         BlogResponse result2=new BlogResponse();
         result2.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
         result2.setListResult(blogService.findAllByUser_UserIDOtherSide(pageable,id));
         result2.setTotalPage((int)Math.ceil((double)blogService.countByUser_UserID(id)/limit ));
+        if(userID!=null){
+            for(TenBlogDTO item: result2.getListResult()){
+                LikeBlog checkLike=likeBlogService.findByUser_UserIDAndBlog_BlogID(Integer.parseInt(userID),item.getBlog_id());
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result2;
     }
     //chuc nang get all blog cho admin

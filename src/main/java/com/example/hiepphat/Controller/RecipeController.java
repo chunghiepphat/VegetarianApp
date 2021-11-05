@@ -57,24 +57,40 @@ public class RecipeController {
     private IngredientRepository ingredientRepository;
     //chức năng get all các recipe có phân trang (page: vị trí trang, limit: số record mong muốn trong 1 trang)
     @GetMapping("/getall")
-    public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit){
+    public RecipeResponse showRecipes(@RequestParam("page") int page,@RequestParam("limit") int limit,@RequestParam(value = "userID",required = false)String userID){
         RecipeResponse result=new RecipeResponse();
         result.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("timeUpdated").descending().and(Sort.by("time")).descending());
         result.setListResult(recipeService.findAll(pageable));
         result.setTotalPage((int)Math.ceil((double)recipeService.totalItem()/limit));
+        if(userID!=null){
+            for(TenRecipeDTO item:result.getListResult()){
+                LikeRecipe checkLike=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(item.getRecipe_id(),Integer.parseInt(userID));
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
     // chức năng get 10 recipe mới nhất theo time
     @GetMapping("/get10recipes")
-    public TenRecipesResponse show10Recipes(){
+    public TenRecipesResponse show10Recipes(@RequestParam(value = "userID",required = false)String userID){
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10Records());
+        if(userID!=null){
+            for(TenRecipeDTO item:result.getListResult()){
+                LikeRecipe checkLike=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(item.getRecipe_id(),Integer.parseInt(userID));
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
     // chức năng get chi tiết 1 recipe theo recipe id
     @GetMapping("/getrecipeby/{id}")
-    public RecipeDTO showRecipesbyID(@PathVariable long id) {
+    public RecipeDTO showRecipesbyID(@PathVariable long id,@RequestParam(value = "userID",required = false)String userID) {
         RecipeDTO result=recipeService.findrecipebyID(id);
         if(result!=null){
             NutritionDTO nutrition=ingredientService.getIngredientByRecipe(id);
@@ -82,33 +98,63 @@ public class RecipeController {
             result.setNutrition(nutrition);
             result.setTotalLike(recipeService.totalLike(id));
             result.setSteps(recipeStepService.findByRecipe_RecipeID(id));
+            if(userID!=null){
+                LikeRecipe likeRecipe=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(result.getRecipe_id(), Integer.parseInt(userID));
+                if(likeRecipe!=null){
+                    result.setIs_like(true);
+                }
+            }
         }
         return result;
     }
     // chức năng get 10 recipe mới nhất của 1 user dựa theo user id( góc nhìn user id chủ profile)
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/get10recipebyuser/{id}")
-    public TenRecipesResponse show10RecipesbyUserID(@PathVariable int id) {
+    public TenRecipesResponse show10RecipesbyUserID(@PathVariable int id,@RequestParam(value = "userID",required = false)String userID) {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10ByUserOrderByTimeDesc(id));
+        if(userID!=null){
+            for(TenRecipeDTO item:result.getListResult()){
+                LikeRecipe checkLike=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(item.getRecipe_id(),Integer.parseInt(userID));
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
     // chức năng get tất cả recipe của 1 user dựa theo user id ( có phân trang,góc nhìn user id chủ profile)  )
     @PreAuthorize("hasAuthority('user')")
     @GetMapping("/getallbyuserID/{id}")
-    public RecipeResponse showRecipebyID(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
+    public RecipeResponse showRecipebyID(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id,@RequestParam(value = "userID",required = false)String userID){
         RecipeResponse result2=new RecipeResponse();
         result2.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
         result2.setListResult(recipeService.findAllByUser_UserID(pageable,id));
         result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
+        if(userID!=null){
+            for(TenRecipeDTO item:result2.getListResult()){
+                LikeRecipe checkLike=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(item.getRecipe_id(),Integer.parseInt(userID));
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result2;
     }
     //get 5 recipe nhiều like nhất
     @GetMapping("/get5bestrecipes")
-    public TenRecipesResponse getbestrecipe() {
+    public TenRecipesResponse getbestrecipe(@RequestParam(value = "userID",required = false)String userID) {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(likeRecipeService.findbestRecipe());
+        if(userID!=null){
+            for(TenRecipeDTO item:result.getListResult()){
+                LikeRecipe checkLike=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(item.getRecipe_id(),Integer.parseInt(userID));
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
 // tạo recipe
@@ -638,19 +684,35 @@ public class RecipeController {
     }
     //chuc nang hien 10 bai viet cua user ( góc nhìn 1 user khác)
     @GetMapping("/get10recipebyuserdifferent/{id}")
-    public TenRecipesResponse show10RecipesbyUserIDOtherside(@PathVariable int id) {
+    public TenRecipesResponse show10RecipesbyUserIDOtherside(@PathVariable int id,@RequestParam(value = "userID",required = false)String userID) {
         TenRecipesResponse result=new TenRecipesResponse();
         result.setListResult(recipeService.findTop10ByUserOrderByTimeDescOtherside(id));
+        if(userID!=null){
+            for(TenRecipeDTO item:result.getListResult()){
+                LikeRecipe checkLike=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(item.getRecipe_id(),Integer.parseInt(userID));
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result;
     }
     //chuc nang hien tatca bai viet cua user có phân trang ( góc nhìn 1 user khác)
     @GetMapping("/getallbyuserIDdifferent/{id}")
-    public RecipeResponse showRecipebyIDOtherside(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id){
+    public RecipeResponse showRecipebyIDOtherside(@RequestParam("page") int page, @RequestParam("limit") int limit, @PathVariable int id,@RequestParam(value = "userID",required = false)String userID){
         RecipeResponse result2=new RecipeResponse();
         result2.setPage(page);
         Pageable pageable= PageRequest.of(page-1, limit,Sort.by("time").descending());
         result2.setListResult(recipeService.findAllByUser_UserIDOtherside(pageable,id));
         result2.setTotalPage((int)Math.ceil((double)recipeService.countByUser_UserID(id)/limit ));
+        if(userID!=null){
+            for(TenRecipeDTO item:result2.getListResult()){
+                LikeRecipe checkLike=likeRecipeService.findByRecipe_RecipeIDAndUser_UserID(item.getRecipe_id(),Integer.parseInt(userID));
+                if(checkLike!=null){
+                    item.setIs_like(true);
+                }
+            }
+        }
         return result2;
     }
     //chuc nang get all recipe cho admin
