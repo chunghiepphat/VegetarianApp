@@ -156,7 +156,6 @@ public class RecipeController {
                 }
             }
         }
-        LogFactory.getLog(getClass()).debug("Failed to set up a Bean Validation provider", new Exception("dsa"));
         return result;
     }
 // tạo recipe

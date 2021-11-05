@@ -208,3 +208,6 @@ java.lang.Exception: dsa
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61) ~[tomcat-embed-core-9.0.52.jar:9.0.52]
 	at java.base/java.lang.Thread.run(Thread.java:831) ~[na:na]
 
+2021-11-05 11:45:36.533  INFO 15956 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2021-11-05 11:45:36.560  INFO 15956 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2021-11-05 11:45:36.564  INFO 15956 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
