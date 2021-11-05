@@ -5,6 +5,7 @@ import com.example.hiepphat.repositories.*;
 import com.example.hiepphat.request.RecipeRequest;
 import com.example.hiepphat.response.*;
 import com.example.hiepphat.service.*;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -155,6 +156,7 @@ public class RecipeController {
                 }
             }
         }
+        LogFactory.getLog(getClass()).debug("Failed to set up a Bean Validation provider", new Exception("dsa"));
         return result;
     }
 // tạo recipe

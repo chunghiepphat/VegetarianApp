@@ -65,6 +65,7 @@ UserRepository userRepository;
     UserAllergiesRepository userAllergiesRepository;
     @Autowired
     EmailServiceImpl emailService;
+
     //login
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -514,4 +515,5 @@ UserRepository userRepository;
             dto.setWorkout_routine(user.getTypeWorkout());
             return dto;
     }
+
 }
