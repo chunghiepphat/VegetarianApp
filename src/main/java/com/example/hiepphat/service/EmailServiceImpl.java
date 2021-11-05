@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-@Service("EmailService")
+@Service
 public class EmailServiceImpl implements EmailService{
     @Autowired
     private JavaMailSender mailSender;
